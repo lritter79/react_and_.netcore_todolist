@@ -1,4 +1,8 @@
 import { FaTimes } from 'react-icons/fa'
+//fatimes is a preloaded react component for the delete icon
+
+//the onDelete prop is the a function that gets passed in
+//`` backticks in double brackets are use for expressions
 
 const Task = ({ task, onDelete, onToggle }) => {
   return (

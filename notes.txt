@@ -1,0 +1,21 @@
+package.json has scripts put there by create react app
+
+react dom renders the app to the browser
+react dom is interchangable with react native
+react icons is a set of react components
+
+start runs development
+build runs the stuff for deploying "building"
+ 
+"npm start" runs development server
+
+jsx componentets can only have on parent element
+classname compiles to class 
+
+jsx classes need to import react, jsx functions dont
+pass in numbers with curly brackets
+
+use double curly braces from inline styling, and in camel case
+
+.map() loops through a list and outputs something based on each item
+.map() takes a function

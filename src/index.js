@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+
+//renders the app component into the div with the id "root" that's in the index.html file
+
+//takes params of the react component, and the html element to render it in
 ReactDOM.render(
   <React.StrictMode>
     <App />

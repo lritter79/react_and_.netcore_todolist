@@ -6,6 +6,7 @@ import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
 import About from './components/About'
 
+//import header and use it like an xml tag
 const App = () => {
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([])
@@ -55,6 +56,7 @@ const App = () => {
   }
 
   // Delete Task
+  //takes in an id
   const deleteTask = async (id) => {
     await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'DELETE',
@@ -85,6 +87,8 @@ const App = () => {
     )
   }
 
+
+  //if there are no tasks, it shows  'No Tasks To Show'
   return (
     <Router>
       <div className='container'>

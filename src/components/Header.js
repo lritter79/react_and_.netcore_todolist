@@ -2,8 +2,11 @@ import PropTypes from 'prop-types'
 import { useLocation } from 'react-router-dom'
 import Button from './Button'
 
+//takes in props as parameters
 const Header = ({ title, onAdd, showAdd }) => {
   const location = useLocation()
+
+  //use header a parent elements
 
   return (
     <header className='header'>
@@ -19,10 +22,12 @@ const Header = ({ title, onAdd, showAdd }) => {
   )
 }
 
+//default props incase they dont get passed in
 Header.defaultProps = {
   title: 'Task Tracker',
 }
 
+//sets title to be a string and to be required
 Header.propTypes = {
   title: PropTypes.string.isRequired,
 }
