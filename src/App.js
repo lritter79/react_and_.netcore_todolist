@@ -8,6 +8,7 @@ import About from './components/About'
 
 //import header and use it like an xml tag
 const App = () => {
+  //keeps tasks at the highest level (state)
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([])
 
@@ -61,11 +62,12 @@ const App = () => {
     await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'DELETE',
     })
-
+    //.filter removes the task with the same id as the id passed up
     setTasks(tasks.filter((task) => task.id !== id))
   }
 
   // Toggle Reminder
+  //takes id so it knows which on to toggle
   const toggleReminder = async (id) => {
     const taskToToggle = await fetchTask(id)
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }

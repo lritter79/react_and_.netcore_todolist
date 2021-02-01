@@ -17,5 +17,8 @@ pass in numbers with curly brackets
 
 use double curly braces from inline styling, and in camel case
 
-.map() loops through a list and outputs something based on each item
+.map() loops through a list and outputs something based on each item in the array it's targeting
 .map() takes a function
+
+we went tasks to be a part of our states
+stae gets passed down, tasks get passed up
