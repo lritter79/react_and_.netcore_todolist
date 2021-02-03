@@ -5,7 +5,25 @@ import { FaTimes } from 'react-icons/fa'
 //`` backticks in double brackets are use for expressions
 //if task.reminder is true then it should have class reminder
 //else it will have an empty string as class
-const Task = ({ task, onDelete, onToggle }) => {
+const Task = ({ task, onDelete, onToggle, coolColor }) => {
+  console.log(coolColor)
+  const dayInlineStyle = {color: coolColor}
+  // const coolColor = (id) => {
+  //   id = id > 3 ? id % 4 : id 
+  //   switch(id) {
+  //     case 0:
+  //       return 'pink';
+  //     case 1:
+  //       return 'white';
+  //     case 2:
+  //       return 'orange';
+  //     case 3:
+  //         return 'green';
+  //     default:
+  //       return '';
+  //   }
+  // }
+
   return (
     <div
       className={`task ${task.reminder ? 'reminder' : ''}`}
@@ -18,7 +36,11 @@ const Task = ({ task, onDelete, onToggle }) => {
           onClick={() => onDelete(task.id)}
         />
       </h3>
-      <p>{task.day}</p>
+      <p 
+        style={dayInlineStyle}
+      >
+        {task.day}
+      </p>
     </div>
   )
 }
