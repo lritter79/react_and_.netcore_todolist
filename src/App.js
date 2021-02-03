@@ -16,19 +16,26 @@ const App = () => {
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {    
-    const getTasks = async () => {
-      const tasksFromServer = await fetchTasks()  
-      console.log(tasksFromServer)   
-      setTasks(tasksFromServer)
+    const getTasks = async () => {          
+      try {
+        console.log("getting tasks")  
+        const tasksFromServer = await fetchTasks()         
+        setTasks(tasksFromServer)
+      }catch (error) {
+        console.log("failed") 
+        console.log(error);
+      }   
     }
-
-    getTasks()
+      getTasks()
+    
   }, [])
 
   // Fetch Tasks
   //gets the tasks we have on the server with async java
-  const fetchTasks = async () => {    
+  const fetchTasks = async () => {  
+    console.log("fetching") 
     const res = await fetch('http://localhost:5000/tasks')
+
     const data = await res.json()
 
     return data
