@@ -81,7 +81,7 @@ const App = () => {
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
 
     //update is put
-    //headers are for sending data
+    //
     const res = await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'PUT',
       headers: {
@@ -103,6 +103,8 @@ const App = () => {
   //if there are no tasks, it shows  'No Tasks To Show'
   //short ternary in jsx:
   // {x === y ? (<Thing />) : ('String')}
+  //wrap everything in <Router> to use routes
+  //exact menas match path exactly
   return (
     <Router>
       <div className='container'>

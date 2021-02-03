@@ -39,3 +39,6 @@ json server creates real ids like a server would
 headers are for sending data
 
 npm i react-router -dom is for installing routing for react apps
+import { BrowserRouter as Router, Route } from 'react-router-dom' to use routing
+import the link tag from react for routing
+<Link to='/'>example</Link>

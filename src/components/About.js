@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-
+//'/' is out index
 const About = () => {
   return (
     <div>
