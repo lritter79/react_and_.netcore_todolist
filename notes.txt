@@ -42,3 +42,10 @@ npm i react-router -dom is for installing routing for react apps
 import { BrowserRouter as Router, Route } from 'react-router-dom' to use routing
 import the link tag from react for routing
 <Link to='/'>example</Link>
+
+How to run this program cause of CORS probably:
+1. Open a powershell terminal in vs code:
+2. Run "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass" (this lets you run the powershell script for building the dummy "Server")
+3. Run "json-server --watch db.json --port 5000"
+4. Open another powershell terminal for node
+5. Run npm start
