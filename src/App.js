@@ -10,11 +10,14 @@ import About from './components/About'
 const App = () => {
   //keeps tasks at the highest level (state)
   const [showAddTask, setShowAddTask] = useState(false)
+  //changes the state of tasks
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {
+    //calls fetch tasks whihc returns a promise
     const getTasks = async () => {
       const tasksFromServer = await fetchTasks()
+      //sets tasks as the state
       setTasks(tasksFromServer)
     }
 
@@ -23,6 +26,7 @@ const App = () => {
 
   // Fetch Tasks
   const fetchTasks = async () => {
+    //gets the tasks we have on the server with async java
     const res = await fetch('http://localhost:5000/tasks')
     const data = await res.json()
 
@@ -39,16 +43,19 @@ const App = () => {
 
   // Add Task
   const addTask = async (task) => {
+    //post because we're adding tasks
     const res = await fetch('http://localhost:5000/tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
       },
+      //turns it from js object into json string
       body: JSON.stringify(task),
     })
 
+    //data returned is the new task
     const data = await res.json()
-
+    //take existings takes and add data on
     setTasks([...tasks, data])
 
     // const id = Math.floor(Math.random() * 10000) + 1
@@ -70,8 +77,11 @@ const App = () => {
   //takes id so it knows which on to toggle
   const toggleReminder = async (id) => {
     const taskToToggle = await fetchTask(id)
+    //change reminder to the opposite of taskToToggle.reminder
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
 
+    //update is put
+    //headers are for sending data
     const res = await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'PUT',
       headers: {
@@ -91,6 +101,8 @@ const App = () => {
 
 
   //if there are no tasks, it shows  'No Tasks To Show'
+  //short ternary in jsx:
+  // {x === y ? (<Thing />) : ('String')}
   return (
     <Router>
       <div className='container'>

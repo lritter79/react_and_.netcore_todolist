@@ -22,3 +22,20 @@ use double curly braces from inline styling, and in camel case
 
 we went tasks to be a part of our states
 stae gets passed down, tasks get passed up
+
+how to build static assets for deploying
+"npm run build" creates your static assets in a folder  called "build"
+build is what gets deployed
+
+to serve on your computer locally run "npm i serve", then "serve - s build -p {port number}"
+
+json server is a tool that creates a mock rest api to make a fake backend
+to get run "npm i json-server"
+add "server" : "json-server --watch db.json --port {port number}" to package.json
+creates "db.json
+json server creates real ids like a server would
+
+"useEffect" is a hook that deals with doing stuff on page load
+headers are for sending data
+
+npm i react-router -dom is for installing routing for react apps

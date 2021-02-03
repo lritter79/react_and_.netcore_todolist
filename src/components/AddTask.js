@@ -1,13 +1,18 @@
 import { useState } from 'react'
 
+//take in the function onAdd
 const AddTask = ({ onAdd }) => {
+  //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
+  //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
   const [text, setText] = useState('')
   const [day, setDay] = useState('')
   const [reminder, setReminder] = useState(false)
 
   const onSubmit = (e) => {
+    //e.preventDefault() is so it doesnt actually submit to the page
     e.preventDefault()
 
+    //filters if text is blank
     if (!text) {
       alert('Please add a task')
       return
@@ -15,6 +20,7 @@ const AddTask = ({ onAdd }) => {
 
     onAdd({ text, day, reminder })
 
+    //clears the form
     setText('')
     setDay('')
     setReminder(false)
