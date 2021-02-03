@@ -1,4 +1,5 @@
 import { FaTimes } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 //fatimes is a preloaded react component for the delete "x" icon
 
 //the onDelete prop is the a function that gets passed in
@@ -41,6 +42,7 @@ const Task = ({ task, onDelete, onToggle, coolColor }) => {
       >
         {task.day}
       </p>
+      <Link to={'/' + task.id} className='detailsLink'>Details</Link>
     </div>
   )
 }

@@ -49,3 +49,5 @@ How to run this program cause of CORS probably:
 3. Run "json-server --watch db.json --port 5000"
 4. Open another powershell terminal for node
 5. Run npm start
+
+<Link> components function like a tags, but without triggering a page reload

@@ -54,6 +54,22 @@ body {
   width: 100%;
 }
 
+a {
+  color: green;
+}
+
+a:hover {
+  color:red;
+}
+
+a:active{
+  color: white;
+}
+
+a:visited {
+  color: green;
+}
+
 .task {
   background: #f4f4f4;
   margin: 5px;

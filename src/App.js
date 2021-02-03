@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
+import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 
 //import header and use it like an xml tag
@@ -138,6 +139,7 @@ const App = () => {
           )}
         />
         <Route path='/about' component={About} />
+        <Route path='/:id' component={TaskDetails} />
         <Footer />
       </div>
     </Router>
