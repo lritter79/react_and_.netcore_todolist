@@ -7,27 +7,35 @@ import AddTask from './components/AddTask'
 import About from './components/About'
 
 //import header and use it like an xml tag
+//keeps tasks at the highest level (state)
+//changes the state of tasks
+//calls fetch tasks whihc returns a promise
+//sets tasks as the state
 const App = () => {
-  //keeps tasks at the highest level (state)
   const [showAddTask, setShowAddTask] = useState(false)
-  //changes the state of tasks
   const [tasks, setTasks] = useState([])
 
-  useEffect(() => {
-    //calls fetch tasks whihc returns a promise
-    const getTasks = async () => {
-      const tasksFromServer = await fetchTasks()
-      //sets tasks as the state
-      setTasks(tasksFromServer)
+  useEffect(() => {    
+    const getTasks = async () => {          
+      try {
+        console.log("getting tasks")  
+        const tasksFromServer = await fetchTasks()         
+        setTasks(tasksFromServer)
+      }catch (error) {
+        console.log("failed") 
+        console.log(error);
+      }   
     }
-
-    getTasks()
+      getTasks()
+    
   }, [])
 
   // Fetch Tasks
-  const fetchTasks = async () => {
-    //gets the tasks we have on the server with async java
+  //gets the tasks we have on the server with async java
+  const fetchTasks = async () => {  
+    console.log("fetching") 
     const res = await fetch('http://localhost:5000/tasks')
+
     const data = await res.json()
 
     return data
@@ -42,14 +50,14 @@ const App = () => {
   }
 
   // Add Task
-  const addTask = async (task) => {
-    //post because we're adding tasks
+  //post because we're adding tasks
+  //turns it from js object into json string
+  const addTask = async (task) => {   
     const res = await fetch('http://localhost:5000/tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-      },
-      //turns it from js object into json string
+      },   
       body: JSON.stringify(task),
     })
 
@@ -76,8 +84,7 @@ const App = () => {
   // Toggle Reminder
   //takes id so it knows which on to toggle
   const toggleReminder = async (id) => {
-    const taskToToggle = await fetchTask(id)
-    //change reminder to the opposite of taskToToggle.reminder
+    const taskToToggle = await fetchTask(id) 
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
 
     //update is put
