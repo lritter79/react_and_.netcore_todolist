@@ -10,6 +10,7 @@ const TaskDetails = () => {
     let { id } = useParams()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
+    const [showEditTask, setShowEditTask] = useState(false)
 
     useEffect(() => {
         console.log("using effect")
@@ -53,7 +54,13 @@ const TaskDetails = () => {
                 </p>
                 <p>
                     Details: {task.details !== undefined ? task.details : "None"}
-                </p>              
+                </p>    
+                <Button
+                    color='green'
+                    text='Edit Task'
+                    onClick={() => setShowEditTask(!showEditTask)}
+                />
+                {showEditTask && (<div>F</div>)}        
             </div>) : (
             <div>
                 <h1>Loading ...</h1>
