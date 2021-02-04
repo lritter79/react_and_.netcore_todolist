@@ -15,16 +15,18 @@ const TaskDetails = ({onUpdate}) => {
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
 
-    const updateTask = async (task) => {    
-        try {  
+    const updateTask = async (task) => {  
+        setIsLoading(true)  
+        try {          
+            setShowEditTask(!showEditTask)
             const updateTask = UpdateTask  
             const updTask = await updateTask(task)                
             setTask(updTask) 
+            setIsLoading(false)
             onUpdate(updTask)          
         } catch (error) {
             console.log(error)
-        }              
-        setShowEditTask(!showEditTask)
+        }                     
     }
 
     const onCancel = () => {

@@ -134,6 +134,7 @@ const App = () => {
                   tasks={tasks}
                   onDelete={deleteTask}
                   onToggle={toggleReminder}
+                  onGoToDetail={() => {setShowAddTask(false)}}
                 />
               ) : (
                 'No Tasks To Show'

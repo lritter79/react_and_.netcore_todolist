@@ -7,7 +7,7 @@ import FormatDateString from './FormatDateString'
 //`` backticks in double brackets are use for expressions
 //if task.reminder is true then it should have class reminder
 //else it will have an empty string as class
-const Task = ({ task, onDelete, onToggle, coolColor }) => {
+const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
   const dayInlineStyle = {color: coolColor}
   // const coolColor = (id) => {
   //   id = id > 3 ? id % 4 : id 
@@ -42,7 +42,7 @@ const Task = ({ task, onDelete, onToggle, coolColor }) => {
       >
         {FormatDateString(task.day)}
       </p>
-      <Link to={'/task/' + task.id} className='detailsLink'>Details</Link>
+      <Link to={'/task/' + task.id} onClick={onGoToDetail} className='detailsLink'>Details</Link>
     </div>
   )
 }

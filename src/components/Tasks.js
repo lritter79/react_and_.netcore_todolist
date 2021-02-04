@@ -1,7 +1,7 @@
 import Task from './Task'
 
 //.map() takes in  a function
-const Tasks = ({ tasks, onDelete, onToggle }) => {
+const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
   const coolColor = (i) => {
     i = i > 3 ? i % 4 : i 
     switch(i) {
@@ -21,7 +21,7 @@ const Tasks = ({ tasks, onDelete, onToggle }) => {
   return (
     <>
       {tasks.map((task, index) => (
-        <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} />
+        <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} onGoToDetail={onGoToDetail}  />
       ))}
     </>
   )
