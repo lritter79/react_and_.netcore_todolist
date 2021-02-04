@@ -143,3 +143,8 @@ footer {
 .green {
   color: green;
 }
+
+.taskDetail h3 { 
+  text-align: center;
+}
+

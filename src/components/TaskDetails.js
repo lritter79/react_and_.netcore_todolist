@@ -1,5 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import Button from './Button'
+
 
 const TaskDetails = () => {
 
@@ -36,22 +38,26 @@ const TaskDetails = () => {
 
     return (
         <>
-            {!isLoading && (<div>
+            {!isLoading ? (
+            <div className="taskDetail">
                 <h3>
                     {task.text}
                     {id}
                 </h3>
+                <hr></hr>
                 <p>
-                    {task.location}
+                    Location: {task.location}
                 </p>
                 <p>
-                    {task.day}
+                    Day: {task.day}
                 </p>
                 <p>
-                    {task.details}
-                </p>
-                <Link to='/'>Go Back</Link>
-            </div>)}
+                    Details: {task.details !== undefined ? task.details : "None"}
+                </p>              
+            </div>) : (
+            <div>
+                <h1>Loading ...</h1>
+            </div>)}           
         </>        
     )
 }

@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
+
 //'/' is out index
 const About = () => {
   return (
     <div>
-      <h4>Version 1.0.0</h4>
-      <Link to='/'>Go Back</Link>
+      <h4>Version 2.0.0</h4>
+      <p>Thanks to Brad Traversy for the help and inspiration</p>
     </div>
   )
 }

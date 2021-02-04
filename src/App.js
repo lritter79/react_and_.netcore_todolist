@@ -136,8 +136,8 @@ const App = () => {
             </>
           )}
         />
-        <Route path='/about' component={About} />
-        <Route path='/:id' component={TaskDetails} />
+        <Route path='/about' exact component={About} />
+        <Route path='/task/:id' exact component={TaskDetails} />
         <Footer />
       </div>
     </Router>

@@ -41,7 +41,7 @@ const Task = ({ task, onDelete, onToggle, coolColor }) => {
       >
         {task.day}
       </p>
-      <Link to={'/' + task.id} className='detailsLink'>Details</Link>
+      <Link to={'/task/' + task.id} className='detailsLink'>Details</Link>
     </div>
   )
 }

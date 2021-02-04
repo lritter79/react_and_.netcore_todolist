@@ -13,12 +13,6 @@
       "id": 2
     },
     {
-      "text": "test3",
-      "day": "test3",
-      "reminder": false,
-      "id": 3
-    },
-    {
       "text": "test6",
       "day": "test6",
       "reminder": true,
