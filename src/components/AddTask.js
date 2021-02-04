@@ -20,6 +20,11 @@ const AddTask = ({ onAdd }) => {
       return
     }
 
+    if (!day) {
+      alert('Please add a datetime')
+      return
+    }
+
     onAdd({ text, details, location, day, reminder })
 
     //clears the form

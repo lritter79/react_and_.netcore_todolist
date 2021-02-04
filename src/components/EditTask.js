@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import Button from './Button'
 
-const EditTask = ({task, onSave, onCancel}) => {
+const EditTask = ({task, onCancel, onUpdate}) => {
+    const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
     const [day, setDay] = useState(task.day)
-    const [details, setDetails] = useState('')
-    const [location, setLocation] = useState('')
+    const [details, setDetails] = useState(task.details)
+    const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
 
     const onSubmit = (e) => {
@@ -18,9 +19,15 @@ const EditTask = ({task, onSave, onCancel}) => {
           return
         }
     
-        onSave({ text, details, location, day, reminder })
+        if (!day) {
+            alert('Please add a datetime')
+            return
+        }
+
+        onUpdate({ id, text, details, location, day, reminder })
     
         //clears the form
+        setId('')
         setText('')
         setDay('')
         setLocation('')

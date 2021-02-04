@@ -4,9 +4,9 @@ import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
 import FetchTask from './FetchTask'
+import UpdateTask from "./UpdateTask";
 
-
-const TaskDetails = () => {
+const TaskDetails = ({onUpdate}) => {
 
     //gets the params passed in from the router
     //is a react hook
@@ -15,6 +15,22 @@ const TaskDetails = () => {
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
 
+    const updateTask = async (task) => {    
+        try {  
+            const updateTask = UpdateTask  
+            const updTask = await updateTask(task)                
+            setTask(updTask) 
+            onUpdate(updTask)          
+        } catch (error) {
+            console.log(error)
+        }              
+        setShowEditTask(!showEditTask)
+    }
+
+    const onCancel = () => {
+        setShowEditTask(!showEditTask)
+    }
+
     useEffect(() => {
         console.log("using effect")
         // Fetch Task
@@ -22,12 +38,12 @@ const TaskDetails = () => {
 
         const getTask = async () => {          
             try {       
-            const taskFromServer = await fetchTask(id)         
-            setTask(taskFromServer)
-            setIsLoading(false)
+                const taskFromServer = await fetchTask(id)         
+                setTask(taskFromServer)
+                setIsLoading(false)
             } catch (error) {
-            console.log("failed") 
-            console.log(error);
+                console.log("failed") 
+                console.log(error);
             }   
         }
       
@@ -63,7 +79,7 @@ const TaskDetails = () => {
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onSave={() => {}} onCancel={() => setShowEditTask(!showEditTask)}/>
+                        <EditTask task={task} onUpdate={updateTask} onCancel={onCancel}/>
                     )}        
                 </div>) : (
                 <div>

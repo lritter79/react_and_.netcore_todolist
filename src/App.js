@@ -7,6 +7,7 @@ import AddTask from './components/AddTask'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
+//import UpdateTask from './components/UpdateTask'
 
 //import header and use it like an xml tag
 //keeps tasks at the highest level (state)
@@ -18,13 +19,15 @@ const App = () => {
   const [tasks, setTasks] = useState([])
   
   useEffect(() => {    
+    console.log('using effect in app');
+
     const getTasks = async () => {          
       try {
         const tasksFromServer = await fetchTasks()   
         setTasks(tasksFromServer)
       }catch (error) {
         console.log("failed") 
-        console.log(error);
+        console.log(error)
       }   
     }
       getTasks()
@@ -81,9 +84,9 @@ const App = () => {
   const toggleReminder = async (id) => {
     const taskToToggle = await fetchTask(id) 
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
-
+    //const updateTask = UpdateTask
     //update is put
-    //
+    // 
     const res = await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'PUT',
       headers: {
@@ -101,6 +104,12 @@ const App = () => {
     )
   }
 
+  const updateTask = async (task) => {
+    console.log(task)
+    setTasks(
+      tasks.map((oldTask) => task.id === oldTask.id ? task : oldTask)
+    )
+  }
 
   //if there are no tasks, it shows  'No Tasks To Show'
   //short ternary in jsx:
@@ -133,7 +142,13 @@ const App = () => {
           )}
         />
         <Route path='/about' exact component={About} />
-        <Route path='/task/:id' exact component={TaskDetails} />
+        <Route path='/task/:id' exact 
+          render={(props) => (
+            <TaskDetails 
+              onUpdate={updateTask} 
+            />
+          )}
+        />
         <Footer />
       </div>
     </Router>
