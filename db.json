@@ -1,28 +1,12 @@
 {
   "tasks": [
     {
-      "text": "l",
-      "day": "2021-02-06T12:32",
-      "reminder": false,
-      "id": 9
-    },
-    {
-      "text": "l",
-      "day": "2021-02-03T11:36",
-      "reminder": false,
-      "id": 10
-    },
-    {
-      "text": "p",
-      "day": "2021-02-03T14:36",
-      "reminder": false,
-      "id": 11
-    },
-    {
-      "text": "Test",
-      "day": "2020-12-02T23:47",
-      "reminder": false,
-      "id": 12
+      "text": "kokoko",
+      "details": "pppp",
+      "location": "lllll",
+      "day": "2021-02-25T00:52",
+      "reminder": true,
+      "id": 15
     }
   ]
 }
