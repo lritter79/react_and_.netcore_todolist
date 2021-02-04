@@ -5,8 +5,16 @@
       "details": "pppp",
       "location": "lllll",
       "day": "2021-02-25T00:52",
-      "reminder": true,
+      "reminder": false,
       "id": 15
+    },
+    {
+      "text": "FU",
+      "details": "FU",
+      "location": "FU",
+      "day": "2021-02-26T07:58",
+      "reminder": false,
+      "id": 16
     }
   ]
 }

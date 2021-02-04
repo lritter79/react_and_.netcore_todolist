@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
+import FetchTask from './FetchTask'
 
 
 const TaskDetails = () => {
@@ -17,12 +18,7 @@ const TaskDetails = () => {
     useEffect(() => {
         console.log("using effect")
         // Fetch Task
-        const fetchTask = async (id) => {
-            const res = await fetch(`http://localhost:5000/tasks/${id}`)
-            const data = await res.json()
-            console.log("getting task")  
-            return data
-        }
+        const fetchTask = FetchTask
 
         const getTask = async () => {          
             try {       
@@ -42,32 +38,38 @@ const TaskDetails = () => {
     return (
         <>
             {!isLoading ? (
-            <div className="taskDetail">
-                <h3>
-                    {task.text}
-                </h3>
-                <hr></hr>
-                <p>
-                    Location: {task.location}
-                </p>
-                <p>
-                    Day: {FormatDateString(task.day)}
-                </p>
-                <p>
-                    Details: {task.details !== undefined ? task.details : "None"}
-                </p>    
-                <Button
-                    color='green'
-                    text='Edit Task'
-                    onClick={() => setShowEditTask(!showEditTask)}
-                />
-                {showEditTask && (
-                    <EditTask task={task} onChange={null} onSubmit={() => setShowEditTask(!showEditTask)}/>
-                )}        
-            </div>) : (
-            <div>
-                <h1>Loading ...</h1>
-            </div>)}           
+                <div>    
+                    {!showEditTask && (
+                        <div className="taskDetail">
+                            <h3>
+                                {task.text}
+                            </h3>
+                            <hr></hr>
+                            <p>
+                                Location: {task.location}
+                            </p>
+                            <p>
+                                Day: {FormatDateString(task.day)}
+                            </p>
+                            <p>
+                                Details: {task.details !== undefined ? task.details : "None"}
+                            </p>    
+                            <Button
+                                color='green'
+                                text='Edit Task'
+                                onClick={() => setShowEditTask(!showEditTask)}
+                            />
+                        </div>
+                    )}                               
+
+                    {showEditTask && (
+                        <EditTask task={task} onSave={() => {}} onCancel={() => setShowEditTask(!showEditTask)}/>
+                    )}        
+                </div>) : (
+                <div>
+                    <h1>Loading ...</h1>
+                </div>
+            )}           
         </>        
     )
 }

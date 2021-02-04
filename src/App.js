@@ -6,6 +6,7 @@ import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
+import FetchTask from './components/FetchTask'
 
 //import header and use it like an xml tag
 //keeps tasks at the highest level (state)
@@ -41,12 +42,7 @@ const App = () => {
   }
 
   // Fetch Task
-  const fetchTask = async (id) => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`)
-    const data = await res.json()
-
-    return data
-  }
+  const fetchTask = FetchTask
 
   // Add Task
   //post because we're adding tasks
