@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Button from './Button'
+import EditTask from './EditTask'
+import FormatDateString from './FormatDateString'
 
 
 const TaskDetails = () => {
@@ -43,14 +45,13 @@ const TaskDetails = () => {
             <div className="taskDetail">
                 <h3>
                     {task.text}
-                    {id}
                 </h3>
                 <hr></hr>
                 <p>
                     Location: {task.location}
                 </p>
                 <p>
-                    Day: {task.day}
+                    Day: {FormatDateString(task.day)}
                 </p>
                 <p>
                     Details: {task.details !== undefined ? task.details : "None"}
@@ -60,7 +61,9 @@ const TaskDetails = () => {
                     text='Edit Task'
                     onClick={() => setShowEditTask(!showEditTask)}
                 />
-                {showEditTask && (<div>F</div>)}        
+                {showEditTask && (
+                    <EditTask task={task} onChange={null} onSubmit={() => setShowEditTask(!showEditTask)}/>
+                )}        
             </div>) : (
             <div>
                 <h1>Loading ...</h1>
