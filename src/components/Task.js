@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 //if task.reminder is true then it should have class reminder
 //else it will have an empty string as class
 const Task = ({ task, onDelete, onToggle, coolColor }) => {
-  console.log(coolColor)
   const dayInlineStyle = {color: coolColor}
   // const coolColor = (id) => {
   //   id = id > 3 ? id % 4 : id 

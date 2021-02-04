@@ -19,12 +19,6 @@
       "id": 3
     },
     {
-      "text": "test5",
-      "day": "test5",
-      "reminder": false,
-      "id": 5
-    },
-    {
       "text": "test6",
       "day": "test6",
       "reminder": true,

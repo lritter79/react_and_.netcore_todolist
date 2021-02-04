@@ -15,12 +15,11 @@ import About from './components/About'
 const App = () => {
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([])
-
+  
   useEffect(() => {    
     const getTasks = async () => {          
       try {
-        console.log("getting tasks")  
-        const tasksFromServer = await fetchTasks()         
+        const tasksFromServer = await fetchTasks()   
         setTasks(tasksFromServer)
       }catch (error) {
         console.log("failed") 
@@ -34,7 +33,6 @@ const App = () => {
   // Fetch Tasks
   //gets the tasks we have on the server with async java
   const fetchTasks = async () => {  
-    console.log("fetching") 
     const res = await fetch('http://localhost:5000/tasks')
 
     const data = await res.json()
