@@ -22,12 +22,12 @@ namespace react_crash_2021.Data
     //    modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
     //    modelBuilder.Entity<Student>().ToTable("Student");
     //}
-    public class AppContext : DbContext
+    public class ReactCrashAppContext : DbContext
 
     {
         public DbSet<task> Tasks { get; set; }
 
-        public AppContext(DbContextOptions<AppContext> options) : base(options)
+        public ReactCrashAppContext(DbContextOptions<ReactCrashAppContext> options) : base(options)
         {
 
         }

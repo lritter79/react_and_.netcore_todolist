@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Tasks from './components/Tasks'
+import Constant from './components/Constant'
 import AddTask from './components/AddTask'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
+
 //import UpdateTask from './components/UpdateTask'
 
 //import header and use it like an xml tag
@@ -36,9 +38,8 @@ const App = () => {
 
   // Fetch Tasks
   //gets the tasks we have on the server with async java
-  const fetchTasks = async () => {  
-    const res = await fetch('http://localhost:5000/tasks')
-
+    const fetchTasks = async () => {
+        const res = await fetch(Constant() + '/api/tasks')
     const data = await res.json()
 
     return data
@@ -51,7 +52,7 @@ const App = () => {
   //post because we're adding tasks
   //turns it from js object into json string
   const addTask = async (task) => {   
-    const res = await fetch('http://localhost:5000/tasks', {
+      const res = await fetch(Constant() + '/api/tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -72,7 +73,7 @@ const App = () => {
   // Delete Task
   //takes in an id
   const deleteTask = async (id) => {
-    await fetch(`http://localhost:5000/tasks/${id}`, {
+      await fetch(`${Constant()}/api/tasks/${id}`, {
       method: 'DELETE',
     })
     //.filter removes the task with the same id as the id passed up

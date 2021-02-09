@@ -11,6 +11,10 @@ namespace react_crash_2021.Data.MappingProfiles
 {
     public class TaskProfile : Profile
     {
-       // CreateMap<task, TaskModel>();
+        public TaskProfile()
+        {
+            CreateMap<task, TaskModel>().ForMember(o => o.Day, e => e.MapFrom(j => j.task_date))
+                                        .ReverseMap();
+        }
     }
 }

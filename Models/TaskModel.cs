@@ -9,7 +9,7 @@ namespace react_crash_2021.Data.Models
     {
         public long Id { get; set; }
         public string Text { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Day { get; set; }
         public Boolean Reminder { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }

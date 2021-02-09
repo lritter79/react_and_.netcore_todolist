@@ -13,7 +13,7 @@ namespace react_crash_2021.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long id { get; set; }
         public string text { get; set; }
-        public DateTime task_date{ get; set; }
+        public DateTime task_date { get; set; }
         public Boolean reminder { get; set; }
         public string details { get; set; }
         public string location { get; set; }

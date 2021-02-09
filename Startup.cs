@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using react_crash_2021.Data;
+using System.Reflection;
 
 namespace react_crash_2021
 {
@@ -26,17 +25,22 @@ namespace react_crash_2021
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
+            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            //add auto mapper
+            //it needs a profile
+            //says go look for profile classes on startup that derive from profile
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppContext appContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ReactCrashAppContext appContext)
         {
             if (env.IsDevelopment())
             {
