@@ -45,9 +45,13 @@ body {
   outline: none;
 }
 
-.btn:active {
-  transform: scale(0.98);
-}
+    .btn:active {
+        transform: scale(0.98);
+        -webkit-box-shadow: inset 0px 0px 13px grey;
+        -moz-box-shadow: inset 0px 0px 13px grey;
+        box-shadow: inset 0px 0px 13px grey;
+        outline: none;
+    }
 
 .btn-block {
   display: block;
