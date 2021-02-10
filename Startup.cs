@@ -26,8 +26,6 @@ namespace react_crash_2021
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -38,8 +36,9 @@ namespace react_crash_2021
             //it needs a profile
             //says go look for profile classes on startup that derive from profile
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            services.AddTransient<IReactCrashAppRepository, ReactCrashAppRepository>();
+            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
+            //scoped makes it available for the whole http request
+            services.AddScoped<ITaskRepository, TaskRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

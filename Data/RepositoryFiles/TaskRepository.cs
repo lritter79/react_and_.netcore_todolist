@@ -13,46 +13,38 @@ namespace react_crash_2021.Data
     /// <summary>
     /// Provides a layer of business logic between API and database context
     /// </summary>
-    public class ReactCrashAppRepository : IReactCrashAppRepository
+    public class TaskRepository : ITaskRepository
     {
         private ReactCrashAppContext _context;
         private DbSet<task> taskEntity;
-        private IMapper _mapper;
 
-        public ReactCrashAppRepository(ReactCrashAppContext context, IMapper mapper)
+        public TaskRepository(ReactCrashAppContext context)
         {
             this._context = context;
             taskEntity = context.Set<task>();
-            _mapper = mapper;
         }
 
-        public TaskModel AddTask(TaskModel model)
+        public Task<task> AddTask(task model)
         {
             throw new NotImplementedException();
         }
 
-        public TaskModel Deletetask(long id)
+        public Task<task> Deletetask(long id)
         {
             throw new NotImplementedException();
         }
 
-        public TaskModel GetTask(long id)
+        public Task<task> GetTask(long id)
         {
             throw new NotImplementedException();
         }
 
-
-        public bool TaskExists(long id)
+        public async Task<IEnumerable<task>> GetTasks()
         {
-            throw new NotImplementedException();
+            return await taskEntity.ToListAsync();
         }
 
-        public TaskModel UpdateTask(long id, TaskModel task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TaskModel> GetTasks()
+        public Task<task> UpdateTask(long id, task task)
         {
             throw new NotImplementedException();
         }

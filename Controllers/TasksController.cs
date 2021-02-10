@@ -18,39 +18,40 @@ namespace react_crash_2021.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly ReactCrashAppContext _context;
        
-        private readonly IReactCrashAppRepository _repo;
+        private readonly ITaskRepository _repo;
 
         private IMapper _mapper;
 
 
-        public TasksController(ReactCrashAppContext context, IReactCrashAppRepository repo, IMapper mapper)
+        public TasksController(ITaskRepository repo, IMapper mapper)
         {
-            _context = context;
             _repo = repo;
             _mapper = mapper;
         }
 
         // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasks()
         {
-            return await _context.Tasks.ToListAsync();
+            var tasks = await _repo.GetTasks();
+
+            return _mapper.Map<List<TaskModel>>(tasks);
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<task>> Gettask(long id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            //var task = await _context.Tasks.FindAsync(id);
 
-            if (task == null)
-            {
-                return NotFound();
-            }
+            //if (task == null)
+            //{
+            //    return NotFound();
+            //}
 
-            return task;
+            //return task;
+            return NotFound();
         }
 
         // PUT: api/Tasks/5
@@ -58,30 +59,32 @@ namespace react_crash_2021.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Puttask(long id, TaskModel task)
         {
-            if (id != task.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != task.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(task).State = EntityState.Modified;
+            //_context.Entry(task).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!taskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!taskExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
-            return NoContent();
+            //return NoContent();
+
+            return NotFound();
         }
 
         // POST: api/Tasks
@@ -89,32 +92,34 @@ namespace react_crash_2021.Controllers
         [HttpPost]
         public async Task<ActionResult<task>> Posttask(TaskModel model)
         {
-            var task = _mapper.Map<task>(model);
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
-            model = _mapper.Map<TaskModel>(task);
-            return CreatedAtAction("Gettask", new { id = task.id }, model);
+            //var task = _mapper.Map<task>(model);
+            //_context.Tasks.Add(task);
+            //await _context.SaveChangesAsync();
+            //model = _mapper.Map<TaskModel>(task);
+            //return CreatedAtAction("Gettask", new { id = task.id }, model);
+
+            return NotFound();
         }
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deletetask(long id)
         {
-            var task = await _context.Tasks.FindAsync(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            //var task = await _context.Tasks.FindAsync(id);
+            //if (task == null)
+            //{
+            //    return NotFound();
+            //}
 
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+            //_context.Tasks.Remove(task);
+            //await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool taskExists(long id)
-        {
-            return _context.Tasks.Any(e => e.id == id);
-        }
+        //private bool taskExists(long id)
+        //{
+        //    return _context.Tasks.Any(e => e.id == id);
+        //}
     }
 }
