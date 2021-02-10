@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using react_crash_2021.Data;
+using react_crash_2021.Data.RepositoryFiles;
 using System.Reflection;
 
 namespace react_crash_2021
@@ -37,6 +38,8 @@ namespace react_crash_2021
             //it needs a profile
             //says go look for profile classes on startup that derive from profile
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddTransient<IReactCrashAppRepository, ReactCrashAppRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

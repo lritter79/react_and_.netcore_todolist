@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Models;
+using react_crash_2021.Data.RepositoryFiles;
 using ReactCrashAppContext = react_crash_2021.Data.ReactCrashAppContext;
 
 namespace react_crash_2021.Controllers
@@ -18,12 +19,16 @@ namespace react_crash_2021.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ReactCrashAppContext _context;
+       
+        private readonly IReactCrashAppRepository _repo;
 
-        private readonly IMapper _mapper;
+        private IMapper _mapper;
 
-        public TasksController(ReactCrashAppContext context, IMapper mapper)
+
+        public TasksController(ReactCrashAppContext context, IReactCrashAppRepository repo, IMapper mapper)
         {
             _context = context;
+            _repo = repo;
             _mapper = mapper;
         }
 
@@ -51,9 +56,9 @@ namespace react_crash_2021.Controllers
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Puttask(long id, task task)
+        public async Task<IActionResult> Puttask(long id, TaskModel task)
         {
-            if (id != task.id)
+            if (id != task.Id)
             {
                 return BadRequest();
             }
