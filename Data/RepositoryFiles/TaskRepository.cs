@@ -34,9 +34,10 @@ namespace react_crash_2021.Data
             throw new NotImplementedException();
         }
 
-        public Task<task> GetTask(long id)
+        public async Task<task> GetTask(long id)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return await taskEntity.Where(task => task.id == id).FirstAsync();
         }
 
         public async Task<IEnumerable<task>> GetTasks()

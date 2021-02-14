@@ -18,11 +18,15 @@ namespace react_crash_2021.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-       
+       /// <summary>
+       /// Provides a layer between API logic and the database to keep things more loosely coupled and flexible
+       /// </summary>
         private readonly ITaskRepository _repo;
-
+        /// <summary>
+        /// We're using mapper here because mapping makes more sense to do the controller side since the Model is what users deal with
+        /// where as the entity is dealt with by the context directly, so the model should be converted to the entity for repo methods
+        /// </summary>
         private IMapper _mapper;
-
 
         public TasksController(ITaskRepository repo, IMapper mapper)
         {
@@ -41,16 +45,21 @@ namespace react_crash_2021.Controllers
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<task>> Gettask(long id)
+        public async Task<ActionResult<TaskModel>> Gettask(long id)
         {
-            //var task = await _context.Tasks.FindAsync(id);
+            var task = await _repo.GetTask(id);
 
-            //if (task == null)
-            //{
-            //    return NotFound();
-            //}
+            if (task == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return _mapper.Map<TaskModel>(task);
+            }
 
-            //return task;
+
+            //
             return NotFound();
         }
 
