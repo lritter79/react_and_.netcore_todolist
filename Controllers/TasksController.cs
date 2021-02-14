@@ -45,7 +45,7 @@ namespace react_crash_2021.Controllers
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskModel>> Gettask(long id)
+        public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
             var task = await _repo.GetTask(id);
 
@@ -66,32 +66,9 @@ namespace react_crash_2021.Controllers
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Puttask(long id, TaskModel task)
+        public async Task<IActionResult> PutTask(long id, TaskModel task)
         {
-            //if (id != task.Id)
-            //{
-            //    return BadRequest();
-            //}
 
-            //_context.Entry(task).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!taskExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
-            //return NoContent();
 
             return NotFound();
         }
@@ -99,20 +76,18 @@ namespace react_crash_2021.Controllers
         // POST: api/Tasks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<task>> Posttask(TaskModel model)
+        public async Task<ActionResult<task>> PostTask(TaskModel model)
         {
-            //var task = _mapper.Map<task>(model);
+            var task = _repo.UpdateTask(model.Id, _mapper.Map<task>(model));
             //_context.Tasks.Add(task);
             //await _context.SaveChangesAsync();
             //model = _mapper.Map<TaskModel>(task);
-            //return CreatedAtAction("Gettask", new { id = task.id }, model);
-
-            return NotFound();
+            return CreatedAtAction("Gettask", new { id = task.id }, model);
         }
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Deletetask(long id)
+        public async Task<IActionResult> DeleteTask(long id)
         {
             //var task = await _context.Tasks.FindAsync(id);
             //if (task == null)
