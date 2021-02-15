@@ -133,15 +133,17 @@ const App = () => {
 
                         <>
                             {showAddTask && <AddTask onAdd={addTask} />}
-
-                            {tasks.length > 0 ? (
-                                <Tasks
-                                    tasks={tasks}
-                                    onDelete={deleteTask}
-                                    onToggle={toggleReminder}
-                                    onGoToDetail={() => { setShowAddTask(false) }}
-                                />) :
-                                ('No Tasks To Show')}
+                            {!isLoading ? (
+                                (tasks.length > 0)? (
+                                    <Tasks
+                                        tasks={tasks}
+                                        onDelete={deleteTask}
+                                        onToggle={toggleReminder}
+                                        onGoToDetail={() => { setShowAddTask(false) }}
+                                    />) :
+                                    ('No Tasks To Show')
+                            ) : ('Loading ...')}
+                            
 
                         </>
 
