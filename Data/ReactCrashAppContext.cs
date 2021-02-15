@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using react_crash_2021.Data.Entities;
 using System;
@@ -22,10 +24,11 @@ namespace react_crash_2021.Data
     //    modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
     //    modelBuilder.Entity<Student>().ToTable("Student");
     //}
-    public class ReactCrashAppContext : DbContext
+    public class ReactCrashAppContext : IdentityDbContext<reactCrashUser, reactCrashUserRole, Guid>
 
     {
         public DbSet<task> Tasks { get; set; }
+        public override DbSet<reactCrashUser> Users { get; set; }
 
         public ReactCrashAppContext(DbContextOptions<ReactCrashAppContext> options) : base(options)
         {
@@ -35,6 +38,11 @@ namespace react_crash_2021.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<task>().ToTable("tasks");
+            modelBuilder.Entity<reactCrashUser>()
+                .ToTable("users")
+                .HasMany(u => u.tasks)
+                .WithOne(t => t.user);
+
         }
     }
 }

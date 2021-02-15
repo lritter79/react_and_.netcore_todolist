@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using react_crash_2021.Data;
+using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.RepositoryFiles;
 using System.Reflection;
 
@@ -36,9 +37,11 @@ namespace react_crash_2021
             //it needs a profile
             //says go look for profile classes on startup that derive from profile
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
+            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")))
+                .AddIdentity<reactCrashUser, reactCrashUserRole>();
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,11 +59,11 @@ namespace react_crash_2021
             }
 
             appContext.Database.EnsureCreated();
-
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -69,6 +72,8 @@ namespace react_crash_2021
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            
 
             app.UseSpa(spa =>
             {
