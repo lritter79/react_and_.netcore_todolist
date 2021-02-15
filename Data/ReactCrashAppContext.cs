@@ -37,11 +37,19 @@ namespace react_crash_2021.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<task>().ToTable("tasks");
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<MyObject>()
+            //.HasRequired(c => c.ApplicationUser)
+            //.WithMany(t => t.MyObjects)
+            //.Map(m => m.MapKey("UserId"));
+            modelBuilder.Entity<task>()
+                .ToTable("tasks")
+                .HasOne(t => t.user)
+                .WithMany(u => u.tasks)
+                .HasForeignKey("user_id");
+                
             modelBuilder.Entity<reactCrashUser>()
-                .ToTable("users")
-                .HasMany(u => u.tasks)
-                .WithOne(t => t.user);
+                .ToTable("users");
 
         }
     }

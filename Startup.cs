@@ -37,8 +37,10 @@ namespace react_crash_2021
             //it needs a profile
             //says go look for profile classes on startup that derive from profile
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")))
-                .AddIdentity<reactCrashUser, reactCrashUserRole>();
+            services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
+            services.AddDefaultIdentity<reactCrashUser>()
+                .AddEntityFrameworkStores<ReactCrashAppContext>();
+
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
             

@@ -17,5 +17,6 @@ namespace react_crash_2021.Data.Models
         public Boolean Reminder { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }
+        public Guid UserId { get; set; }
     }
 }
