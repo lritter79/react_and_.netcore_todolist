@@ -130,21 +130,21 @@ const App = () => {
                     path='/'
                     exact
                     render={(props) =>
-                        
-                            <>
-                                {showAddTask && <AddTask onAdd={addTask} />}
-                            
-                                {tasks.length > 0 ? (
-                                        <Tasks
-                                            tasks={tasks}
-                                            onDelete={deleteTask}
-                                            onToggle={toggleReminder}
-                                            onGoToDetail={() => { setShowAddTask(false) }}
-                                    />) :
+
+                        <>
+                            {showAddTask && <AddTask onAdd={addTask} />}
+
+                            {tasks.length > 0 ? (
+                                <Tasks
+                                    tasks={tasks}
+                                    onDelete={deleteTask}
+                                    onToggle={toggleReminder}
+                                    onGoToDetail={() => { setShowAddTask(false) }}
+                                />) :
                                 ('No Tasks To Show')}
-                               
-                            </>
-                     
+
+                        </>
+
                     }
                 />
                 <Route path='/about' exact component={About} />
@@ -162,3 +162,4 @@ const App = () => {
 }
 
 export default App
+
