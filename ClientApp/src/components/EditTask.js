@@ -41,6 +41,7 @@ const EditTask = ({task, onCancel, onUpdate}) => {
             <label>Task</label>
             <input
                 type='text'
+                maxLength='30'
                 placeholder=''
                 value={text}
                 onChange={(e) => setText(e.target.value)}

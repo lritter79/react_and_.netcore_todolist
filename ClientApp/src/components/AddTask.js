@@ -41,6 +41,7 @@ const AddTask = ({ onAdd }) => {
         <label>Task</label>
         <input
           type='text'
+          maxLength='30'
           placeholder='Add Task'
           value={text}
           onChange={(e) => setText(e.target.value)}
