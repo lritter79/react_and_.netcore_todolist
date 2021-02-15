@@ -31,9 +31,18 @@ namespace react_crash_2021.Data
             return model;
         }
 
-        public Task<task> Deletetask(long id)
+        public async Task<task> Deletetask(long id)
         {
-            throw new NotImplementedException();
+
+            var task = _context.Tasks.Find(id);
+
+            if (task != null)
+            {
+                _context.Tasks.Remove(task);
+                await _context.SaveChangesAsync();
+            }
+
+            return task;
         }
 
         public async Task<task> GetTask(long id)

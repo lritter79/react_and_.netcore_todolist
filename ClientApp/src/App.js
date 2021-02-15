@@ -19,6 +19,7 @@ import FetchTask from './components/FetchTask'
 const App = () => {
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         console.log('using effect in app');
@@ -26,6 +27,7 @@ const App = () => {
         const getTasks = async () => {
             try {
                 const tasksFromServer = await fetchTasks()
+                setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
                 console.log("failed")
@@ -88,7 +90,7 @@ const App = () => {
         //const updateTask = UpdateTask
         //update is put
         // 
-        const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+        const res = await fetch(`${Constant()}/api/tasks/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -127,21 +129,23 @@ const App = () => {
                 <Route
                     path='/'
                     exact
-                    render={(props) => (
-                        <>
-                            {showAddTask && <AddTask onAdd={addTask} />}
-                            {tasks.length > 0 ? (
-                                <Tasks
-                                    tasks={tasks}
-                                    onDelete={deleteTask}
-                                    onToggle={toggleReminder}
-                                    onGoToDetail={() => { setShowAddTask(false) }}
-                                />
-                            ) : (
-                                    'No Tasks To Show'
-                                )}
-                        </>
-                    )}
+                    render={(props) =>
+                        
+                            <>
+                                {showAddTask && <AddTask onAdd={addTask} />}
+                            
+                                {tasks.length > 0 ? (
+                                        <Tasks
+                                            tasks={tasks}
+                                            onDelete={deleteTask}
+                                            onToggle={toggleReminder}
+                                            onGoToDetail={() => { setShowAddTask(false) }}
+                                    />) :
+                                ('No Tasks To Show')}
+                               
+                            </>
+                     
+                    }
                 />
                 <Route path='/about' exact component={About} />
                 <Route path='/task/:id' exact

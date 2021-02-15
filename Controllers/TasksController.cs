@@ -47,42 +47,55 @@ namespace react_crash_2021.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
-            var task = await _repo.GetTask(id);
-
-            if (task == null)
+            try
             {
-                return NotFound();
+                var task = await _repo.GetTask(id);
+
+                if (task == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return _mapper.Map<TaskModel>(task);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return _mapper.Map<TaskModel>(task);
+                return BadRequest(e.Message);
             }
-
-
-            //
-            return NotFound();
+            
         }
 
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(long id, TaskModel task)
+        public async Task<ActionResult<TaskModel>> PutTask(long id, TaskModel task)
         {
+            try
+            {
+                var updatedTask = await _repo.UpdateTask(id, _mapper.Map<task>(task));
+                //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
+                return _mapper.Map<TaskModel>(updatedTask);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
+            
 
-            return NotFound();
         }
 
         // POST: api/Tasks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<task>> PostTask(TaskModel model)
+        public async Task<ActionResult> PostTask(TaskModel model)
         {
-            var task = _repo.UpdateTask(model.Id, _mapper.Map<task>(model));
-            //_context.Tasks.Add(task);
-            //await _context.SaveChangesAsync();
+            var task = await _repo.AddTask(_mapper.Map<task>(model));
+            //
             //model = _mapper.Map<TaskModel>(task);
-            return CreatedAtAction("Gettask", new { id = task.id }, model);
+            return CreatedAtAction("GetTask", _mapper.Map<TaskModel>(task));
         }
 
         // DELETE: api/Tasks/5
@@ -97,8 +110,17 @@ namespace react_crash_2021.Controllers
 
             //_context.Tasks.Remove(task);
             //await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                var task = await _repo.Deletetask(id);
+                //should retun a 204: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
+                return NoContent();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
 
         //private bool taskExists(long id)
