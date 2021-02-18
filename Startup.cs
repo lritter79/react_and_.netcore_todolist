@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +44,9 @@ namespace react_crash_2021
 
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
-            
+            services.AddTransient<AspNetUserManager<reactCrashUser>>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using react_crash_2021.Data.Entities;
@@ -47,9 +48,17 @@ namespace react_crash_2021.Data
                 .HasOne(t => t.user)
                 .WithMany(u => u.tasks)
                 .HasForeignKey("user_id");
-                
+
+
+
+           
+
             modelBuilder.Entity<reactCrashUser>()
                 .ToTable("users");
+
+            
+
+            
 
         }
     }
