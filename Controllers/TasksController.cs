@@ -42,8 +42,40 @@ namespace react_crash_2021.Controllers
 
             return _mapper.Map<List<TaskModel>>(tasks);
         }
+        
+        [HttpGet]
+        [Route("~/api/Users/{userId}/Tasks")]
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser(Guid userId)
+        {
+            var tasks = await _repo.GetTasks();
+
+            return _mapper.Map<List<TaskModel>>(tasks);
+        }
 
         // GET: api/Tasks/5
+        [HttpGet]
+        [Route("~/api/Users/{userId}/Tasks{id}")]
+        public async Task<ActionResult<TaskModel>> GetTaskByUser(Guid userId, long id)
+        {
+            try
+            {
+                var task = await _repo.GetTask(id);
+
+                if (task == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return _mapper.Map<TaskModel>(task);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+        }// GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
@@ -74,7 +106,7 @@ namespace react_crash_2021.Controllers
         {
             try
             {
-                var updatedTask = await _repo.UpdateTask(id, _mapper.Map<task>(task));
+                var updatedTask = await _repo.UpdateTask(id, _mapper.Map<TaskEntity>(task));
                 //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
                 return _mapper.Map<TaskModel>(updatedTask);
             }
@@ -92,7 +124,7 @@ namespace react_crash_2021.Controllers
         [HttpPost]
         public async Task<ActionResult> PostTask(TaskModel model)
         {
-            var task = await _repo.AddTask(_mapper.Map<task>(model));
+            var task = await _repo.AddTask(_mapper.Map<TaskEntity>(model));
             //
             //model = _mapper.Map<TaskModel>(task);
             return CreatedAtAction("GetTask", _mapper.Map<TaskModel>(task));

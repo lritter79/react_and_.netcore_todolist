@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -39,9 +40,20 @@ namespace react_crash_2021
             //says go look for profile classes on startup that derive from profile
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<ReactCrashAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
+
+            //identity docs: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-5.0
+            //Identity with the default UI
             services.AddDefaultIdentity<reactCrashUser>()
                 .AddEntityFrameworkStores<ReactCrashAppContext>();
-
+            //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
+            //default ASP.NET Core conventions on top of IdentityServer:
+            services.AddIdentityServer()
+                .AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
+            //Authentication with an additional AddIdentityServerJwt helper method 
+            //that configures the app to 
+            //validate JWT tokens produced by IdentityServer:
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddTransient<AspNetUserManager<reactCrashUser>>();
@@ -63,8 +75,14 @@ namespace react_crash_2021
                 app.UseHsts();
             }
 
-            appContext.Database.EnsureCreated();
+            appContext.Database.EnsureCreated(); 
+            //The authentication middleware that is responsible for 
+            //validating the request credentials and setting the user
+            //on the request context:
             app.UseAuthentication();
+            //The IdentityServer middleware that exposes the OpenID 
+            //Connect endpoints:
+            app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

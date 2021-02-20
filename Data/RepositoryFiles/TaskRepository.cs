@@ -24,14 +24,14 @@ namespace react_crash_2021.Data
             this._context = context;
         }
 
-        public async Task<task> AddTask(task model)
+        public async Task<TaskEntity> AddTask(TaskEntity model)
         {
             await _context.Tasks.AddAsync(model);
             await _context.SaveChangesAsync();
             return model;
         }
 
-        public async Task<task> Deletetask(long id)
+        public async Task<TaskEntity> Deletetask(long id)
         {
 
             var task = _context.Tasks.Find(id);
@@ -45,18 +45,18 @@ namespace react_crash_2021.Data
             return task;
         }
 
-        public async Task<task> GetTask(long id)
+        public async Task<TaskEntity> GetTask(long id)
         {
             //throw new NotImplementedException();
             return await _context.Tasks.Where(task => task.id == id).FirstAsync();
         }
 
-        public async Task<IEnumerable<task>> GetTasks()
+        public async Task<IEnumerable<TaskEntity>> GetTasks()
         {
             return await _context.Tasks.ToListAsync();
         }
 
-        public async Task<task> UpdateTask(long id, task task)
+        public async Task<TaskEntity> UpdateTask(long id, TaskEntity task)
         {
             if (_context.Tasks.Any(t => t.id == id))
             {
@@ -71,7 +71,7 @@ namespace react_crash_2021.Data
 
             await _context.SaveChangesAsync();
 
-            return await _context.FindAsync<task>(id);
+            return await _context.FindAsync<TaskEntity>(id);
         }
 
 

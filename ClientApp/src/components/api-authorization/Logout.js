@@ -1,0 +1,1 @@
+﻿//Logout.js: Handles the app's logout flow.

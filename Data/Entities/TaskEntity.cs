@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace react_crash_2021.Data.Entities
 {
-    public class task
+    public class TaskEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

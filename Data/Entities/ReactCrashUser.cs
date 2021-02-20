@@ -8,7 +8,7 @@ namespace react_crash_2021.Data.Entities
 {
     public class reactCrashUser : IdentityUser<Guid>
     {
-        public IEnumerable<task> tasks;
+        public IEnumerable<TaskEntity> tasks;
         
     }
 }

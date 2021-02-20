@@ -1,5 +1,9 @@
 ﻿
-using Microsoft.AspNet.Identity.EntityFramework;
+using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Extensions;
+using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +30,9 @@ namespace react_crash_2021.Data
     //    modelBuilder.Entity<Student>().ToTable("Student");
     //}
     public class ReactCrashAppContext : IdentityDbContext<reactCrashUser, reactCrashUserRole, Guid>
-
     {
-        public DbSet<task> Tasks { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
         public override DbSet<reactCrashUser> Users { get; set; }
-
         public ReactCrashAppContext(DbContextOptions<ReactCrashAppContext> options) : base(options)
         {
 
@@ -43,23 +45,15 @@ namespace react_crash_2021.Data
             //.HasRequired(c => c.ApplicationUser)
             //.WithMany(t => t.MyObjects)
             //.Map(m => m.MapKey("UserId"));
-            modelBuilder.Entity<task>()
+            modelBuilder.Entity<TaskEntity>()
                 .ToTable("tasks")
                 .HasOne(t => t.user)
                 .WithMany(u => u.tasks)
                 .HasForeignKey("user_id");
 
-
-
-           
-
             modelBuilder.Entity<reactCrashUser>()
                 .ToTable("users");
-
-            
-
-            
-
         }
+
     }
 }
