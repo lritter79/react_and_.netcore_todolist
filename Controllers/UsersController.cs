@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using react_crash_2021.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,9 @@ namespace react_crash_2021.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private AspNetUserManager<reactCrashUser> _userManager;
+
+
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
