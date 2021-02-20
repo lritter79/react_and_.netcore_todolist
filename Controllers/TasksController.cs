@@ -47,19 +47,19 @@ namespace react_crash_2021.Controllers
         [Route("~/api/Users/{userId}/Tasks")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser(Guid userId)
         {
-            var tasks = await _repo.GetTasks();
+            var tasks = await _repo.GetTasksByUser(userId);
 
             return _mapper.Map<List<TaskModel>>(tasks);
         }
 
         // GET: api/Tasks/5
         [HttpGet]
-        [Route("~/api/Users/{userId}/Tasks{id}")]
+        [Route("~/api/Users/{userId}/Tasks/{id}")]
         public async Task<ActionResult<TaskModel>> GetTaskByUser(Guid userId, long id)
         {
             try
             {
-                var task = await _repo.GetTask(id);
+                var task = await _repo.GetTaskByUser(userId, id);
 
                 if (task == null)
                 {

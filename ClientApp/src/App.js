@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 //for authorization
-import authService from './api-authorization/AuthorizeService'
+//import authService from './api-authorization/AuthorizeService'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Tasks from './components/Tasks'
@@ -128,7 +128,7 @@ const App = () => {
                     onAdd={() => setShowAddTask(!showAddTask)}
                     showAdd={showAddTask}
                 />
-                <AuthorizeRout
+                <Route
                     path='/'
                     exact
                     render={(props) =>
@@ -152,7 +152,7 @@ const App = () => {
                     }
                 />
                 <Route path='/about' exact component={About} />
-                <AuthorizeRout path='/task/:id' exact
+                <Route path='/task/:id' exact
                     render={(props) => (
                         <TaskDetails
                             onUpdate={updateTask}

@@ -45,15 +45,17 @@ namespace react_crash_2021
             //Identity with the default UI
             services.AddDefaultIdentity<reactCrashUser>()
                 .AddEntityFrameworkStores<ReactCrashAppContext>();
+
             //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
             //default ASP.NET Core conventions on top of IdentityServer:
-            services.AddIdentityServer()
-                .AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
+            //services.AddIdentityServer()
+                //.AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
             //Authentication with an additional AddIdentityServerJwt helper method 
             //that configures the app to 
             //validate JWT tokens produced by IdentityServer:
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            //services.AddAuthentication()
+                //.AddIdentityServerJwt();
+
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddTransient<AspNetUserManager<reactCrashUser>>();
@@ -76,13 +78,15 @@ namespace react_crash_2021
             }
 
             appContext.Database.EnsureCreated(); 
+           
             //The authentication middleware that is responsible for 
             //validating the request credentials and setting the user
             //on the request context:
-            app.UseAuthentication();
+            //app.UseAuthentication();
+            
             //The IdentityServer middleware that exposes the OpenID 
             //Connect endpoints:
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

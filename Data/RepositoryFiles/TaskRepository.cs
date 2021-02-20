@@ -51,9 +51,51 @@ namespace react_crash_2021.Data
             return await _context.Tasks.Where(task => task.id == id).FirstAsync();
         }
 
+        public async Task<TaskEntity> GetTaskByUser(Guid userId, long id)
+        {
+            var queryable = _context.Tasks
+                        .Join(_context.Users,
+                        task => task.user.Id,
+                        user => user.Id,
+                        (task, user) => new TaskEntity
+                        {
+                            id = task.id,
+                            details = task.details,
+                            reminder = task.reminder,
+                            location = task.location,
+                            task_date = task.task_date,
+                            text = task.text,
+                            user = user
+                        })
+                        .Where(t => t.user.Id == userId);
+
+            return await queryable.Where(t => t.id == id).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<TaskEntity>> GetTasks()
         {
             return await _context.Tasks.ToListAsync();
+        }
+        
+        public async Task<IEnumerable<TaskEntity>> GetTasksByUser(Guid userId)
+        {
+
+            return await _context.Tasks
+                                    .Join(_context.Users,
+                                    task => task.user.Id,
+                                    user => user.Id,
+                                    (task, user) => new TaskEntity
+                                    {
+                                        id = task.id,
+                                        details = task.details,
+                                        reminder = task.reminder,
+                                        location = task.location,
+                                        task_date = task.task_date,
+                                        text = task.text,
+                                        user = user
+                                    })
+                                    .Where(t => t.user.Id == userId)
+                                    .ToListAsync();
         }
 
         public async Task<TaskEntity> UpdateTask(long id, TaskEntity task)

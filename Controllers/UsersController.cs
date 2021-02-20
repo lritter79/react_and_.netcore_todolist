@@ -21,7 +21,7 @@ namespace react_crash_2021.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get(Guid id)
         {
             return "value";
         }
