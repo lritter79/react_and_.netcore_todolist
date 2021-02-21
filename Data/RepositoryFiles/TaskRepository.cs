@@ -31,6 +31,13 @@ namespace react_crash_2021.Data
             return model;
         }
 
+        public async Task<IEnumerable<TaskEntity>> AddTasks(IEnumerable<TaskEntity> model)
+        {
+            await _context.Tasks.AddRangeAsync(model);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
         public async Task<TaskEntity> Deletetask(long id)
         {
 

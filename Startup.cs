@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.RepositoryFiles;
+using System;
 using System.Reflection;
 
 namespace react_crash_2021
@@ -46,19 +47,54 @@ namespace react_crash_2021
             services.AddDefaultIdentity<reactCrashUser>()
                 .AddEntityFrameworkStores<ReactCrashAppContext>();
 
-            //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
-            //default ASP.NET Core conventions on top of IdentityServer:
-            //services.AddIdentityServer()
-                //.AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
-            //Authentication with an additional AddIdentityServerJwt helper method 
-            //that configures the app to 
-            //validate JWT tokens produced by IdentityServer:
-            //services.AddAuthentication()
-                //.AddIdentityServerJwt();
-
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddTransient<AspNetUserManager<reactCrashUser>>();
+
+            //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
+            //default ASP.NET Core conventions on top of IdentityServer:
+            services.AddIdentityServer()
+                .AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
+            //Authentication with an additional AddIdentityServerJwt helper method 
+            //that configures the app to 
+            //validate JWT tokens produced by IdentityServer:
+            services.AddAuthentication()
+            .AddIdentityServerJwt();
+
+
+            //services.AddScoped<ApplicationUserStore>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
 
         }
@@ -79,20 +115,22 @@ namespace react_crash_2021
 
             appContext.Database.EnsureCreated(); 
            
-            //The authentication middleware that is responsible for 
-            //validating the request credentials and setting the user
-            //on the request context:
-            //app.UseAuthentication();
+            
             
             //The IdentityServer middleware that exposes the OpenID 
             //Connect endpoints:
-            //app.UseIdentityServer();
+            app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             
             app.UseRouting();
-
+            //The authentication middleware that is responsible for 
+            //validating the request credentials and setting the user
+            //on the request context:
+            app.UseAuthentication();
+            //app.UseAuthorization is included to ensure it's added in the correct order should the app add authorization.
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

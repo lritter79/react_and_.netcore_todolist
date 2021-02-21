@@ -13,6 +13,7 @@ namespace react_crash_2021.Data.RepositoryFiles
         Task<TaskEntity> GetTask(long id);
         Task<TaskEntity> UpdateTask (long id, TaskEntity task);
         Task<TaskEntity> AddTask(TaskEntity model);
+        Task<IEnumerable<TaskEntity>> AddTasks(IEnumerable<TaskEntity> model);
         Task<TaskEntity> Deletetask(long id);
         Task<IEnumerable<TaskEntity>> GetTasksByUser(Guid userId);
         Task<TaskEntity> GetTaskByUser(Guid userId, long id);
