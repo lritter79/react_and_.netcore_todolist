@@ -9,6 +9,8 @@ import FormatDateString from './FormatDateString'
 //else it will have an empty string as class
 const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
   const dayInlineStyle = {color: coolColor}
+  const borderStyle = {borderTop: '5px solid ' + coolColor}
+  
   // const coolColor = (id) => {
   //   id = id > 3 ? id % 4 : id 
   //   switch(id) {
@@ -26,7 +28,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
   // }
 
   return (
-    <div
+    <div style={borderStyle}
       className={`task ${task.reminder ? 'reminder' : ''}`}
       onDoubleClick={() => onToggle(task.id)}
     >

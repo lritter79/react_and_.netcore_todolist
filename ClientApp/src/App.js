@@ -125,7 +125,7 @@ const App = () => {
     return (
         <Router>
             <Navbar bg="light" expand="lg">
-				<Navbar.Brand>Task Tracker</Navbar.Brand>
+                <Navbar.Brand>Task Tracker</Navbar.Brand>				
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="mr-auto">                    

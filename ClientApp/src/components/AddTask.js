@@ -40,15 +40,6 @@ const AddTask = ({ onAdd, isToggled }) => {
     
   }
 
-  const cssClass = (isToggled) => 
-  { 
-    if (isToggled) {
-      console.log("dddfd")
-      return "taskForm"
-    } else {
-      return "taskForm hidden"
-    }
-  }
 
   return (
     <div className={isToggled ? 'taskForm' : 'taskForm hidden'}>
