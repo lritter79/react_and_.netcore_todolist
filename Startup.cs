@@ -61,7 +61,7 @@ namespace react_crash_2021
             services.AddAuthentication()
             .AddIdentityServerJwt();
 
-
+            services.AddJwtBearer();
             //services.AddScoped<ApplicationUserStore>();
 
             services.Configure<IdentityOptions>(options =>

@@ -1,6 +1,6 @@
-﻿//Handles the app's login flow.
+//Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
-const Login = () => {
+const Register = () => {
     return (
         <>
             <Form>
@@ -18,12 +18,19 @@ const Login = () => {
                         placeholder="Password"
                     />
                 </Form.Group>
+                <Form.Group>
+                    <Form.Label>Confirm Password: </Form.Label>
+                    <Form.Control 
+                        type="password" 
+                        placeholder="Password"
+                    />
+                </Form.Group>
                 <button
                     type='submit'
                     className='btn'
                     style={{ backgroundColor: 'skyblue' }}
                     >
-                    Login
+                    Sign Up
                 </button>
             </Form>
         </>
@@ -31,4 +38,4 @@ const Login = () => {
     
 }
 
-export default Login
+export default Register

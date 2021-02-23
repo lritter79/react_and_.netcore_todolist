@@ -10,6 +10,6 @@ namespace react_crash_2021.Models
     public class ReactCrashUserModel : IdentityUser<Guid>
     {
         public IEnumerable<TaskModel> Tasks;
-
+        public DateTime DateCreated;
     }
 }

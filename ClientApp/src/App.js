@@ -11,6 +11,8 @@ import AddTask from './components/AddTask'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
+import Login from './components/api-authorization/Login'
+import Register from './components/api-authorization/Register'
 
 //import UpdateTask from './components/UpdateTask'
 
@@ -131,6 +133,8 @@ const App = () => {
 					<Nav className="mr-auto">                    
 						<Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
 						<Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
+                        <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
+                        <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
@@ -162,6 +166,8 @@ const App = () => {
                     }
                 />
                 <Route path='/about' exact component={About} />
+                <Route path='/login' exact component={Login} />
+                <Route path='/register' exact component={Register} />
                 <Route path='/task/:id' exact
                     render={(props) => (
                         <TaskDetails

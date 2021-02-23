@@ -43,7 +43,8 @@ namespace react_crash_2021.Data
                 .HasForeignKey("user_id");
 
             modelBuilder.Entity<reactCrashUser>()
-                .ToTable("users");
+                .ToTable("users")
+                .Property(rcu => rcu.dateCreated).HasColumnType("DateTime2"); ;
 
         }
 

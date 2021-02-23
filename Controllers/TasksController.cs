@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,7 @@ namespace react_crash_2021.Controllers
         
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser(Guid userId)
         {
             var tasks = await _repo.GetTasksByUser(userId);
@@ -55,6 +57,7 @@ namespace react_crash_2021.Controllers
         // GET: api/Tasks/5
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks/{id}")]
+        [Authorize]
         public async Task<ActionResult<TaskModel>> GetTaskByUser(Guid userId, long id)
         {
             try
@@ -77,6 +80,7 @@ namespace react_crash_2021.Controllers
             
         }// GET: api/Tasks/5
         [HttpGet("{id}")]
+
         public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
             try
@@ -102,6 +106,7 @@ namespace react_crash_2021.Controllers
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<TaskModel>> PutTask(long id, TaskModel task)
         {
             try
@@ -122,6 +127,7 @@ namespace react_crash_2021.Controllers
         // POST: api/Tasks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> PostTask(TaskModel model)
         {
             var task = await _repo.AddTask(_mapper.Map<TaskEntity>(model));
@@ -132,6 +138,7 @@ namespace react_crash_2021.Controllers
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTask(long id)
         {
             //var task = await _context.Tasks.FindAsync(id);
