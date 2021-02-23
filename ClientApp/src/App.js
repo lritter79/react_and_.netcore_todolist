@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, NavLink  } from 'react-router-dom'
+import { Navbar, Nav } from 'react-bootstrap'
 //for authorization
 //import authService from './api-authorization/AuthorizeService'
 import Header from './components/Header'
@@ -123,6 +124,16 @@ const App = () => {
     //exact menas match path exactly
     return (
         <Router>
+            <Navbar bg="light" expand="lg">
+				<Navbar.Brand>Task Tracker</Navbar.Brand>
+				<Navbar.Toggle aria-controls="basic-navbar-nav" />
+				<Navbar.Collapse id="basic-navbar-nav">
+					<Nav className="mr-auto">                    
+						<Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+						<Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
+					</Nav>
+				</Navbar.Collapse>
+			</Navbar>
             <div className='container'>
                 <Header
                     onAdd={() => setShowAddTask(!showAddTask)}
@@ -132,7 +143,6 @@ const App = () => {
                     path='/'
                     exact
                     render={(props) =>
-
                         <>
                             {showAddTask && <AddTask onAdd={addTask} />}
                             {!isLoading ? (

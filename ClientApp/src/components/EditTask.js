@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Button from './Button'
+import Form from 'react-bootstrap/Form'
 
 const EditTask = ({task, onCancel, onUpdate}) => {
     const [id, setId] = useState(task.id)
@@ -36,61 +37,66 @@ const EditTask = ({task, onCancel, onUpdate}) => {
       }
     
     return (
-    <form className='edit-form' onSubmit={onSubmit}>
-        <div className='form-control'>
-            <label>Task</label>
-            <input
+<Form onSubmit={onSubmit}>
+  <Form.Group>
+    <Form.Label>Task</Form.Label>
+    <Form.Control 
                 type='text'
                 maxLength='30'
                 placeholder=''
                 value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-        </div>
-        <div className='form-control'>
-            <label>Detail</label>
-            <input
-            type='text'
-            placeholder=''
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-            />
-        </div>
-        <div className='form-control'>
-            <label>Location</label>
-            <input
+                onChange={(e) => setText(e.target.value)} />
+  </Form.Group>
+
+  <Form.Group>
+    <Form.Label>Location: </Form.Label>
+    <Form.Control 
             type='text'
             placeholder=''
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             />
-        </div>
-        <div className='form-control'>
-        <label>Day & Time</label>
-        <input
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Details: </Form.Label>
+    <Form.Control 
+            type='text'
+            placeholder=''
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+             />
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Day & Time</Form.Label>
+    <Form.Control 
             type='datetime-local'
             placeholder='Add Day & Time'
             value={day}
-            onChange={(e) => setDay(e.target.value)}
-        />
-        </div>
-        <div className='form-control form-control-check'>
-        <label>Set Reminder</label>
-        <input
-            type='checkbox'
-            checked={reminder}
+            onChange={(e) => setDay(e.target.value)}/>
+  </Form.Group>
+  <Form.Group>
+    <Form.Check 
+    type="checkbox" 
+    label="Set Reminder"
+    checked={reminder}
             value={reminder}
-            onChange={(e) => setReminder(e.currentTarget.checked)}
-        />
-        </div>
-
-        <input type='submit' value='Save Task' className='btn' />
-        <Button
+            onChange={(e) => setReminder(e.currentTarget.checked)} />
+  </Form.Group>
+  
+  <button
+      type='submit'
+      className='btn'
+      style={{ backgroundColor: 'skyblue' }}
+    >
+      Save Task
+  </button>
+  <Button
             color='red'
             text='Cancel'
             onClick={onCancel}
         />
-    </form>)
+</Form>
+)
     
 }
 export default EditTask

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Form from 'react-bootstrap/Form'
 
 //take in the function onAdd
 const AddTask = ({ onAdd }) => {
@@ -36,56 +37,62 @@ const AddTask = ({ onAdd }) => {
   }
 
   return (
-    <form className='add-form' onSubmit={onSubmit}>
-      <div className='form-control'>
-        <label>Task</label>
-        <input
-          type='text'
-          maxLength='30'
-          placeholder='Add Task'
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-      </div>
-      <div className='form-control'>
-        <label>Detail</label>
-        <input
-          type='text'
-          placeholder=''
-          value={details}
-          onChange={(e) => setDetails(e.target.value)}
-        />
-      </div>
-      <div className='form-control'>
-        <label>Location</label>
-        <input
-          type='text'
-          placeholder=''
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-      </div>
-      <div className='form-control'>
-        <label>Day & Time</label>
-        <input
-          type='datetime-local'
-          placeholder='Add Day & Time'
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-        />
-      </div>
-      <div className='form-control form-control-check'>
-        <label>Set Reminder</label>
-        <input
-          type='checkbox'
-          checked={reminder}
-          value={reminder}
-          onChange={(e) => setReminder(e.currentTarget.checked)}
-        />
-      </div>
+<Form onSubmit={onSubmit}>
+  <Form.Group>
+    <Form.Label>Task</Form.Label>
+    <Form.Control 
+                type='text'
+                maxLength='30'
+                placeholder=''
+                value={text}
+                onChange={(e) => setText(e.target.value)} />
+  </Form.Group>
 
-      <input type='submit' value='Save Task' className='btn btn-block' />
-    </form>
+  <Form.Group>
+    <Form.Label>Location: </Form.Label>
+    <Form.Control 
+            type='text'
+            placeholder=''
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            />
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Details: </Form.Label>
+    <Form.Control 
+            type='text'
+            placeholder=''
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+             />
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Day & Time</Form.Label>
+    <Form.Control 
+            type='datetime-local'
+            placeholder='Add Day & Time'
+            value={day}
+            onChange={(e) => setDay(e.target.value)}/>
+  </Form.Group>
+  <Form.Group>
+    <Form.Check 
+    type="checkbox" 
+    label="Set Reminder"
+    checked={reminder}
+            value={reminder}
+            onChange={(e) => setReminder(e.currentTarget.checked)} />
+  </Form.Group>
+  
+  <button
+      type='submit'
+      className='btn btn-block'
+      style={{ backgroundColor: 'skyblue' }}
+    >
+      Save Task
+  </button>
+
+</Form>
+    
   )
 }
 
