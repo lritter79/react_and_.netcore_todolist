@@ -37,7 +37,7 @@ const EditTask = ({task, onCancel, onUpdate}) => {
       }
     
     return (
-<Form onSubmit={onSubmit}>
+<Form onSubmit={onSubmit} className="taskName">
   <Form.Group>
     <Form.Label>Task</Form.Label>
     <Form.Control 

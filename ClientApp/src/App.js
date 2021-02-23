@@ -144,7 +144,7 @@ const App = () => {
                     exact
                     render={(props) =>
                         <>
-                            {showAddTask && <AddTask onAdd={addTask} />}
+                            <AddTask onAdd={addTask} isToggled={showAddTask} />
                             {!isLoading ? (
                                 (tasks.length > 0)? (
                                     <Tasks

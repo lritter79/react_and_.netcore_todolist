@@ -153,3 +153,19 @@ footer {
   text-align: center;
 }
 
+
+.taskForm {
+  max-height: 422px;
+  display: block;
+  transition: max-height 0.5s, opacity 0.5s;
+  opacity: 1;
+  overflow: hidden;
+}
+.taskForm.hidden {
+ 
+  pointer-events:none;
+  max-height: 0px;
+	overflow: hidden;
+  transition: max-height 0.5s, opacity 0.5s;
+  opacity: 0;
+}

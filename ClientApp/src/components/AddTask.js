@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 //take in the function onAdd
-const AddTask = ({ onAdd }) => {
+const AddTask = ({ onAdd, isToggled }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
   //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
   const [text, setText] = useState('')
@@ -28,70 +28,87 @@ const AddTask = ({ onAdd }) => {
 
     onAdd({ text, details, location, day, reminder })
 
+
+
     //clears the form
     setText('')
     setDay('')
     setLocation('')
     setDetails('')
     setReminder(false)
+
+    
+  }
+
+  const cssClass = (isToggled) => 
+  { 
+    if (isToggled) {
+      console.log("dddfd")
+      return "taskForm"
+    } else {
+      return "taskForm hidden"
+    }
   }
 
   return (
-<Form onSubmit={onSubmit}>
-  <Form.Group>
-    <Form.Label>Task</Form.Label>
-    <Form.Control 
-                type='text'
-                maxLength='30'
-                placeholder=''
-                value={text}
-                onChange={(e) => setText(e.target.value)} />
-  </Form.Group>
+    <div className={isToggled ? 'taskForm' : 'taskForm hidden'}>
+      <Form onSubmit={onSubmit}>
+        <Form.Group>
+          <Form.Label>Task</Form.Label>
+          <Form.Control 
+                      type='text'
+                      maxLength='30'
+                      placeholder=''
+                      value={text}
+                      onChange={(e) => setText(e.target.value)} />
+        </Form.Group>
 
-  <Form.Group>
-    <Form.Label>Location: </Form.Label>
-    <Form.Control 
-            type='text'
-            placeholder=''
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            />
-  </Form.Group>
-  <Form.Group>
-    <Form.Label>Details: </Form.Label>
-    <Form.Control 
-            type='text'
-            placeholder=''
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-             />
-  </Form.Group>
-  <Form.Group>
-    <Form.Label>Day & Time</Form.Label>
-    <Form.Control 
-            type='datetime-local'
-            placeholder='Add Day & Time'
-            value={day}
-            onChange={(e) => setDay(e.target.value)}/>
-  </Form.Group>
-  <Form.Group>
-    <Form.Check 
-    type="checkbox" 
-    label="Set Reminder"
-    checked={reminder}
-            value={reminder}
-            onChange={(e) => setReminder(e.currentTarget.checked)} />
-  </Form.Group>
-  
-  <button
-      type='submit'
-      className='btn btn-block'
-      style={{ backgroundColor: 'skyblue' }}
-    >
-      Save Task
-  </button>
+        <Form.Group>
+          <Form.Label>Location: </Form.Label>
+          <Form.Control 
+                  type='text'
+                  placeholder=''
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Details: </Form.Label>
+          <Form.Control 
+                  type='text'
+                  placeholder=''
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Day & Time</Form.Label>
+          <Form.Control 
+                  type='datetime-local'
+                  placeholder='Add Day & Time'
+                  value={day}
+                  onChange={(e) => setDay(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Check 
+          type="checkbox" 
+          label="Set Reminder"
+          checked={reminder}
+                  value={reminder}
+                  onChange={(e) => setReminder(e.currentTarget.checked)} />
+        </Form.Group>
+        
+        <button
+            type='submit'
+            className='btn btn-block'
+            style={{ backgroundColor: 'skyblue' }}
+          >
+            Save Task
+        </button>
 
-</Form>
+      </Form>
+    </div>
+
     
   )
 }
