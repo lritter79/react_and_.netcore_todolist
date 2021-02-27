@@ -1,17 +1,18 @@
-﻿//Handles the app's login flow.
+﻿
+//Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
-import Constant from './Constant'
-
+import Constant from '../Constant'
+import { useState } from 'react'
 
 const Login = () => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
         
-            const res = await fetch(`${Constant()}/api/users`, {
+            const res = await fetch(`${Constant()}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
@@ -22,9 +23,8 @@ const Login = () => {
             const data = await res.json()
 
             return data
-        }
     }
-
+    
     return (
         <>
             <Form onSubmit={onSubmit}>
