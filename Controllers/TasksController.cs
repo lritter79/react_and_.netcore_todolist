@@ -46,7 +46,7 @@ namespace react_crash_2021.Controllers
         
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser(Guid userId)
         {
             var tasks = await _repo.GetTasksByUser(userId);
@@ -57,7 +57,7 @@ namespace react_crash_2021.Controllers
         // GET: api/Tasks/5
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks/{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<TaskModel>> GetTaskByUser(Guid userId, long id)
         {
             try
@@ -127,7 +127,7 @@ namespace react_crash_2021.Controllers
         // POST: api/Tasks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> PostTask(TaskModel model)
         {
             var task = await _repo.AddTask(_mapper.Map<TaskEntity>(model));
@@ -138,7 +138,7 @@ namespace react_crash_2021.Controllers
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteTask(long id)
         {
             //var task = await _context.Tasks.FindAsync(id);

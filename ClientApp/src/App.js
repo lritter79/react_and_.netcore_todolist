@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, NavLink  } from 'react-router-dom'
+import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
 //for authorization
 //import authService from './api-authorization/AuthorizeService'
@@ -25,6 +25,8 @@ const App = () => {
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true);
+    //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
+    const [token, setToken] = useState();
 
     useEffect(() => {
         console.log('using effect in app');
@@ -127,55 +129,58 @@ const App = () => {
     return (
         <Router>
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand>Task Tracker</Navbar.Brand>				
-				<Navbar.Toggle aria-controls="basic-navbar-nav" />
-				<Navbar.Collapse id="basic-navbar-nav">
-					<Nav className="mr-auto">                    
-						<Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-						<Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
+                <Navbar.Brand>Task Tracker</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="mr-auto">
+                        <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
                         <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
                         <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-					</Nav>
-				</Navbar.Collapse>
-			</Navbar>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
             <div className='container'>
-                <Header
-                    onAdd={() => setShowAddTask(!showAddTask)}
-                    showAdd={showAddTask}
-                />
-                <Route
-                    path='/'
-                    exact
-                    render={(props) =>
-                        <>
-                            <AddTask onAdd={addTask} isToggled={showAddTask} />
-                            {!isLoading ? (
-                                (tasks.length > 0)? (
-                                    <Tasks
-                                        tasks={tasks}
-                                        onDelete={deleteTask}
-                                        onToggle={toggleReminder}
-                                        onGoToDetail={() => { setShowAddTask(false) }}
-                                    />) :
-                                    ('No Tasks To Show')
-                            ) : ('Loading ...')}
-                            
+                {token ? (
+                    <>
+                        <Header
+                            onAdd={() => setShowAddTask(!showAddTask)}
+                            showAdd={showAddTask} /><Route
+                            path='/'
+                            exact
+                            render={(props) => <>
+                                <AddTask onAdd={addTask} isToggled={showAddTask} />
+                                {!isLoading ? (
+                                    (tasks.length > 0) ? (
+                                        <Tasks
+                                            tasks={tasks}
+                                            onDelete={deleteTask}
+                                            onToggle={toggleReminder}
+                                            onGoToDetail={() => { setShowAddTask(false) }} />) :
+                                        ('No Tasks To Show')
+                                ) : ('Loading ...')}
 
+
+                            </>} /><Route path='/about' exact component={About} /><Route path='/task/:id' exact
+                                render={(props) => (
+                                    <TaskDetails
+                                        onUpdate={updateTask} />
+                                )} />
+                        <Footer />
+                    </>
+                ) : (
+                        <>
+                            <Route exact path="/">
+                                <Redirect to="/login" /> 
+                            </Route>
+                            
+                                <Route path='/login' exact component={Login} />
+                                <Route path='/register' exact component={Register} />
+                            
+                            
                         </>
 
-                    }
-                />
-                <Route path='/about' exact component={About} />
-                <Route path='/login' exact component={Login} />
-                <Route path='/register' exact component={Register} />
-                <Route path='/task/:id' exact
-                    render={(props) => (
-                        <TaskDetails
-                            onUpdate={updateTask}
-                        />
                     )}
-                />
-                <Footer />
             </div>
         </Router>
     )
