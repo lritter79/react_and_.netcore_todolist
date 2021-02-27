@@ -49,8 +49,8 @@ namespace react_crash_2021
 
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
-            services.AddTransient<AspNetUserManager<reactCrashUser>>();
-
+            services.AddTransient<UserManager<reactCrashUser>>();
+            services.AddTransient<SignInManager<reactCrashUser>>();
             //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
             //default ASP.NET Core conventions on top of IdentityServer:
             services.AddIdentityServer()
@@ -61,7 +61,7 @@ namespace react_crash_2021
             services.AddAuthentication()
             .AddIdentityServerJwt();
 
-            services.AddJwtBearer();
+            //services.AddJwtBearer();
             //services.AddScoped<ApplicationUserStore>();
 
             services.Configure<IdentityOptions>(options =>
@@ -136,6 +136,7 @@ namespace react_crash_2021
             app.UseAuthentication();
             //app.UseAuthorization is included to ensure it's added in the correct order should the app add authorization.
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

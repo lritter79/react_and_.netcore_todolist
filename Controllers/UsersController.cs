@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using react_crash_2021.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,13 +19,17 @@ namespace react_crash_2021.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private AspNetUserManager<reactCrashUser> _userManager;
+        private UserManager<reactCrashUser> _userManager;
+        private SignInManager<reactCrashUser> _signInManager;
+        //private IJwtAuthenticationManager _jwtAuthenticationManager;
         private IMapper _mapper;
 
-        public UsersController(AspNetUserManager<reactCrashUser> userManager, IMapper mapper)
+        public UsersController(UserManager<reactCrashUser> userManager, SignInManager<reactCrashUser> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _signInManager = signInManager;
+            //_jwtAuthenticationManager = jwtAuthenticationManager;
         }
 
         // GET: api/<UsersController>
@@ -43,7 +50,8 @@ namespace react_crash_2021.Controllers
 
         // POST api/Users
         [HttpPost]
-        public async Task<ActionResult> PostUser(RegisterModel registerModel)
+        [Route("~/api/Users/Register")]
+        public async Task<ActionResult> Register(RegisterModel registerModel)
         {
             try
             {
@@ -70,6 +78,35 @@ namespace react_crash_2021.Controllers
 
         }
 
+        [HttpPost]
+        [Route("~/api/Users/Login")]
+        public async Task<ActionResult> Login(LoginModel loginModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //stores sign in result
+                    var result = await _signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        //var token = _jwtAuthenticationManager.Authenticate(loginModel);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest("Invalid username/password");
+                    }
+                }
+
+                return BadRequest("Invalid username/password");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         [Authorize]
