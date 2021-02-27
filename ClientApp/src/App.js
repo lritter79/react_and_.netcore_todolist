@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom'
+import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
 //for authorization
 //import authService from './api-authorization/AuthorizeService'
@@ -161,7 +161,8 @@ const App = () => {
                                 ) : ('Loading ...')}
 
 
-                            </>} /><Route path='/about' exact component={About} /><Route path='/task/:id' exact
+                            </>} /><Route path='/about' exact component={About} />
+                        <Route path='/task/:id' exact
                                 render={(props) => (
                                     <TaskDetails
                                         onUpdate={updateTask} />
@@ -171,13 +172,19 @@ const App = () => {
                 ) : (
                         <>
                             <Route exact path="/">
-                                <Redirect to="/login" /> 
+                                <Redirect to="/login" />
                             </Route>
-                            
-                                <Route path='/login' exact component={Login} />
-                                <Route path='/register' exact component={Register} />
-                            
-                            
+
+                            <Route path='/login' exact
+                                render={(props) => (
+                                    <Login
+                                        setToken={setToken}
+                                    />
+                                )}
+                            />
+                            <Route path='/register' exact component={Register} />
+
+
                         </>
 
                     )}
