@@ -15,7 +15,12 @@ import Login from './components/api-authorization/Login'
 import Register from './components/api-authorization/Register'
 
 //import UpdateTask from './components/UpdateTask'
+function setToken(userToken) {
+    sessionStorage.setItem('token', JSON.stringify(userToken));
+}
 
+function getToken() {
+}
 //import header and use it like an xml tag
 //keeps tasks at the highest level (state)
 //changes the state of tasks
@@ -26,7 +31,8 @@ const App = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
-    const [token, setToken] = useState();
+    const token = getToken()
+    
 
     useEffect(() => {
         console.log('using effect in app');
@@ -127,6 +133,7 @@ const App = () => {
     //wrap everything in <Router> to use routes
     //exact menas match path exactly
     return (
+
         <Router>
             <Navbar bg="light" expand="lg">
                 <Navbar.Brand>Task Tracker</Navbar.Brand>

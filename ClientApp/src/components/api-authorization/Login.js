@@ -16,7 +16,9 @@ const Login = ({ setToken }) => {
             username,
             password
         });
-        setToken(token);
+
+        console.log(token)
+        //setToken(token);
         
 
     }
@@ -30,7 +32,10 @@ const Login = ({ setToken }) => {
             },
             body: JSON.stringify(credentials),
         })
-        .then(data => data.json)
+            .then(data => data.json)
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
     }
     

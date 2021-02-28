@@ -91,7 +91,7 @@ namespace react_crash_2021.Controllers
 
                     if (result.Succeeded)
                     {
-                        //var token = _jwtAuthenticationManager.Authenticate(loginModel);
+                        //var token = sign
                         return Ok();
                     }
                     else
