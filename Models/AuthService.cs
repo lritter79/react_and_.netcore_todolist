@@ -37,7 +37,7 @@ namespace react_crash_2021.Models
                 }),
                 Expires = expirationTime,
                 Issuer = jwtIssuer,
-                Audience = jwtIssuer,
+                //Audience = jwtIssuer,
                 //see here for more info about utc.now: https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow
                 IssuedAt = DateTime.UtcNow,
                 // new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature)

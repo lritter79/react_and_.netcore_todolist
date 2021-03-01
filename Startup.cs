@@ -70,8 +70,9 @@ namespace react_crash_2021
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                //options.Audience = Configuration.GetSection("IssuerUrls").GetValue<string>("Development");
-                //options.Authority = Configuration.GetSection("IssuerUrls").GetValue<string>("Development"); ;
+                //options.Audience = 
+                //options.ClaimsIssuer = Configuration.GetSection("IssuerUrls").GetValue<string>("Development");
+                //options.Authority = Configuration.GetSection("IssuerUrls").GetValue<string>("Development");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
@@ -85,7 +86,7 @@ namespace react_crash_2021
                 };
             });
 
-            Console.WriteLine(Configuration.GetSection("IssuerUrls").GetValue<string>("Development"));
+            //Console.WriteLine(Configuration.GetSection("IssuerUrls").GetValue<string>("Development"));
             services.AddSingleton<IAuthService>(
                 new AuthService(
                     Configuration.GetValue<string>("JWTSecretKey"),
@@ -98,6 +99,7 @@ namespace react_crash_2021
 
             services.Configure<IdentityOptions>(options =>
             {
+                
                 // Password settings.
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
