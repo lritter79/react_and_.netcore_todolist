@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using react_crash_2021.Data.Repositories;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,13 +24,17 @@ namespace react_crash_2021.Controllers
         private UserManager<reactCrashUser> _userManager;
         private SignInManager<reactCrashUser> _signInManager;
         //private IJwtAuthenticationManager _jwtAuthenticationManager;
+        private IAuthService _authService;
         private IMapper _mapper;
+        private IReactCrashUserRepository _reactCrashUserRepository;
 
-        public UsersController(UserManager<reactCrashUser> userManager, SignInManager<reactCrashUser> signInManager, IMapper mapper)
+        public UsersController(IReactCrashUserRepository reactCrashUserRepository, UserManager<reactCrashUser> userManager, SignInManager<reactCrashUser> signInManager, IMapper mapper, IAuthService authService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _signInManager = signInManager;
+            _authService = authService;
+            _reactCrashUserRepository = reactCrashUserRepository;
             //_jwtAuthenticationManager = jwtAuthenticationManager;
         }
 
@@ -80,7 +86,7 @@ namespace react_crash_2021.Controllers
 
         [HttpPost]
         [Route("~/api/Users/Login")]
-        public async Task<ActionResult> Login(LoginModel loginModel)
+        public async Task<ActionResult<AuthData>> Login(LoginModel loginModel)
         {
             try
             {
@@ -91,8 +97,9 @@ namespace react_crash_2021.Controllers
 
                     if (result.Succeeded)
                     {
-                        //var token = sign
-                        return Ok();
+                        var user = await _reactCrashUserRepository.GetUser(loginModel.UserName);
+                        
+                        return _authService.GetAuthData(user.Id);
                     }
                     else
                     {
@@ -100,7 +107,7 @@ namespace react_crash_2021.Controllers
                     }
                 }
 
-                return BadRequest("Invalid username/password");
+                return BadRequest(ModelState);
             }
             catch (Exception e)
             {

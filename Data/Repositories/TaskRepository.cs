@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Models;
-using react_crash_2021.Data.RepositoryFiles;
+using react_crash_2021.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace react_crash_2021.Data
+namespace react_crash_2021.Data.Repositories
 {
     /// <summary>
     /// Provides a layer of business logic between API and database context
@@ -21,7 +21,7 @@ namespace react_crash_2021.Data
 
         public TaskRepository(ReactCrashAppContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public async Task<TaskEntity> AddTask(TaskEntity model)

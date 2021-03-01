@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using react_crash_2021.Data.Entities;
-using react_crash_2021.Data.RepositoryFiles;
+using react_crash_2021.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

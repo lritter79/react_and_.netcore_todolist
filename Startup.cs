@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
-using react_crash_2021.Data.RepositoryFiles;
+using react_crash_2021.Data.Repositories;
+using react_crash_2021.Models;
 using System;
 using System.Reflection;
+using System.Text;
 
 namespace react_crash_2021
 {
@@ -49,18 +53,40 @@ namespace react_crash_2021
 
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<IReactCrashUserRepository, ReactCrashUserRepository>();
             services.AddTransient<UserManager<reactCrashUser>>();
             services.AddTransient<SignInManager<reactCrashUser>>();
             //IdentityServer with an additional AddApiAuthorization helper method that sets up some 
             //default ASP.NET Core conventions on top of IdentityServer:
-            services.AddIdentityServer()
-                .AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<reactCrashUser, ReactCrashAppContext>();
             //Authentication with an additional AddIdentityServerJwt helper method 
             //that configures the app to 
             //validate JWT tokens produced by IdentityServer:
-            services.AddAuthentication()
-            .AddIdentityServerJwt();
+            //services.AddAuthentication()
+            //.AddIdentityServerJwt();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
 
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration.GetValue<string>("JWTSecretKey"))
+                    )
+                };
+            });
+
+            services.AddSingleton<IAuthService>(
+                new AuthService(
+                    Configuration.GetValue<string>("JWTSecretKey"),
+                    Configuration.GetValue<int>("JWTLifespan")
+                )
+            );
             //services.AddJwtBearer();
             //services.AddScoped<ApplicationUserStore>();
 
@@ -81,7 +107,7 @@ namespace react_crash_2021
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = false;
 
                 //sign in setting
                 options.SignIn.RequireConfirmedEmail = false;
@@ -124,7 +150,7 @@ namespace react_crash_2021
             
             //The IdentityServer middleware that exposes the OpenID 
             //Connect endpoints:
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

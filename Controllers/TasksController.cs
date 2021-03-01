@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Models;
-using react_crash_2021.Data.RepositoryFiles;
+using react_crash_2021.Data.Repositories;
 using ReactCrashAppContext = react_crash_2021.Data.ReactCrashAppContext;
 
 namespace react_crash_2021.Controllers

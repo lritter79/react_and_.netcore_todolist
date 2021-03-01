@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace react_crash_2021.Data.RepositoryFiles
+namespace react_crash_2021.Data.Repositories
 {
     public interface ITaskRepository
     {
