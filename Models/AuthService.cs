@@ -10,14 +10,20 @@ using System.Web.Helpers;
 
 namespace react_crash_2021.Models
 {
+    /// <summary>
+    /// This is the class that makes the JWT token to be used for authenitcation
+    /// more info here: https://dotnetcoretutorials.com/2020/01/15/creating-and-validating-jwt-tokens-in-asp-net-core/
+    /// </summary>
     public class AuthService : IAuthService
     {
         private string jwtSecret;
         private int jwtLifespan;
-        public AuthService(string jwtSecret, int jwtLifespan)
+        private string jwtIssuer;
+        public AuthService(string jwtSecret, int jwtLifespan, string jwtIssuer)
         {
             this.jwtSecret = jwtSecret;
             this.jwtLifespan = jwtLifespan;
+            this.jwtIssuer = jwtIssuer;
         }
         public AuthData GetAuthData(Guid id)
         {
@@ -30,6 +36,10 @@ namespace react_crash_2021.Models
                     new Claim(ClaimTypes.Name, id.ToString())
                 }),
                 Expires = expirationTime,
+                Issuer = jwtIssuer,
+                Audience = jwtIssuer,
+                //see here for more info about utc.now: https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow
+                IssuedAt = DateTime.UtcNow,
                 // new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature)
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),

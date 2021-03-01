@@ -18,7 +18,7 @@ namespace react_crash_2021.Data
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="repository"></param>
-        public static async Task SeedUsers(AspNetUserManager<reactCrashUser> userManager, ITaskRepository repository)
+        public static async Task SeedUsers(UserManager<reactCrashUser> userManager, ITaskRepository repository)
         {
             reactCrashUser reactCrashUserSeed = new reactCrashUser { UserName = "foo@bar.com", Email = "foo@bar.com", EmailConfirmed = true };
             var isAdded = await SeedUser(userManager, reactCrashUserSeed);
@@ -31,7 +31,7 @@ namespace react_crash_2021.Data
             }
         }
 
-        private async static Task<IdentityResult> SeedUser(AspNetUserManager<reactCrashUser> userManager, reactCrashUser reactCrashUserSeed)
+        private async static Task<IdentityResult> SeedUser(UserManager<reactCrashUser> userManager, reactCrashUser reactCrashUserSeed)
         {
             var user = userManager.Users.FirstOrDefault(u => u.UserName == reactCrashUserSeed.UserName);
             if (user == null)

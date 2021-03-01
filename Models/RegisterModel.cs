@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace react_crash_2021.Models
 {
+    /// <summary>
+    /// An instance of the register view model the user will interact with
+    /// </summary>
     public class RegisterModel
     {
         [Required]

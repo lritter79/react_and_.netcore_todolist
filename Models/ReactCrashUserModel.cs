@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace react_crash_2021.Models
 {
+    /// <summary>
+    /// Represent an app user
+    /// </summary>
     public class ReactCrashUserModel : IdentityUser<Guid>
     {
         public IEnumerable<TaskModel> Tasks;

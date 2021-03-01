@@ -46,7 +46,7 @@ namespace react_crash_2021.Controllers
         
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser(Guid userId)
         {
             var tasks = await _repo.GetTasksByUser(userId);

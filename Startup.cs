@@ -28,8 +28,9 @@ namespace react_crash_2021
 
         public IConfiguration Configuration { get; }
 
+        //use seperate method for development: https://stackoverflow.com/questions/32548948/how-to-get-the-development-staging-production-hosting-environment-in-configurese
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
 
             services.AddControllersWithViews();
@@ -50,6 +51,7 @@ namespace react_crash_2021
             //Identity with the default UI
             services.AddDefaultIdentity<reactCrashUser>()
                 .AddEntityFrameworkStores<ReactCrashAppContext>();
+            
 
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
@@ -68,6 +70,8 @@ namespace react_crash_2021
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
+                //options.Audience = Configuration.GetSection("IssuerUrls").GetValue<string>("Development");
+                //options.Authority = Configuration.GetSection("IssuerUrls").GetValue<string>("Development"); ;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
@@ -81,10 +85,12 @@ namespace react_crash_2021
                 };
             });
 
+            Console.WriteLine(Configuration.GetSection("IssuerUrls").GetValue<string>("Development"));
             services.AddSingleton<IAuthService>(
                 new AuthService(
                     Configuration.GetValue<string>("JWTSecretKey"),
-                    Configuration.GetValue<int>("JWTLifespan")
+                    Configuration.GetValue<int>("JWTLifespan"),
+                    Configuration.GetSection("IssuerUrls").GetValue<string>("Development")
                 )
             );
             //services.AddJwtBearer();
@@ -131,7 +137,7 @@ namespace react_crash_2021
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ReactCrashAppContext appContext)
+        public void ConfigureDevelopment(IApplicationBuilder app, IWebHostEnvironment env, ReactCrashAppContext appContext)
         {
             if (env.IsDevelopment())
             {

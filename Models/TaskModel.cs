@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace react_crash_2021.Data.Models
 {
+    /// <summary>
+    /// Represents an instance of a task that the user will interact with
+    /// </summary>
     public class TaskModel
     {
         public long Id { get; set; }
