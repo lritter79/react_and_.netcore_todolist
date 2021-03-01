@@ -57,10 +57,29 @@ namespace react_crash_2021.Controllers
         // POST api/Users
         [HttpPost]
         [Route("~/api/Users/Register")]
-        public async Task<ActionResult> Register(RegisterModel registerModel)
+        public async Task<ActionResult<AuthData>> Register(RegisterModel registerModel)
         {
+
             try
             {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                //var emailUniq = userRepository.isEmailUniq(model.Email);
+                //if (!emailUniq) return BadRequest(new { email = "user with this email already exists" });
+                //var usernameUniq = userRepository.IsUsernameUniq(model.Username);
+                //if (!usernameUniq) return BadRequest(new { username = "user with this email already exists" });
+
+                //var id = Guid.NewGuid().ToString();
+                //var user = new User
+                //{
+                //    Id = id,
+                //    Username = model.Username,
+                //    Email = model.Email,
+                //    Password = authService.HashPassword(model.Password)
+                //};
+                //userRepository.Add(user);
+                //userRepository.Commit();
+
+                
                 ReactCrashUserModel newUser = new ReactCrashUserModel();
                 newUser.Email = registerModel.Email;
                 newUser.UserName = registerModel.UserName;
@@ -68,8 +87,9 @@ namespace react_crash_2021.Controllers
                 var isCreated = await _userManager.CreateAsync(_mapper.Map<reactCrashUser>(newUser), registerModel.Password);
                 if (isCreated.Succeeded)
                 {
-                    //_userManager.GetUserIdAsync();
-                    return CreatedAtAction("PostUser", newUser);
+                    var user = await _reactCrashUserRepository.GetUser(registerModel.UserName);
+
+                    return _authService.GetAuthData(user.Id);
                 }
                 else
                 {
@@ -103,15 +123,15 @@ namespace react_crash_2021.Controllers
                     }
                     else
                     {
-                        return BadRequest("Invalid username/password");
+                        return BadRequest(new { error = "Invalid username/password" });
                     }
                 }
 
-                return BadRequest(ModelState);
+                return BadRequest(new { error = ModelState.ToString() });
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { error = e.Message });
             }
         }
         // PUT api/<UsersController>/5

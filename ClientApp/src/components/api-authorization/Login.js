@@ -9,18 +9,33 @@ const Login = ({ setToken }) => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const onSubmit = async (e) => {
+    const onSubmit = async e => {
         e.preventDefault()
         const token = await loginUser({
             username,
             password
         });
 
-        console.log(token)
-        //setToken(token);
         
-
+        if (!token.error) {
+            setErrorMessage('')
+            setToken(token)
+        }
+        else {
+            //console.log(token.error)
+            setErrorMessage(token.error)
+        }
+        
+        //if (token.error) {
+            
+            
+        //} else {
+            
+            
+        //}
+        
     }
 
 
@@ -32,19 +47,19 @@ const Login = ({ setToken }) => {
             },
             body: JSON.stringify(credentials),
         })
-            .then(data => data.json)
+            .then(data => data.json())
             .catch((error) => {
-                console.error('Error:', error);
+                console.error('Fetch Error:', error);
             });
 
     }
-    
+
     return (
         <>
             <Form onSubmit={onSubmit}>
                 <Form.Group>
-                <Form.Label>Username: </Form.Label>
-                    <Form.Control 
+                    <Form.Label>Username: </Form.Label>
+                    <Form.Control
                         type='text'
                         maxLength='30'
                         placeholder=''
@@ -54,8 +69,8 @@ const Login = ({ setToken }) => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Password: </Form.Label>
-                    <Form.Control 
-                        type="password" 
+                    <Form.Control
+                        type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -65,13 +80,16 @@ const Login = ({ setToken }) => {
                     type='submit'
                     className='btn'
                     style={{ backgroundColor: 'skyblue' }}
-                    >
+                >
                     Login
                 </button>
             </Form>
+            <p>
+                {errorMessage}
+            </p>
         </>
     )
-    
+
 }
 
 Login.propTypes = {

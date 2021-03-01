@@ -17,13 +17,14 @@ import Register from './components/api-authorization/Register'
 //import UpdateTask from './components/UpdateTask'
 function setToken(userToken) {
     sessionStorage.setItem('token', JSON.stringify(userToken));
+
 }
 
 function getToken() {
 
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
-    //.? is the optional chaing operator: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+    //.? is the optional chain operator: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
     /*
      You need to use the optional chaining operator—?.—when accessing the token property because when you 
      first access the application, the value of sessionStorage.getItem('token') will 
