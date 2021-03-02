@@ -169,6 +169,7 @@ const App = () => {
                 <Route path='/about' exact component={About} />
                 {token ? (
                     <>
+                        <Redirect from='/login' to="/" />
                         <Route path='/' exact
                             render={(props) => (
                                 <>
@@ -194,7 +195,7 @@ const App = () => {
                                 <TaskDetails
                                     onUpdate={updateTask} />
                             )} />
-                        <Footer />
+                        <Footer isLoggedIn={token} />
                     </>
                 ) : (
                         <RegisterAndLoginRoutes setToken={setToken} />
