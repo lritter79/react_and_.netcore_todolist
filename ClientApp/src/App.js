@@ -1,3 +1,5 @@
+/// <reference path="components/navbarlinks.js" />
+
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
@@ -13,25 +15,27 @@ import About from './components/About'
 import FetchTask from './components/FetchTask'
 import Login from './components/api-authorization/Login'
 import Register from './components/api-authorization/Register'
+import useToken from './components/api-authorization/UseToken'
+import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 
 //import UpdateTask from './components/UpdateTask'
-function setToken(userToken) {
-    sessionStorage.setItem('token', JSON.stringify(userToken));
+//function setToken(userToken) {
+//    sessionStorage.setItem('token', JSON.stringify(userToken));
 
-}
+//}
 
-function getToken() {
+//function getToken() {
 
-    const tokenString = sessionStorage.getItem('token');
-    const userToken = JSON.parse(tokenString);
-    //.? is the optional chain operator: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
-    /*
-     You need to use the optional chaining operator—?.—when accessing the token property because when you 
-     first access the application, the value of sessionStorage.getItem('token') will 
-     be undefined. If you try to access a property, you will generate an error.
-     */
-    return userToken?.token
-}
+//    const tokenString = sessionStorage.getItem('token');
+//    const userToken = JSON.parse(tokenString);
+//    //.? is the optional chain operator: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+//    /*
+//     You need to use the optional chaining operator—?.—when accessing the token property because when you 
+//     first access the application, the value of sessionStorage.getItem('token') will 
+//     be undefined. If you try to access a property, you will generate an error.
+//     */
+//    return userToken?.token
+//}
 //import header and use it like an xml tag
 //keeps tasks at the highest level (state)
 //changes the state of tasks
@@ -42,7 +46,7 @@ const App = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
-    const token = getToken()
+    const { token, setToken } = useToken();
     
 
     useEffect(() => {
@@ -150,15 +154,21 @@ const App = () => {
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
+                    <Nav className="mr-auto">        
+                        {token ? (
+                            <>
+                                <Nav.Link as={NavLink} to="/logout" exact>Logout</Nav.Link>
+                            </>) : (<>
+                                <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
+                                <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
+                            </>)}
                         <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
-                        <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
-                        <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
+                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>                                               
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
             <div className='container'>
+                <Route path='/about' exact component={About} />
                 {token ? (
                     <>
                         <Header
@@ -179,32 +189,16 @@ const App = () => {
                                 ) : ('Loading ...')}
 
 
-                            </>} /><Route path='/about' exact component={About} />
+                            </>} />
                         <Route path='/task/:id' exact
-                                render={(props) => (
-                                    <TaskDetails
-                                        onUpdate={updateTask} />
-                                )} />
+                            render={(props) => (
+                                <TaskDetails
+                                    onUpdate={updateTask} />
+                            )} />
                         <Footer />
                     </>
                 ) : (
-                        <>
-                            <Route exact path="/">
-                                <Redirect to="/login" />
-                            </Route>
-
-                            <Route path='/login' exact
-                                render={(props) => (
-                                    <Login
-                                        setToken={setToken}
-                                    />
-                                )}
-                            />
-                            <Route path='/register' exact component={Register} />
-
-
-                        </>
-
+                        <RegisterAndLoginRoutes setToken={setToken} />
                     )}
             </div>
         </Router>
