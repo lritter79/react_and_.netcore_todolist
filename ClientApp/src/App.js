@@ -49,6 +49,13 @@ const App = () => {
         setToken(null);
     };
 
+    const getUserId = () => {
+        const tokenString = sessionStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        console.log(userToken)
+        return userToken?.id
+    };
+
     function handleLogoutClick(e) {
         e.preventDefault()
         removeToken()
@@ -60,7 +67,7 @@ const App = () => {
 
         const getTasks = async () => {
             try {
-                const tasksFromServer = await fetchTasks()
+                const tasksFromServer = await fetchTasks(getUserId())
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
@@ -74,8 +81,15 @@ const App = () => {
 
     // Fetch Tasks
     //gets the tasks we have on the server with async java
-    const fetchTasks = async () => {
-        const res = await fetch(Constant() + '/api/tasks')
+    const fetchTasks = async (id) => {
+        console.log(id)
+        console.log(token)
+        const res = await fetch(Constant() + `/api/Users/${id}/tasks`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
         const data = await res.json()
 
         return data
