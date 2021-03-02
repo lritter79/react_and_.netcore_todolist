@@ -1,4 +1,4 @@
-﻿//instructions https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
+//instructions https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
 import { useState } from 'react';
 
 export default function useToken() {
@@ -17,10 +17,10 @@ export default function useToken() {
         setToken(userToken?.token);
     };
 
-    const removeToken = userToken => {
-        localStorage.removeItem('token');
-        setToken(null);
-    };
+    //const removeToken = userToken => {
+    //    localStorage.removeItem('token');
+    //    setToken(null);
+    //};
 
     let result = {
         setToken: saveToken,

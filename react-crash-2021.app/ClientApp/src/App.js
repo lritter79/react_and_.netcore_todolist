@@ -64,10 +64,10 @@ const App = () => {
 
     useEffect(() => {
         console.log('using effect in app');
-
+        let userId = getUserId()
         const getTasks = async () => {
             try {
-                const tasksFromServer = await fetchTasks(getUserId())
+                const tasksFromServer = await fetchTasks(userId)
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
