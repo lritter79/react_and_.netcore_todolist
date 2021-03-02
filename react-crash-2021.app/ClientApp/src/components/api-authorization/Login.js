@@ -1,4 +1,4 @@
-﻿
+
 //Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'

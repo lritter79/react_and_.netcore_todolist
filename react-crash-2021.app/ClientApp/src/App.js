@@ -40,34 +40,51 @@ import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 const App = () => {
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true)
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
-    const { token, setToken } = useToken();
+    const { token, setToken } = useToken()
+    const [userId, setUserId] = useState()
 
     const removeToken = () => {
         localStorage.removeItem('token');
-        setToken(null);
-    };
+        setToken(null)
+    }
 
-    const getUserId = () => {
-        const tokenString = sessionStorage.getItem('token');
-        const userToken = JSON.parse(tokenString);
-        console.log(userToken)
-        return userToken?.id
-    };
 
     function handleLogoutClick(e) {
         e.preventDefault()
+        setTasks([])
         removeToken()
-        console.log('The link was clicked.');
+        //console.log('The link was clicked.');
     }
 
+    // Fetch Tasks
+    //gets the tasks we have on the server with async java
+
     useEffect(() => {
-        console.log('using effect in app');
+        const getId = () => {
+            console.log('%c using effect in app', 'background: #222, color:#87CEEB')
+            const tokenString = sessionStorage.getItem('token');
+            const userToken = JSON.parse(tokenString);
+            console.log(`%c ${userToken}`, 'background: #222; color: #87CEEB')
+            setUserId(userToken?.id)
+        }
+        
+        const fetchTasks = async (id) => {
+            const res = await fetch(Constant() + `/api/Users/${id}/tasks`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            const data = await res.json()
+
+            return data
+        }
 
         const getTasks = async () => {
             try {
-                const tasksFromServer = await fetchTasks(getUserId())
+                const tasksFromServer = await fetchTasks(userId)
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
@@ -75,25 +92,17 @@ const App = () => {
                 console.log(error)
             }
         }
-        getTasks()
 
-    }, [])
+        getId()
 
-    // Fetch Tasks
-    //gets the tasks we have on the server with async java
-    const fetchTasks = async (id) => {
-        console.log(id)
-        console.log(token)
-        const res = await fetch(Constant() + `/api/Users/${id}/tasks`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        const data = await res.json()
+        if (userId) {
+            getTasks()
+        }
+   
 
-        return data
-    }
+    }, [token, userId])
+
+
 
     // Fetch Task
     const fetchTask = FetchTask
@@ -156,7 +165,7 @@ const App = () => {
     }
 
     const updateTask = async (task) => {
-        console.log(task)
+        //console.log(task)
         setTasks(
             tasks.map((oldTask) => task.id === oldTask.id ? task : oldTask)
         )
