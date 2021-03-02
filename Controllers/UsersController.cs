@@ -79,7 +79,7 @@ namespace react_crash_2021.Controllers
                 //userRepository.Add(user);
                 //userRepository.Commit();
 
-                
+
                 ReactCrashUserModel newUser = new ReactCrashUserModel();
                 newUser.Email = registerModel.Email;
                 newUser.UserName = registerModel.UserName;
@@ -93,9 +93,10 @@ namespace react_crash_2021.Controllers
                 }
                 else
                 {
-                    return BadRequest(isCreated.Errors);
+                    
+                    return BadRequest(new { error = isCreated.Errors } );
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -118,7 +119,7 @@ namespace react_crash_2021.Controllers
                     if (result.Succeeded)
                     {
                         var user = await _reactCrashUserRepository.GetUser(loginModel.UserName);
-                        
+
                         return _authService.GetAuthData(user.Id);
                     }
                     else
@@ -134,18 +135,31 @@ namespace react_crash_2021.Controllers
                 return BadRequest(new { error = e.Message });
             }
         }
-        // PUT api/<UsersController>/5
+
+        //PUT api/<UsersController>/5
         [HttpPut("{id}")]
         [Authorize]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         [Authorize]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(id.ToString());
+                await _userManager.DeleteAsync(user);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { error = ModelState.ToString() });
+            }
         }
+
     }
 }
