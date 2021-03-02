@@ -13,8 +13,6 @@ import AddTask from './components/AddTask'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
-import Login from './components/api-authorization/Login'
-import Register from './components/api-authorization/Register'
 import useToken from './components/api-authorization/UseToken'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 
@@ -171,25 +169,26 @@ const App = () => {
                 <Route path='/about' exact component={About} />
                 {token ? (
                     <>
-                        <Header
-                            onAdd={() => setShowAddTask(!showAddTask)}
-                            showAdd={showAddTask} /><Route
-                            path='/'
-                            exact
-                            render={(props) => <>
-                                <AddTask onAdd={addTask} isToggled={showAddTask} />
-                                {!isLoading ? (
-                                    (tasks.length > 0) ? (
-                                        <Tasks
-                                            tasks={tasks}
-                                            onDelete={deleteTask}
-                                            onToggle={toggleReminder}
-                                            onGoToDetail={() => { setShowAddTask(false) }} />) :
-                                        ('No Tasks To Show')
-                                ) : ('Loading ...')}
-
-
-                            </>} />
+                        <Route path='/' exact
+                            render={(props) => (
+                                <>
+                                    <Header
+                                        onAdd={() => setShowAddTask(!showAddTask)}
+                                        showAdd={showAddTask} />
+                                    <AddTask onAdd={addTask} isToggled={showAddTask} />
+                                    {!isLoading ? (
+                                        (tasks.length > 0) ? (
+                                            <Tasks
+                                                tasks={tasks}
+                                                onDelete={deleteTask}
+                                                onToggle={toggleReminder}
+                                                onGoToDetail={() => { setShowAddTask(false) }} />) :
+                                            ('No Tasks To Show')
+                                    ) : ('Loading ...')}
+                                </>
+                                
+                            )} />
+                        
                         <Route path='/task/:id' exact
                             render={(props) => (
                                 <TaskDetails
