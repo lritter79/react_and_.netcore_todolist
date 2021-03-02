@@ -1,5 +1,3 @@
-/// <reference path="components/navbarlinks.js" />
-
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
