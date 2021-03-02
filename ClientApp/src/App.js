@@ -43,7 +43,17 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
     const { token, setToken } = useToken();
-    
+
+    const removeToken = () => {
+        localStorage.removeItem('token');
+        setToken(null);
+    };
+
+    function handleLogoutClick(e) {
+        e.preventDefault()
+        removeToken()
+        console.log('The link was clicked.');
+    }
 
     useEffect(() => {
         console.log('using effect in app');
@@ -153,7 +163,7 @@ const App = () => {
                     <Nav className="mr-auto">        
                         {token ? (
                             <>
-                                <Nav.Link as={NavLink} to="/logout" exact>Logout</Nav.Link>
+                                <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
                             </>) : (<>
                                 <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
                                 <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
