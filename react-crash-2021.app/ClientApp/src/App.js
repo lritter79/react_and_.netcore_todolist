@@ -107,27 +107,7 @@ const App = () => {
     // Fetch Task
     const fetchTask = FetchTask
 
-    // Add Task
-    //post because we're adding tasks
-    //turns it from js object into json string
-    const addTask = async (task) => {
-        const res = await fetch(Constant() + '/api/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(task),
-        })
 
-        //data returned is the new task
-        const data = await res.json()
-        //take existings takes and add data on
-        setTasks([...tasks, data])
-        setShowAddTask(false)
-        // const id = Math.floor(Math.random() * 10000) + 1
-        // const newTask = { id, ...task }
-        // setTasks([...tasks, newTask])
-    }
 
     // Delete Task
     //takes in an id
@@ -207,7 +187,7 @@ const App = () => {
                                     <Header
                                         onAdd={() => setShowAddTask(!showAddTask)}
                                         showAdd={showAddTask} />
-                                    <AddTask onAdd={addTask} isToggled={showAddTask} />
+                                    <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} setShowAddTask={setShowAddTask} />
                                     {!isLoading ? (
                                         (tasks.length > 0) ? (
                                             <Tasks

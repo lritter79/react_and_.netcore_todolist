@@ -13,7 +13,7 @@ export default function useToken() {
     const [token, setToken] = useState(getToken());
 
     const saveToken = userToken => {
-        console.log(`%c saving token ${userToken}`, 'background: #222; color: #87CEEB')
+        //console.log(`%c saving token ${userToken}`, 'background: #222; color: #87CEEB')
         sessionStorage.setItem('token', JSON.stringify(userToken));
         setToken(userToken?.token);
     };
@@ -27,7 +27,8 @@ export default function useToken() {
         setToken: saveToken,
         token
     }
-    console.log(`%c result:${result.setToken}, ${result.token}`, 'background: #222; color: #87CEEB')
+
+    //console.log(`%c result:${result.setToken}, ${result.token}`, 'background: #222; color: #87CEEB')
 
     return result
 }

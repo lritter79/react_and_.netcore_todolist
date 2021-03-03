@@ -128,14 +128,14 @@ namespace react_crash_2021.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> PostTask(TaskModel model)
+        public async Task<ActionResult<TaskModel>> PostTask(TaskModel model)
         {
             try
             {
                 var task = await _repo.AddTask(_mapper.Map<TaskEntity>(model));
                 //
                 //model = _mapper.Map<TaskModel>(task);
-                return CreatedAtAction("GetTask", _mapper.Map<TaskModel>(task));
+                return _mapper.Map<TaskModel>(task);
             }
             catch (Exception e)
             {

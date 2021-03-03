@@ -16,7 +16,7 @@ const Login = ({ setToken }) => {
         const token = await loginUser({
             username,
             password
-        });
+        })
 
         
         if (!token.error) {
