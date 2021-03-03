@@ -26,6 +26,7 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<TaskEntity> AddTask(TaskEntity model)
         {
+            _context.Entry(model.user).State = EntityState.Unchanged;
             await _context.Tasks.AddAsync(model);
             await _context.SaveChangesAsync();
             return model;
@@ -33,7 +34,9 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<IEnumerable<TaskEntity>> AddTasks(IEnumerable<TaskEntity> model)
         {
+
             await _context.Tasks.AddRangeAsync(model);
+
             await _context.SaveChangesAsync();
             return model;
         }
