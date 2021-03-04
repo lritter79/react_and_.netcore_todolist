@@ -8,8 +8,8 @@ import FormatDateString from './FormatDateString'
 //if task.reminder is true then it should have class reminder
 //else it will have an empty string as class
 const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
-  const dayInlineStyle = {color: coolColor}
-  const borderStyle = {borderTop: '5px solid ' + coolColor}
+    const dayInlineStyle = coolColor === 'white' ? { color: coolColor, textShadow: '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black' } : { color: coolColor }
+    const borderStyle = {borderTop: '5px solid ' + coolColor}
   
   // const coolColor = (id) => {
   //   id = id > 3 ? id % 4 : id 
