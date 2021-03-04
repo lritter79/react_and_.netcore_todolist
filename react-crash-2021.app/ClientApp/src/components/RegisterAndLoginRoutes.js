@@ -1,6 +1,5 @@
 import Login from './api-authorization/Login'
 import Register from './api-authorization/Register'
-import Logout from './api-authorization/Logout'
 import { Route } from 'react-router-dom'
 import Intro from './Intro'
 
@@ -18,8 +17,12 @@ const RegisterAndLoginRoutes = ({ setToken }) => {
                 )}
             />
 
-            <Route path='/register' exact component={Register} />
-            <Route path='/logout' exact component={Logout} />
+            <Route path='/register' exact
+                render={(props) =>
+                    <Register setToken={setToken} />
+                }
+            />
+            
 
         </>
     )

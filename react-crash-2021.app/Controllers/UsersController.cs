@@ -100,7 +100,7 @@ namespace react_crash_2021.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { error = e.Message });
             }
 
         }

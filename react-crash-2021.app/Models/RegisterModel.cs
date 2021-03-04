@@ -11,8 +11,8 @@ namespace react_crash_2021.Models
     /// </summary>
     public class RegisterModel
     {
-        [Required]
-        [StringLength(256)]
+        //[Required]
+        //[StringLength(256)]
         public string Email { get; set; }
         [Required]
         [StringLength(256)]

@@ -24,18 +24,9 @@ const Login = ({ setToken }) => {
             setToken(token)
         }
         else {
-            //console.log(token.error)
             setErrorMessage(token.error)
         }
-        
-        //if (token.error) {
-            
-            
-        //} else {
-            
-            
-        //}
-        
+               
     }
 
 

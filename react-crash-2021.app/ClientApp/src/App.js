@@ -13,6 +13,7 @@ import About from './components/About'
 import FetchTask from './components/FetchTask'
 import useToken from './components/api-authorization/UseToken'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
+import Logout from './components/api-authorization/Logout'
 
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
@@ -48,6 +49,7 @@ const App = () => {
     const removeToken = () => {
         localStorage.removeItem('token');
         setToken(null)
+        setUserId(null)
     }
 
 
@@ -55,7 +57,6 @@ const App = () => {
         e.preventDefault()
         setTasks([])
         removeToken()
-        //console.log('The link was clicked.');
     }
 
     // Fetch Tasks
@@ -66,7 +67,6 @@ const App = () => {
             console.log('%c using effect in app', 'background: #222, color:#87CEEB')
             const tokenString = sessionStorage.getItem('token');
             const userToken = JSON.parse(tokenString);
-            console.log(`%c ${userToken}`, 'background: #222; color: #87CEEB')
             setUserId(userToken?.id)
         }
         
@@ -88,14 +88,14 @@ const App = () => {
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
-                console.log("failed")
+                console.log("failed to fetch tasks")
                 console.log(error)
             }
         }
 
         getId()
 
-        if (userId) {
+        if (userId != null || userId != undefined) {
             getTasks()
         }
    
@@ -179,6 +179,7 @@ const App = () => {
             </Navbar>
             <div className='container'>
                 <Route path='/about' exact component={About} />
+                <Route path='/logout' exact component={Logout} />
                 {token ? (
                     <>
                         <Redirect from='/login' to="/" />
@@ -213,7 +214,10 @@ const App = () => {
                         <Footer isLoggedIn={token} />
                     </>
                 ) : (
-                        <RegisterAndLoginRoutes setToken={setToken} />
+                        <>
+                            <RegisterAndLoginRoutes setToken={setToken} />
+                        </>
+                     
                     )}
             </div>
         </Router>
