@@ -6,7 +6,7 @@ import FormatDateString from './FormatDateString'
 import FetchTask from './FetchTask'
 import UpdateTask from "./UpdateTask";
 
-const TaskDetails = ({onUpdate}) => {
+const TaskDetails = ({ onUpdate, token, userId }) => {
 
     //gets the params passed in from the router
     //is a react hook
@@ -17,10 +17,11 @@ const TaskDetails = ({onUpdate}) => {
 
     const updateTask = async (task) => {  
         setIsLoading(true)  
-        try {          
+        try {
+            task.userId = userId
             setShowEditTask(!showEditTask)
             const updateTask = UpdateTask  
-            const updTask = await updateTask(task)                
+            const updTask = await updateTask(task, token)                
             setTask(updTask) 
             setIsLoading(false)
             onUpdate(updTask)          

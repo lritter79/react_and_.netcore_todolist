@@ -131,6 +131,7 @@ const App = () => {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + token             
             },
             body: JSON.stringify(updTask),
         })
@@ -145,7 +146,7 @@ const App = () => {
     }
 
     const updateTask = async (task) => {
-        //console.log(task)
+        console.log(task)
         setTasks(
             tasks.map((oldTask) => task.id === oldTask.id ? task : oldTask)
         )
@@ -204,7 +205,10 @@ const App = () => {
                         <Route path='/task/:id' exact
                             render={(props) => (
                                 <TaskDetails
-                                    onUpdate={updateTask} />
+                                    onUpdate={updateTask}
+                                    userId={userId}
+                                    token={token}
+                                />
                             )} />
                         <Footer isLoggedIn={token} />
                     </>

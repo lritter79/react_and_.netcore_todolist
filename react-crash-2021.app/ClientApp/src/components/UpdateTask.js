@@ -1,11 +1,12 @@
 import Constant from './Constant'
 
-const UpdateTask = async (task) => {
+const UpdateTask = async (task, token) => {
     
     const res = await fetch(`${Constant()}/api/tasks/${task.id}`, {
         method: 'PUT',
         headers: {
-        'Content-type': 'application/json',
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(task),
     })
