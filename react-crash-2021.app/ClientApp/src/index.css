@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  max-width: 500px;
+  margin: 30px auto;
+  overflow: auto;
+  min-height: 300px;
+  border: 1px solid steelblue;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+    .btn:active {
+        transform: scale(0.98);
+        -webkit-box-shadow: inset 0px 0px 13px grey;
+        -moz-box-shadow: inset 0px 0px 13px grey;
+        box-shadow: inset 0px 0px 13px grey;
+        outline: none;
+    }
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+a {
+  color: green;
+}
+
+a:hover {
+  color:red;
+}
+
+a:active{
+  color: white;
+}
+
+a:visited {
+  color: green;
+}
+
+.task {
+  background: #f4f4f4;
+  margin: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.task.reminder {
+  border-left: 5px solid green;
+}
+
+.task h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/*
+.add-form {
+  margin-bottom: 40px;
+}
+
+ .form-control {
+  margin: 20px 0;
+}
+
+.form-control label {
+  display: block;
+}
+
+.form-control input {
+  width: 100%;
+  height: 40px;
+  margin: 5px;
+  padding: 3px 7px;
+  font-size: 17px;
+}
+
+.form-control-check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-control-check label {
+  flex: 1;
+}
+
+.form-control-check input {
+  flex: 2;
+  height: 20px;
+}
+
+*/
+footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.pink {
+
+  color: pink;
+}
+
+.white {
+  color: white;
+}
+
+.orange {
+  color: orange;
+}
+
+.green {
+  color: green;
+}
+
+.taskDetail h3 { 
+  text-align: center;
+}
+
+
+.taskForm {
+  max-height: 422px;
+  display: block;
+  transition: max-height 0.5s, opacity 0.5s;
+  opacity: 1;
+  overflow: hidden;
+}
+.taskForm.hidden {
+ 
+  pointer-events:none;
+  max-height: 0px;
+	overflow: hidden;
+  transition: max-height 0.5s, opacity 0.5s;
+  opacity: 0;
+}
+
+.mr-auto.navbar-nav a:nth-child(1).active {
+  color:pink !important;
+}
+
+
+.mr-auto.navbar-nav a:nth-child(2).active {
+  color: orange !important;
+}
+
+.mr-auto.navbar-nav a:nth-child(3).active {
+  color:green !important;
+}
+
