@@ -63,22 +63,6 @@ namespace react_crash_2021.Controllers
             try
             {
                 if (!ModelState.IsValid) return BadRequest(ModelState);
-                //var emailUniq = userRepository.isEmailUniq(model.Email);
-                //if (!emailUniq) return BadRequest(new { email = "user with this email already exists" });
-                //var usernameUniq = userRepository.IsUsernameUniq(model.Username);
-                //if (!usernameUniq) return BadRequest(new { username = "user with this email already exists" });
-
-                //var id = Guid.NewGuid().ToString();
-                //var user = new User
-                //{
-                //    Id = id,
-                //    Username = model.Username,
-                //    Email = model.Email,
-                //    Password = authService.HashPassword(model.Password)
-                //};
-                //userRepository.Add(user);
-                //userRepository.Commit();
-
 
                 ReactCrashUserModel newUser = new ReactCrashUserModel();
                 newUser.Email = registerModel.Email;
@@ -93,8 +77,16 @@ namespace react_crash_2021.Controllers
                 }
                 else
                 {
-                    
-                    return BadRequest(new { error = isCreated.Errors } );
+
+                    string error = "";
+                    IEnumerator<IdentityError> enumerator = isCreated.Errors.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+
+                        error = enumerator.Current.Description;
+                    }
+
+                    return BadRequest(new { error } );
                 }
 
             }
