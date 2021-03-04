@@ -143,9 +143,17 @@ namespace react_crash_2021.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(id.ToString());
-                await _userManager.DeleteAsync(user);
-                return Ok();
+                try
+                {
+                    _reactCrashUserRepository.DeleteUserTasks(id);
+                    var user = await _userManager.FindByIdAsync(id.ToString());
+                    await _userManager.DeleteAsync(user);
+                    return Ok(new { message = $"deleted {id}" });
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { error = e.Message + ": " + e.InnerException });
+                }
             }
             else
             {

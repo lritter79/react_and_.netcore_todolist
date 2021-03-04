@@ -13,20 +13,23 @@ const Login = ({ setToken }) => {
 
     const onSubmit = async e => {
         e.preventDefault()
-        const token = await loginUser({
-            username,
-            password
-        })
-
-        
-        if (!token.error) {
-            setErrorMessage('')
-            setToken(token)
+        if (password === "") {
+            setErrorMessage("Enter Password")
         }
         else {
-            setErrorMessage(token.error)
-        }
-               
+            const token = await loginUser({
+                username,
+                password
+            })
+
+            if (!token.error) {
+                setErrorMessage('')
+                setToken(token)
+            }
+            else {
+                setErrorMessage(token.error)
+            }
+        }             
     }
 
 

@@ -11,7 +11,7 @@ namespace react_crash_selenium_tests
         private string url;
         private string username;
         private string password;
-        private string email;
+        //private string email;
 
         [TearDown]
         public void Cleanup()

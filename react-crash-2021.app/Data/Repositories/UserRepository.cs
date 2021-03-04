@@ -21,6 +21,13 @@ namespace react_crash_2021.Data.Repositories
         {
             _context = context;
         }
+
+        public void DeleteUserTasks(Guid userId)
+        {
+            List<TaskEntity> userTasks = _context.Tasks.Where(t => t.user.Id == userId).ToList();
+            _context.RemoveRange(userTasks);
+        }
+
         public async Task<reactCrashUser> GetUser(string userName)
         {
             return await _context.Users.Where(user => user.UserName == userName).FirstOrDefaultAsync();

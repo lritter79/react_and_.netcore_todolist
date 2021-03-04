@@ -12,6 +12,7 @@ import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
 import useToken from './components/api-authorization/UseToken'
+import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
 
@@ -168,6 +169,7 @@ const App = () => {
                         {token ? (
                             <>
                                 <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
+                                <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
                             </>) : (<>
                                 <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
                                 <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
@@ -182,7 +184,12 @@ const App = () => {
                 <Route path='/logout' exact component={Logout} />
                 {token ? (
                     <>
-                        <Redirect from='/login' to="/" />
+                        <Redirect from='/login' to="/" />                       
+                        <Route path='/userManager' exact
+                            render={(props) => (
+                                <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
+                            )}
+                        />
                         <Route path='/' exact
                             render={(props) => (
                                 <>
@@ -210,12 +217,13 @@ const App = () => {
                                     userId={userId}
                                     token={token}
                                 />
-                            )} />
+                            )}
+                        />
                         <Footer isLoggedIn={token} />
                     </>
                 ) : (
-                        <>
-                            <RegisterAndLoginRoutes setToken={setToken} />
+                        <>                           
+                            <RegisterAndLoginRoutes setToken={setToken} token={token} />
                         </>
                      
                     )}

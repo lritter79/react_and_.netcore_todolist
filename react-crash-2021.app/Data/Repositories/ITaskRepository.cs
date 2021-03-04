@@ -17,6 +17,7 @@ namespace react_crash_2021.Data.Repositories
         Task<TaskEntity> Deletetask(long id);
         Task<IEnumerable<TaskEntity>> GetTasksByUser(Guid userId);
         Task<TaskEntity> GetTaskByUser(Guid userId, long id);
+        
     }
 
 }
