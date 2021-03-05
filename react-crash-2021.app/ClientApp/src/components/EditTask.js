@@ -9,6 +9,8 @@ const EditTask = ({task, onCancel, onUpdate}) => {
     const [details, setDetails] = useState(task.details)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
+    const [isCompleted, setIsCompleted] = useState(task.isCompleted)
+
 
     const onSubmit = (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -25,7 +27,7 @@ const EditTask = ({task, onCancel, onUpdate}) => {
             return
         }
 
-        onUpdate({ id, text, details, location, day, reminder })
+        onUpdate({ id, text, details, location, day, reminder, isCompleted })
     
         //clears the form
         setId('')
@@ -81,6 +83,14 @@ const EditTask = ({task, onCancel, onUpdate}) => {
     checked={reminder}
             value={reminder}
             onChange={(e) => setReminder(e.currentTarget.checked)} />
+ </Form.Group>
+ <Form.Group>
+    <Form.Check 
+    type="checkbox" 
+                    label="Completed?"
+                    checked={isCompleted}
+                    value={isCompleted}
+            onChange={(e) => setIsCompleted(e.currentTarget.checked)} />
   </Form.Group>
   
   <button

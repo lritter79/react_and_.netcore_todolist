@@ -9,8 +9,8 @@ import FormatDateString from './FormatDateString'
 //else it will have an empty string as class
 const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
     const dayInlineStyle = coolColor === 'white' ? { color: coolColor, textShadow: '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black' } : { color: coolColor }
-    const borderStyle = {borderTop: '5px solid ' + coolColor}
-  
+    const borderStyle = task.isCompleted ? { borderTop: '5px solid ' + coolColor, opacity: '50%' } : { borderTop: '5px solid ' + coolColor }
+    console.log(task.isCompleted + ' ' + task.id)
   // const coolColor = (id) => {
   //   id = id > 3 ? id % 4 : id 
   //   switch(id) {

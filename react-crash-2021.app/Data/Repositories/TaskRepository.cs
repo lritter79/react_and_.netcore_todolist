@@ -101,6 +101,8 @@ namespace react_crash_2021.Data.Repositories
                                         reminder = task.reminder,
                                         location = task.location,
                                         task_date = task.task_date,
+                                        date_completed = task.date_completed,
+                                        is_completed = task.is_completed,
                                         text = task.text,
                                         user = user
                                     })

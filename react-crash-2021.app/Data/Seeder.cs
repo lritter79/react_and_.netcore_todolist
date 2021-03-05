@@ -25,8 +25,8 @@ namespace react_crash_2021.Data
             if (isAdded == IdentityResult.Success)
             {
                 List<TaskEntity> taskEntities = new List<TaskEntity>
-                { new TaskEntity { details = "foo", location = "bar", text = "foobar", task_date = DateTime.Now, reminder = false, user = reactCrashUserSeed },
-                    new TaskEntity { details = "bar", location = "foo", text = "barfoo", task_date = DateTime.Now, user = reactCrashUserSeed, reminder = true }};
+                { new TaskEntity { details = "foo", location = "bar", text = "foobar", task_date = DateTime.Now, reminder = false, user = reactCrashUserSeed, is_completed = true, date_completed = DateTime.Now },
+                    new TaskEntity { details = "bar", location = "foo", text = "barfoo", task_date = DateTime.Now, user = reactCrashUserSeed, reminder = true, is_completed = false }};
                 var result = await repository.AddTasks(taskEntities);
             }
         }

@@ -17,7 +17,9 @@ namespace react_crash_2021.Data.Models
         public string Text { get; set; }
         [Required]
         public DateTime Day { get; set; }
-        public Boolean Reminder { get; set; }
+        public bool Reminder { get; set; }
+        public bool IsCompleted { get; set; }
+        public DateTime DateCompleted { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }
         public Guid UserId { get; set; }
