@@ -18,8 +18,9 @@ body {
 }
 
 #root {
-    
-    height:100%;
+    display: block;
+    overflow: auto;
+    height: 100%;
 }
 
 #backdrop {
@@ -181,7 +182,7 @@ footer {
 
 
 .taskForm {
-  max-height: 422px;
+  max-height: 502px;
   display: block;
   transition: max-height 0.5s, opacity 0.5s;
   opacity: 1;
@@ -215,6 +216,16 @@ footer {
 
 .container > div > ul {
     padding-left: 10px;
+}
+
+.container > div:nth-of-type(2) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.container > div:last-of-type {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 /* how to have a multicolored border
     nav::after {

@@ -92,9 +92,10 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
         <Form.Group>
           <Form.Label>Details: </Form.Label>
           <Form.Control 
-                  type='text'
+                  as="textarea"
+                  rows={3}
                   placeholder=''
-                  value={details}
+                  value={details}                  
                   onChange={(e) => setDetails(e.target.value)}
                   />
         </Form.Group>

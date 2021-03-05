@@ -62,7 +62,8 @@ const EditTask = ({task, onCancel, onUpdate}) => {
   <Form.Group>
     <Form.Label>Details: </Form.Label>
     <Form.Control 
-            type='text'
+            as="textarea"
+            rows={3}
             placeholder=''
             value={details}
             onChange={(e) => setDetails(e.target.value)}
