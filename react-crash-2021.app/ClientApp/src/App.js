@@ -161,6 +161,8 @@ const App = () => {
     return (
 
         <Router>
+            <div id="backdrop">
+            </div>
             <Navbar bg="light" expand="lg">
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -179,55 +181,58 @@ const App = () => {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            <div className='container'>
-                <Route path='/about' exact component={About} />
-                <Route path='/logout' exact component={Logout} />
-                {token ? (
-                    <>
-                        <Redirect from='/login' to="/" />                       
-                        <Route path='/userManager' exact
-                            render={(props) => (
-                                <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
-                            )}
-                        />
-                        <Route path='/' exact
-                            render={(props) => (
-                                <>
-                                    <Header
-                                        onAdd={() => setShowAddTask(!showAddTask)}
-                                        showAdd={showAddTask} />
-                                    <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} setShowAddTask={setShowAddTask} />
-                                    {!isLoading ? (
-                                        (tasks.length > 0) ? (
-                                            <Tasks
-                                                tasks={tasks}
-                                                onDelete={deleteTask}
-                                                onToggle={toggleReminder}
-                                                onGoToDetail={() => { setShowAddTask(false) }} />) :
-                                            ('No Tasks To Show')
-                                    ) : ('Loading ...')}
-                                </>
-                                
-                            )} />
-                        
-                        <Route path='/task/:id' exact
-                            render={(props) => (
-                                <TaskDetails
-                                    onUpdate={updateTask}
-                                    userId={userId}
-                                    token={token}
-                                />
-                            )}
-                        />
-                        <Footer isLoggedIn={token} />
-                    </>
-                ) : (
-                        <>                           
-                            <RegisterAndLoginRoutes setToken={setToken} token={token} />
+            
+                <div className='container'>
+                    <Route path='/about' exact component={About} />
+                    <Route path='/logout' exact component={Logout} />
+                    {token ? (
+                        <>
+                            <Redirect from='/login' to="/" />
+                            <Route path='/userManager' exact
+                                render={(props) => (
+                                    <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
+                                )}
+                            />
+                            <Route path='/' exact
+                                render={(props) => (
+                                    <>
+                                        <Header
+                                            onAdd={() => setShowAddTask(!showAddTask)}
+                                            showAdd={showAddTask} />
+                                        <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} setShowAddTask={setShowAddTask} />
+                                        {!isLoading ? (
+                                            (tasks.length > 0) ? (
+                                                <Tasks
+                                                    tasks={tasks}
+                                                    onDelete={deleteTask}
+                                                    onToggle={toggleReminder}
+                                                    onGoToDetail={() => { setShowAddTask(false) }} />) :
+                                                ('No Tasks To Show')
+                                        ) : ('Loading ...')}
+                                    </>
+
+                                )} />
+
+                            <Route path='/task/:id' exact
+                                render={(props) => (
+                                    <TaskDetails
+                                        onUpdate={updateTask}
+                                        userId={userId}
+                                        token={token}
+                                    />
+                                )}
+                            />
+                            <Footer isLoggedIn={token} />
                         </>
-                     
-                    )}
+                    ) : (
+                            <>
+                                <RegisterAndLoginRoutes setToken={setToken} token={token} />
+                            </>
+
+                        )}
             </div>
+            
+            
         </Router>
     )
 }

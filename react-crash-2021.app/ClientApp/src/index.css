@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
 
+html {
+    height: 100%;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,7 +11,27 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif; 
+    min-height: 100%;
+    height: 100%;
+   
+}
+
+#root {
+    
+    height:100%;
+}
+
+#backdrop {
+    background-image: linear-gradient(90deg, pink 12.50%, white 12.50%, white 25%, orange 25%, orange 37.50%, green 37.50%, green 50%, pink 50%, pink 62.50%, white 62.50%, white 75%, orange 75%, orange 87.50%, green 87.50%, green 100%);
+    background-size: 500.00px 500.00px;
+    opacity: 50%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
 .container {
@@ -15,9 +39,11 @@ body {
   margin: 30px auto;
   overflow: auto;
   min-height: 300px;
-  border: 1px solid steelblue;
+  border: 1px solid black;
   padding: 30px;
   border-radius: 5px;
+  background-color: white;
+  opacity:100%
 }
 
 .header {
@@ -171,15 +197,32 @@ footer {
 }
 
 .mr-auto.navbar-nav a:nth-child(1).active {
-  color:pink !important;
+  border-bottom: 3px solid pink;
 }
 
 
 .mr-auto.navbar-nav a:nth-child(2).active {
-  color: orange !important;
+    border-bottom: 3px solid orange;
 }
 
 .mr-auto.navbar-nav a:nth-child(3).active {
-  color:green !important;
+    border-bottom: 3px solid green;
 }
 
+.mr-auto.navbar-nav a:nth-child(4).active {
+    border-bottom: 3px solid white;
+}
+
+.container > div > ul {
+    padding-left: 10px;
+}
+/* how to have a multicolored border
+    nav::after {
+    content: '';
+    height: 2px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, pink 0%, pink 25%, white 20%, white 50%, #ed8034 45%, #ed8034 75%, green 70%, green 100%);
+}*/
