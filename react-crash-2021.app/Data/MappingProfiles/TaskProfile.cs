@@ -15,6 +15,8 @@ namespace react_crash_2021.Data.MappingProfiles
         {
             CreateMap<TaskEntity, TaskModel>().ForMember(m => m.Day, e => e.MapFrom(t => t.task_date))
               .ForMember(m => m.UserId, e => e.MapFrom(t => t.user.Id))
+              .ForMember(m => m.DateCompleted, e => e.MapFrom(t => t.date_completed))
+              .ForMember(m => m.IsCompleted, e => e.MapFrom(t => t.is_completed))
               .ReverseMap();
         }
     }

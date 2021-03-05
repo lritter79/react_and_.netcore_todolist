@@ -48,7 +48,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
       return
     }
 
-      const didAdd = await addTask({ text, details, location, day, reminder, userId })
+      const didAdd = await addTask({ text, details, location, day, reminder, userId, isCompleted:false })
       console.log(didAdd)
       //data returned is the new task
       //const data = await res.json()

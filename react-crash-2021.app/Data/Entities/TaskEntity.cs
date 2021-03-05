@@ -14,7 +14,9 @@ namespace react_crash_2021.Data.Entities
         public long id { get; set; }
         public string text { get; set; }
         public DateTime task_date { get; set; }
-        public Boolean reminder { get; set; }
+        public bool reminder { get; set; }
+        public bool is_completed {get; set;}
+        public DateTime? date_completed { get; set; }
         public string details { get; set; }
         public string location { get; set; }
         public reactCrashUser user { get; set; }

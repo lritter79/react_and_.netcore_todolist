@@ -26,7 +26,7 @@ namespace react_crash_selenium_tests
         {
             url = "http://localhost:44310";
             username = "foo@bar.com";
-            email = "foo@bar.com";
+            //email = "foo@bar.com";
             password = "Foobar*69";
             webDriver = new ChromeDriver();
             webDriver.Navigate().GoToUrl(url);

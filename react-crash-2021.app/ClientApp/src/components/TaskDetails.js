@@ -35,7 +35,7 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
     }
 
     useEffect(() => {
-        console.log("using effect")
+        console.log("using effect: task details")
         // Fetch Task
         const fetchTask = FetchTask
 
@@ -73,6 +73,9 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
                             <p>
                                 Details: {task.details !== undefined ? task.details : "None"}
                             </p>    
+                            { task.isCompleted && (
+                                <p>Completed On: {FormatDateString(task.dateCompleted)}</p>
+                            )}
                             <Button
                                 color='green'
                                 text='Edit Task'
