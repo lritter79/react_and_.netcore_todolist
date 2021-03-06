@@ -9,8 +9,9 @@ namespace react_crash_2021.Data.Entities
 {
     public class reactCrashUser : IdentityUser<Guid>
     {
-        public IEnumerable<TaskEntity> tasks;
-        public DateTime? dateCreated;
-        
+        public IEnumerable<TaskEntity> tasks { get; set; }
+        public DateTime? dateCreated { get; set; }
+        public bool isOpenToCollaboration { get; set; }
+        public IEnumerable<Collaboration> collaboratorations { get; set; }
     }
 }

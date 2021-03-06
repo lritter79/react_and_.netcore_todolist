@@ -45,7 +45,7 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true)
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
     const { token, setToken } = useToken()
-    const [userId, setUserId] = useState()
+    const [userId, setUserId] = useState('')
 
     const removeToken = () => {
         localStorage.removeItem('token');

@@ -42,6 +42,19 @@ namespace react_crash_2021.Data
                 .WithMany(u => u.tasks)
                 .HasForeignKey("user_id");
 
+            modelBuilder.Entity<Collaboration>()
+                .HasKey(collab => new { collab.task_id, collab.user_id });
+
+            modelBuilder.Entity<Collaboration>()
+                .HasOne(c => c.task)
+                .WithMany(t => t.collaboratorations)
+                .HasForeignKey(t => t.task_id);
+
+            modelBuilder.Entity<Collaboration>()
+                .HasOne(c => c.user)
+                .WithMany(u => u.collaboratorations)
+                .HasForeignKey(u => u.user_id);
+
             modelBuilder.Entity<reactCrashUser>()
                 .ToTable("users")
                 .Property(rcu => rcu.dateCreated).HasColumnType("DateTime2"); ;

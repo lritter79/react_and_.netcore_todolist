@@ -32,7 +32,20 @@ namespace react_crash_2021.Data.Repositories
         {
             return await _context.Users.Where(user => user.UserName == userName).FirstOrDefaultAsync();
         }
+        
+        public async Task<reactCrashUser> GetUser(Guid id)
+        {
+            return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
+        }
 
+        public async Task<int> ToggleCollab(Guid id, bool isOpen)
+        {
+            var user = await  _context.Users.FirstAsync(u => u.Id == id);
+            user.isOpenToCollaboration = isOpen;
+            var t = _context.Users.Attach(user);
+            t.State = EntityState.Modified;
+            return await _context.SaveChangesAsync();
 
+        }
     }
 }

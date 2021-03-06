@@ -1,4 +1,5 @@
-﻿using System;
+﻿using react_crash_2021.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace react_crash_2021.Data.Models
         public string Details { get; set; }
         public string Location { get; set; }
         public Guid UserId { get; set; }
+        public IEnumerable<ReactCrashUserModel> Collaborators { get; set; }
     }
 }

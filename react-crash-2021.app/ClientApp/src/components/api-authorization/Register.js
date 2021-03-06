@@ -20,10 +20,10 @@ const Register = ({ setToken }) => {
                     password
                 })
 
-                if (!token.error) {
-                    setDisabled(true)
+                if (!token.error) {                   
                     setErrorMessage('')
                     setToken(token)
+                    setDisabled(true)
                 }
                 else {
                     setErrorMessage(token.error)

@@ -48,10 +48,11 @@ namespace react_crash_2021.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        //[Authorize]
-        public string Get(Guid id)
+        [Authorize]
+        public async Task<ActionResult<ReactCrashUserModel>> Get(Guid id)
         {
-            return "value";
+            var user = await _reactCrashUserRepository.GetUser(id);
+            return _mapper.Map<ReactCrashUserModel>(user);
         }
 
         // POST api/Users
@@ -129,10 +130,36 @@ namespace react_crash_2021.Controllers
         }
 
         //PUT api/<UsersController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize]
-        public void Put(int id, [FromBody] string value)
+        [Route("~/api/Users/toggleCollab")]
+        
+        public async Task<ActionResult> Put(ReactCrashUserModel model)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //stores sign in result
+                    var result = await _reactCrashUserRepository.ToggleCollab(model.Id, model.IsOpenToCollaboration);
+
+                    if (result > 0)
+                    {
+                        return Ok(new { message = "Success!", isOpenToCollaboration = model.IsOpenToCollaboration });
+                    }
+                    else
+                    {
+                        return BadRequest(new { error = "Invalid username/password" });
+                    }
+                }
+
+                return BadRequest(new { error = ModelState.ToString() });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+
 
         }
 
