@@ -8,28 +8,34 @@ const Register = ({ setToken }) => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const [honeyPot, setHoneyPot] = useState('')
+    const [disabled, setDisabled] = useState(false)
 
     const onSubmit = async e => {
         e.preventDefault()
+        if (honeyPot === '') {
+            if (password === confirmPassword) {
+                const token = await registerUser({
+                    username,
+                    password
+                })
 
-        if (password === confirmPassword) {
-            const token = await registerUser({
-                username,
-                password
-            })
-
-            if (!token.error) {
-                setErrorMessage('')
-                setToken(token)
+                if (!token.error) {
+                    setDisabled(true)
+                    setErrorMessage('')
+                    setToken(token)
+                }
+                else {
+                    setErrorMessage(token.error)
+                }
             }
             else {
-                setErrorMessage(token.error)
+                setErrorMessage("Passwords do not match")
             }
         }
         else {
-            setErrorMessage("Passwords do not match")
+            setDisabled(true)
         }
-
 
         
     }
@@ -78,9 +84,18 @@ const Register = ({ setToken }) => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                 </Form.Group>
+                <Form.Group style={{ display: 'none' }}>
+                    <Form.Label></Form.Label>
+                    <Form.Control                        
+                        type="text" 
+                        placeholder=""
+                        onChange={(e) => setHoneyPot(e.target.value)}
+                    />
+                </Form.Group>
                 <button
                     type='submit'
                     className='btn'
+                    disabled={disabled}
                     style={{ backgroundColor: 'skyblue' }}
                 >
                     Sign Up
