@@ -266,3 +266,15 @@ footer {
         display: block;
         text-align: center;
 }
+
+#alertCounter {
+    border-radius: 50%;
+    display: inline-block;
+    background: indianred;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    font-weight: bold;
+    color: white;
+    margin-left: 2px;
+}

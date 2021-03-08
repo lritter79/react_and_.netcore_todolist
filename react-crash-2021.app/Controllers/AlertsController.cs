@@ -101,8 +101,17 @@ namespace react_crash_2021.Controllers
 
         // DELETE api/<AlertsController>/5
         [HttpDelete("{id}")]
-        public void Delete(long id)
+        public async Task<ActionResult> Delete(long id)
         {
+            try
+            {
+                await _repo.DeleteAlert(id);
+                return Ok(new { message = "Deleted Alert" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import Tasks from './components/Tasks'
 import Constant from './components/Constant'
 import AddTask from './components/AddTask'
+import AlertCenter from './components/AlertCenter'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
 import FetchTask from './components/FetchTask'
@@ -49,6 +50,7 @@ const App = () => {
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
     const { token, setToken } = useToken()
     const [userId, setUserId] = useState('')
+    const [alerts, setAlerts] = useState([])
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -65,7 +67,6 @@ const App = () => {
 
     // Fetch Tasks
     //gets the tasks we have on the server with async java
-
     useEffect(() => {
         const getId = () => {
             console.log('%c using effect in app', 'background: #222, color:#87CEEB')
@@ -96,11 +97,35 @@ const App = () => {
                 console.log(error)
             }
         }
+        const fetchAlerts = async (id) => {
+            const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+
+            const data = await res.json()
+
+            return data
+        }
+
+        const getAlerts = async () => {
+            try {
+                const tasksFromServer = await fetchAlerts(userId)
+                setIsLoading(false)
+                setAlerts(tasksFromServer)
+            } catch (error) {
+                console.log("failed to fetch tasks")
+                console.log(error)
+            }
+        }
 
         getId()
 
         if (userId != null || userId != undefined) {
             getTasks()
+            getAlerts()
         }
    
 
@@ -175,6 +200,9 @@ const App = () => {
                             <>
                                 <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
                                 <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
+                                <Nav.Link as={NavLink} to="/alerts" exact>Alerts 
+                                    {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}                                                                                                     
+                                </Nav.Link>
                             </>) : (<>
                                 <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
                                 <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
@@ -189,7 +217,12 @@ const App = () => {
                     <Route path='/about' exact component={About} />
                     <Route path='/logout' exact component={Logout} />
                     {token ? (
-                        <>
+                    <>
+                        <Route path='/alerts' exact
+                            render={(props) => (
+                                <AlertCenter alerts={alerts} setAlerts={setAlerts} />
+                            )}
+                        />
                             <Redirect from='/login' to="/" />
                             <Route path='/userManager' exact
                                 render={(props) => (
