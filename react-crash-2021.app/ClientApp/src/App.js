@@ -40,6 +40,9 @@ import Logout from './components/api-authorization/Logout'
 //calls fetch tasks whihc returns a promise
 //sets tasks as the state
 const App = () => {
+    //showAddTask = current state
+    //setShowAddTask = function that aloows you to update the current state
+    //when you update state, the component rerenders
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -134,7 +137,7 @@ const App = () => {
                 'Content-type': 'application/json',
                 'Authorization': 'Bearer ' + token             
             },
-            body: JSON.stringify(updTask),
+            body: JSON.stringify(updTask)
         })
 
         const data = await res.json()

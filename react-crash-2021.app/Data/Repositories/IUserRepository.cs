@@ -8,6 +8,7 @@ namespace react_crash_2021.Data.Repositories
     {
         public Task<reactCrashUser> GetUser(string userName);
         public Task<reactCrashUser> GetUser(Guid id);
+        public Task<int> UpdateUser(reactCrashUser user);
         public Task<int> ToggleCollab(Guid id, bool isOpen);
         void DeleteUserTasks(Guid userId);
     }
