@@ -47,5 +47,12 @@ namespace react_crash_2021.Data.Repositories
             return await _context.SaveChangesAsync();
 
         }
+
+        public async Task<int> UpdateUser(reactCrashUser user)
+        {
+            var t = _context.Users.Attach(user);
+            t.State = EntityState.Modified;
+            return await _context.SaveChangesAsync();
+        }
     }
 }

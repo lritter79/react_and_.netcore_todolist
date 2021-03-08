@@ -1,87 +1,82 @@
 ﻿import { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
+import userFunctions from './UserFunctions'
 
 const UserManager = ({ handleLogout, token, id }) => {
-    
+    //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState()
+    const [isChecked, setIsChecked] = useState('')
     
 
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
-    useEffect(() => {
-        console.log('empty use effect')
-        const init = async () => {
-            
-            const user = await getUserData(id, token)
-            setIsLoading(false)
-            //console.log(user.isOpenToCollaboration)
-        }
-                
-        init()
-        
+    useEffect(async () => {
+        setIsLoading(false)
+        const userData = await userFunctions.getUser(id, token)
+        setUser(userData)
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         console.log('user use effect')
-        console.log(user)
-        
+        console.log(isChecked)
+        if (isChecked != undefined) {
+            const updatedUser = await userFunctions.saveUser({ user, id, token })        
+        }
+        else {
+            console.log('first time')
+        }                      
+        setIsChecked(user?.isOpenToCollaboration)
     }, [user])
 
     useEffect(() => {
         console.log('isLoading use effect')
     }, [isLoading])
 
-    async function getUserData(id, token) {
-        console.log('getting user data')
-        const response = await fetch(`${Constant()}/api/users/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-type': 'application/json',
-            }
-        })
-        const user = await response.json()
-
-        const set = await setUser(user)
-
-        return set
-
-    }
+    
 
     async function onChange(e) {
+        setIsLoading(true)  
+
         try {
-            const val = e.target.checked
-            console.log('cb va; = ' + val)     
-            const updateUserState = await  setUser(prevState => {
-                return { ...prevState, isOpenToCollaboration: val }
-            });
+            const value = e.target.checked
+            setIsChecked(value)
+            console.log(`val: ${value}`)
+            console.log("inside of try block")
+            console.log(user)
+            setUser(prev => { 
+                return { ...prev, isOpenToCollaboration: value }
+            })
             
-            const updated = await toggleIsOpenToCollaboration({ ...user, isOpenToCollaboration: val })
             
+            
+
         } catch (error) {
             console.log("failed to update user")
             console.log(error)
         }
+        console.log("out of try block")
+        console.log(user)
+        setIsLoading(false)
     }
 
 
 
-    async function toggleIsOpenToCollaboration(appUser) {
+    //async function toggleIsOpenToCollaboration(appUser) {
         
-        return fetch(`${Constant()}/api/users/toggleCollab`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(appUser),
-        })
-            .then(data => data.json())
-            .catch((error) => {
-                console.error('Fetch Error:', error);
-            });
-    }
+    //    return fetch(`${Constant()}/api/users/toggleCollab`, {
+    //        method: 'PUT',
+    //        headers: {
+    //            'Authorization': 'Bearer ' + token,
+    //            'Content-type': 'application/json',
+    //        },
+    //        body: JSON.stringify(appUser),
+    //    })
+    //        .then(data => data.json())
+    //        .catch((error) => {
+    //            console.error('Fetch Error:', error);
+    //        });
+    //}
 
     const onSubmit = async e => {
         e.preventDefault()
@@ -120,7 +115,7 @@ const UserManager = ({ handleLogout, token, id }) => {
                         </button>
                     </form >                 
                     <form>
-                        <input type="checkbox" checked={user?.isOpenToCollaboration} onChange={onChange} />
+                        <input type="checkbox" checked={isChecked} onChange={onChange} />
                         <label>Open to collaboration?</label>
                     </form>
                 </>)}
