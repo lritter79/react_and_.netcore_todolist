@@ -38,6 +38,36 @@ namespace react_crash_2021.Data.Repositories
             return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<reactCrashUser>> GetUsersByTask(TaskEntity task)
+        {
+            //var taskWithCollabs = await _context.Tasks.Join(_context.Collaborations, t => t.id, collab => collab.task_id, 
+            //                        (t, collab) => new  TaskEntity {
+            //                            collaboratorations = col
+            //                        })
+
+            var users = await _context.Users.Join(_context.Collaborations, user => user.Id, collab => collab.user_id, (user, collab) => new { user, collab })
+                                            .Join(_context.Tasks, cu => cu.collab.task_id, taskE => taskE.id, (cu, taskE) => new { taskE, cu })
+                                            .Select(m => new
+                                                  {
+                                                      User = m.cu.user,                                                    
+                                                      Collab = m.cu.collab,
+                                                      Task = m.taskE
+                                                  }).Where(o => o.Task.id == task.id || o.Collab.task_id == task.id)   
+                                                  .Select(res => res.User)
+                                                  .ToListAsync();
+            //        var categorizedProducts = product
+            //.Join(productcategory, p => p.Id, pc => pc.ProdId, (p, pc) => new { p, pc })
+            //.Join(category, ppc => ppc.pc.CatId, c => c.Id, (ppc, c) => new { ppc, c })
+            //.Select(m => new {
+            //    ProdId = m.ppc.p.Id, // or m.ppc.pc.ProdId
+            //    CatId = m.c.CatId
+            //    // other assignments
+            //});
+
+
+            return users;
+        }
+
         public async Task<int> ToggleCollab(Guid id, bool isOpen)
         {
             var user = await  _context.Users.FirstAsync(u => u.Id == id);

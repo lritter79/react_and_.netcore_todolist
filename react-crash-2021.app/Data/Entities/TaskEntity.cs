@@ -23,6 +23,8 @@ namespace react_crash_2021.Data.Entities
  
 
         public IEnumerable<Collaboration> collaboratorations { get; set; }
+        public IEnumerable<comment> comments { get; set; }
+        
 
     }
 }
