@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace react_crash_2021.Data.Entities
 {
+    [Table("alerts")]
     public class alert
     {
         [Key]
@@ -16,6 +17,6 @@ namespace react_crash_2021.Data.Entities
         [Required]
         public reactCrashUser user { get; set; }
         public string message { get; set; }
-        public DateTime data { get; set; }
+        public DateTime date { get; set; }
     }
 }

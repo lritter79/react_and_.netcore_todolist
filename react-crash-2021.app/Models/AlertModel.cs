@@ -11,7 +11,7 @@ namespace react_crash_2021.Models
 
         public Guid UserId { get; set; }
 
-        public string Text { get; set; }
+        public string Message { get; set; }
         public DateTime Date { get; set; }
     }
 }

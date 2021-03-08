@@ -1,7 +1,7 @@
 ﻿using react_crash_2021.Data.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,6 +18,7 @@ namespace react_crash_2021.Data.Repositories
         }
         public async Task<int> CreateAlert(alert a)
         {
+
             await _context.Alerts.AddAsync(a);
             return await _context.SaveChangesAsync();
         }
@@ -37,7 +38,17 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<IEnumerable<alert>> GetAlertsByUser(Guid id)
         {
-            return await _context.Alerts.Where(a => a.user.Id == id).ToListAsync(); ;
+            return await _context.Alerts.Join(_context.Users, 
+                a => a.user.Id, 
+                u => u.Id, 
+                (a, u) => new alert { 
+                    date = a.date,
+                    id = a.id,
+                    message = a.message,
+                    user = u
+                })
+                .Where(alert => alert.user.Id == id)
+                .ToListAsync();
         }
     }
 }

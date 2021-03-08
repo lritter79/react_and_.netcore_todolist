@@ -23,7 +23,7 @@ namespace react_crash_2021.Data
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<Collaboration> Collaborations { get; set; }
         public override DbSet<reactCrashUser> Users { get; set; }
-        public DbSet<comment> Comments { get; set; }
+        public DbSet<comment> Comment { get; set; }
         public DbSet<alert> Alerts { get; set; }
 
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
