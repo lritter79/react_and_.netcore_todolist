@@ -6,8 +6,8 @@ import userFunctions from './UserFunctions'
 const UserManager = ({ handleLogout, token, id }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
-    const [user, setUser] = useState()
-    const [isChecked, setIsChecked] = useState('')
+    const [user, setUser] = useState('')
+    const [isChecked, setIsChecked] = useState()
     
 
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
@@ -15,6 +15,15 @@ const UserManager = ({ handleLogout, token, id }) => {
         setIsLoading(false)
         const userData = await userFunctions.getUser(id, token)
         setUser(userData)
+
+        
+    }, [])
+
+    useEffect(() => {
+        return function cleanup() {
+            console.log('clean up')
+            setIsChecked(undefined)
+        }
     }, [])
 
     useEffect(async () => {
