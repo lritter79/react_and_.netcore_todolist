@@ -33,11 +33,11 @@ namespace react_crash_2021.Controllers
             _mapper = mapper;
         }
         // GET: api/<AlertsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
 
         [HttpGet]
         [Route("~/api/Users/{userId}/Alerts")]

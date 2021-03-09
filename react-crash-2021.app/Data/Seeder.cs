@@ -26,9 +26,14 @@ namespace react_crash_2021.Data
             {
                 try
                 {
+                    comment sampleComment = new comment { date = DateTime.Now, text = "Test", user = reactCrashUserSeed };
+                    List<comment> sampleComments = new List<comment>();
+                    sampleComments.Add(sampleComment);
                     List<TaskEntity> taskEntities = new List<TaskEntity>
-                { new TaskEntity { details = "foo", location = "bar", text = "foobar", task_date = DateTime.Now, reminder = false, user = reactCrashUserSeed, is_completed = true, date_completed = DateTime.Now },
-                    new TaskEntity { details = "bar", location = "foo", text = "barfoo", task_date = DateTime.Now.AddDays(3), user = reactCrashUserSeed, reminder = true, is_completed = false }};
+                    { 
+                        new TaskEntity { details = "foo", location = "bar", text = "foobar", task_date = DateTime.Now, reminder = false, user = reactCrashUserSeed, is_completed = true, date_completed = DateTime.Now, comments = sampleComments },
+                        new TaskEntity { details = "bar", location = "foo", text = "barfoo", task_date = DateTime.Now.AddDays(3), user = reactCrashUserSeed, reminder = true, is_completed = false }
+                    };
                     var result = await repository.AddTasks(taskEntities);
                     alert a = new alert { date = DateTime.Now, message = "Created", user = userManager.Users.FirstOrDefault(u => u.UserName == "foo@bar.com") };
                     var alertResult = await alertRepository.CreateAlert(a);
@@ -36,8 +41,7 @@ namespace react_crash_2021.Data
                 catch (Exception e)
                 {
                     var message = e.Message;
-                }
-                
+                }               
             }
         }
 
