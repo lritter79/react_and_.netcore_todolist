@@ -11,7 +11,9 @@ import AddTask from './components/AddTask'
 import AlertCenter from './components/AlertCenter'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
-import FetchTask from './components/FetchTask'
+import DeleteTask from './components/task-crud-operations/DeleteTask'
+import FetchTask from './components/task-crud-operations/FetchTask'
+import FetchTasks from './components/task-crud-operations/FetchTasks'
 import useToken from './components/api-authorization/UseToken'
 import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
@@ -74,22 +76,12 @@ const App = () => {
             const userToken = JSON.parse(tokenString);
             setUserId(userToken?.id)
         }
-        
-        const fetchTasks = async (id) => {
-            const res = await fetch(Constant() + `/api/Users/${id}/tasks`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            const data = await res.json()
 
-            return data
-        }
+        const fetchTasks = FetchTasks
 
         const getTasks = async () => {
             try {
-                const tasksFromServer = await fetchTasks(userId)
+                const tasksFromServer = await fetchTasks(userId, token)
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
@@ -140,10 +132,8 @@ const App = () => {
 
     // Delete Task
     //takes in an id
-    const deleteTask = async (id) => {
-        await fetch(`${Constant()}/api/tasks/${id}`, {
-            method: 'DELETE',
-        })
+    const onDelete = async (id) => {
+        await DeleteTask(id, token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
     }
@@ -195,20 +185,20 @@ const App = () => {
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">        
+                    <Nav className="mr-auto">    
+                        <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>      
                         {token ? (
-                            <>
-                                <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
+                            <>                               
                                 <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
                                 <Nav.Link as={NavLink} to="/alerts" exact>Alerts 
                                     {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}                                                                                                     
                                 </Nav.Link>
+                                <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
                             </>) : (<>
                                 <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
                                 <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-                            </>)}
-                        <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>                                               
+                            </>)}                                                                
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -240,7 +230,7 @@ const App = () => {
                                             (tasks.length > 0) ? (
                                                 <Tasks
                                                     tasks={tasks}
-                                                    onDelete={deleteTask}
+                                                    onDelete={onDelete}
                                                     onToggle={toggleReminder}
                                                     onGoToDetail={() => { setShowAddTask(false) }} />) :
                                                 ('No Tasks To Show')

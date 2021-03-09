@@ -14,7 +14,7 @@ const CommentSection = ({ comments }) => {
             {(comments?.length > 0) ? (
                 <Comments comments={comments} />
             ) : (
-                    <p>No Comments</p>
+                    <></>
                 )}
             
             <CommentForm />

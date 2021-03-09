@@ -30,7 +30,6 @@ const UserManager = ({ handleLogout, token, id }) => {
 
     useEffect(async () => {
         console.log('user use effect')
-        console.log(user)
         if (isChecked != undefined) {
             const updatedUser = await userFunctions.saveUser({ user, id, token })        
         }
@@ -58,16 +57,12 @@ const UserManager = ({ handleLogout, token, id }) => {
             console.log(user)
             await setUser(prev => { 
                 return { ...prev, isOpenToCollaboration: value }
-            })
-            
-            
-
+            })                  
         } catch (error) {
             console.log("failed to update user")
             console.log(error)
         }
-        console.log("out of try block")
-        console.log(user)
+
         setIsLoading(false)
     }
 

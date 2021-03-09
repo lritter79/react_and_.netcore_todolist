@@ -87,7 +87,7 @@ namespace react_crash_2021.Controllers
         // GET: api/Tasks/5
 
         [HttpGet("{id}")]
-
+        [Authorize]
         public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
             try

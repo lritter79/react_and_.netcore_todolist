@@ -3,38 +3,19 @@ import { useState, useEffect } from 'react'
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
-import FetchTask from './FetchTask'
-import UpdateTask from './UpdateTask'
-import CommentSection from './comments/CommentSection'
+import FetchTask from './task-crud-operations/FetchTask'
+import UpdateTask from './task-crud-operations/UpdateTask'
+import CommentSection from './comment-components/CommentSection'
 
 const TaskDetails = ({ onUpdate, token, userId }) => {
 
     //gets the params passed in from the router
     //is a react hook
-    let { id } = useParams()
+    const { id } = useParams()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
     const [comments, setComments] = useState()
-
-    const updateTask = async (task) => {  
-        setIsLoading(true)  
-        try {
-            task.userId = userId
-            setShowEditTask(!showEditTask)
-            const updateTask = UpdateTask  
-            const updTask = await updateTask(task, token)                
-            setTask(updTask) 
-            setIsLoading(false)
-            onUpdate(updTask)          
-        } catch (error) {
-            console.log(error)
-        }                     
-    }
-
-    const onCancel = () => {
-        setShowEditTask(!showEditTask)
-    }
 
     useEffect(() => {
         console.log("using effect: task details")
@@ -43,7 +24,7 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
 
         const getTask = async () => {          
             try {       
-                const taskFromServer = await fetchTask(id)         
+                const taskFromServer = await fetchTask(id, token)         
                 setTask(taskFromServer)
                 console.log(taskFromServer)
                 setComments(taskFromServer.comments)
@@ -56,7 +37,25 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
       
         getTask()
 
-    }, [id]) 
+    }, []) 
+
+    const onCancel = () => {
+        setShowEditTask(!showEditTask)
+    }
+
+    const update = async (task) => {
+        setIsLoading(true)
+        try {
+            task.userId = userId
+            setShowEditTask(!showEditTask)
+            const updTask = await UpdateTask(task)
+            setTask(updTask)
+            setIsLoading(false)
+            onUpdate(updTask)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -92,7 +91,7 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onUpdate={updateTask} onCancel={onCancel}/>
+                        <EditTask task={task} onUpdate={update} onCancel={onCancel} token={token}/>
                     )}        
                 </div>) : (
                 <div>
