@@ -32,9 +32,45 @@ namespace react_crash_2021.Data.Repositories
             return await _context.Comment.Where(c => c.task.id == id).ToListAsync();
         }
 
+        /// <summary>
+        /// Saves commetns and alerts to other users on that task that there's a new comment
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public async Task<int> SaveComment(comment comment)
         {
             await _context.Comment.AddAsync(comment);
+            reactCrashUser commenter = await _context.Users.Where(u => u.Id == comment.user.Id).FirstAsync();
+            TaskEntity taskEntity = await _context.Tasks
+                                        .Join(_context.Users, t => t.user.Id, u => u.Id,
+                                        (t, u) => new TaskEntity { 
+                                            id = t.id,
+                                            user = u
+                                        })
+                                        .Where(t => t.id == comment.task.id)
+                                        .FirstAsync();
+            taskEntity.collaboratorations = await _context.Collaborations
+                                                    .Join(_context.Users,
+                                                    c => c.user_id,
+                                                    u => u.Id,
+                                                    (c, u) => new Collaboration
+                                                    {
+                                                        task = taskEntity,
+                                                        user = u
+                                                    })
+                                                    .Where(collab => collab.task_id == comment.task.id)
+                                                    .ToListAsync();
+            List<reactCrashUser> usersToNotify = new List<reactCrashUser>();
+            usersToNotify.Append(taskEntity.user);
+            var i = taskEntity.collaboratorations.Select(collab => collab.user).ToList();
+            usersToNotify.AddRange(i);
+            usersToNotify.Remove(commenter);
+            alert a = new alert { date = DateTime.Now, message = $"{commenter.UserName} commented \"{comment.text}\" on \"{taskEntity.text}\"" };
+            foreach (reactCrashUser user in usersToNotify)          
+            {
+                await _context.Alerts.AddAsync(a);
+            }
+            
             return await _context.SaveChangesAsync();
         }
 

@@ -4,7 +4,8 @@ import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
 import FetchTask from './FetchTask'
-import UpdateTask from "./UpdateTask";
+import UpdateTask from './UpdateTask'
+import CommentSection from './comments/CommentSection'
 
 const TaskDetails = ({ onUpdate, token, userId }) => {
 
@@ -14,6 +15,7 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
+    const [comments, setComments] = useState()
 
     const updateTask = async (task) => {  
         setIsLoading(true)  
@@ -43,6 +45,8 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
             try {       
                 const taskFromServer = await fetchTask(id)         
                 setTask(taskFromServer)
+                console.log(taskFromServer)
+                setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
                 console.log("failed") 
@@ -81,6 +85,9 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
+                            {(comments != undefined) && (
+                                <CommentSection comments={comments} /> 
+                            )}                         
                         </div>
                     )}                               
 

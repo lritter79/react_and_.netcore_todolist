@@ -25,6 +25,7 @@ namespace react_crash_2021.Data.Models
         public string Location { get; set; }
         public Guid UserId { get; set; }
         public IEnumerable<ReactCrashUserModel> Collaborators { get; set; }
+        public IEnumerable<CommentModel> Comments { get; set; }
         public Dictionary<string, string> DeadlineMessage {
             get
             {

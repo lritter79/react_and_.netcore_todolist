@@ -48,6 +48,7 @@ namespace react_crash_2021.Data.Repositories
 
             if (task != null)
             {
+                _context.Comment.RemoveRange(_context.Comment.Where(c => c.task.id == id));
                 _context.Tasks.Remove(task);
                 await _context.SaveChangesAsync();
             }
@@ -58,7 +59,15 @@ namespace react_crash_2021.Data.Repositories
         public async Task<TaskEntity> GetTask(long id)
         {
             //throw new NotImplementedException();
-            return await _context.Tasks.Where(task => task.id == id).FirstAsync();
+            var task = await _context.Tasks.Where(task => task.id == id).FirstAsync();
+            task.comments = await (from c in _context.Comment
+                            where c.task.id == id
+                            join u in _context.Users on c.user.Id equals u.Id
+                            join t in _context.Tasks on c.task.id equals t.id
+                            select new comment { date = c.date, text = c.text, id = c.id, task = t, user = u })
+                            .ToListAsync();                           
+                            
+            return task;
         }
 
         public async Task<TaskEntity> GetTaskByUser(Guid userId, long id)

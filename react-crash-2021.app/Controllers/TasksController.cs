@@ -73,6 +73,7 @@ namespace react_crash_2021.Controllers
                 }
                 else
                 {
+
                     return _mapper.Map<TaskModel>(task);
                 }
             }
