@@ -1,8 +1,8 @@
 ﻿
 const Comment = ({ comment }) => (
 
-        <div>
-            <span>{comment.username}: </span>
+    <div className='comment'>
+        <span style={{ fontWeight: 'bold' }}>{comment.username}: </span>
             <span>{comment.text}</span>
         </div>
     )

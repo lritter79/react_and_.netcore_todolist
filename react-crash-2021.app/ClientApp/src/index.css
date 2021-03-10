@@ -278,3 +278,24 @@ footer {
     color: white;
     margin-left: 2px;
 }
+
+.commentSection {
+    background: ghostwhite;
+    border-radius: 10px;
+}
+
+.comment {
+    border-bottom: 2px solid lightgrey;
+    margin: 5px;
+    padding: 2px
+}
+
+.commentForm {
+    margin: 5px;
+    padding-bottom: 4px;
+}
+
+    .commentForm > .btn {
+        margin-left: 0px;
+        margin-right: 0px;
+    }

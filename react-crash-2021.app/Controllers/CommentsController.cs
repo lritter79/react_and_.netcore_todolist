@@ -69,6 +69,7 @@ namespace react_crash_2021.Controllers
         {
             try
             {
+                comment.Date = DateTime.Now;
                 await _repo.SaveComment(_mapper.Map<comment>(comment));
                 return Ok(new { message = "created" });
             }

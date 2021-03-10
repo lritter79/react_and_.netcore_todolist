@@ -85,7 +85,7 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
                             {(comments != undefined) && (
-                                <CommentSection comments={comments} /> 
+                                <CommentSection comments={comments} token={token} taskId={task.id} userId={userId} /> 
                             )}                         
                         </div>
                     )}                               

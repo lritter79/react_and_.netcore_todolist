@@ -12,9 +12,13 @@ namespace react_crash_2021.Data.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long id { get; set; }
+        
+        public long task_id { get; set; }
         [ForeignKey("task_id")]
         [Required]
         public TaskEntity task { get; set; }
+        
+        public Guid user_id { get; set; }
         [ForeignKey("user_id")]
         [Required]
         public reactCrashUser user { get; set; }

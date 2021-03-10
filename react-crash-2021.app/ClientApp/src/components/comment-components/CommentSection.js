@@ -3,22 +3,21 @@ import Comments from "./Comments"
 import { useState, useEffect } from 'react'
 
 
-const CommentSection = ({ comments }) => {
+const CommentSection = ({ comments, userId, token, taskId }) => {
 
     console.log(comments)
 
     
     return (
-        <>
-            <p>Comments</p>
+        <div className='commentSection'>
             {(comments?.length > 0) ? (
                 <Comments comments={comments} />
             ) : (
                     <></>
                 )}
-            
-            <CommentForm />
-        </>
+
+            <CommentForm userId={userId} token={token} taskId={taskId} />
+        </div>
    )
 }
 
