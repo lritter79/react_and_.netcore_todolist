@@ -124,6 +124,8 @@
     to {
         transform: translateX(0);
     }
+
+    
 }
 
 @keyframes toast-in-left {

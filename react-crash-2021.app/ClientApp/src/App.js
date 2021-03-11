@@ -61,15 +61,15 @@ const App = () => {
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(3000)
 
-    const showToast = (type) => {
+    const showToast = (type, text) => {
         let toastProperties = null
         const id = Math.floor((Math.random() * 100) + 1)
         switch (type) {
-            case 'success':
+            case 'addedReminder':
                 toastProperties = {
                     id,
-                    title: 'Success',
-                    description: 'This is a success toast component',
+                    title: 'Added Reminder',
+                    description: 'You have added a reminder',
                     backgroundColor: '#5cb85c',
                     icon: checkIcon
                 }
@@ -78,7 +78,7 @@ const App = () => {
                 toastProperties = {
                     id,
                     title: 'Danger',
-                    description: 'This is an error toast component',
+                    description: `Error: ${text}`,
                     backgroundColor: '#d9534f',
                     icon: errorIcon
                 }
@@ -106,36 +106,36 @@ const App = () => {
         }
         setList([...list, toastProperties])
     }
-    const testList = [
-        {
-            id: 1,
-            title: 'Success',
-            description: 'This is a success toast component',
-            backgroundColor: '#5cb85c',
-            icon: checkIcon
-        },
-        {
-            id: 2,
-            title: 'Danger',
-            description: 'This is an error toast component',
-            backgroundColor: '#d9534f',
-            icon: errorIcon
-        },
-        {
-            id: 3,
-            title: 'Info',
-            description: 'This is an info toast component',
-            backgroundColor: '#5bc0de',
-            icon: infoIcon
-        },
-        {
-            id: 4,
-            title: 'Warning',
-            description: 'This is a warning toast component',
-            backgroundColor: '#f0ad4e',
-            icon: warningIcon
-        }
-    ]
+    //const testList = [
+    //    {
+    //        id: 1,
+    //        title: 'Success',
+    //        description: 'This is a success toast component',
+    //        backgroundColor: '#5cb85c',
+    //        icon: checkIcon
+    //    },
+    //    {
+    //        id: 2,
+    //        title: 'Danger',
+    //        description: 'This is an error toast component',
+    //        backgroundColor: '#d9534f',
+    //        icon: errorIcon
+    //    },
+    //    {
+    //        id: 3,
+    //        title: 'Info',
+    //        description: 'This is an info toast component',
+    //        backgroundColor: '#5bc0de',
+    //        icon: infoIcon
+    //    },
+    //    {
+    //        id: 4,
+    //        title: 'Warning',
+    //        description: 'This is a warning toast component',
+    //        backgroundColor: '#f0ad4e',
+    //        icon: warningIcon
+    //    }
+    //]
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -168,8 +168,7 @@ const App = () => {
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
-                console.log("failed to fetch tasks")
-                console.log(error)
+                showToast('danger', error)
             }
         }
         const fetchAlerts = async (id) => {
@@ -191,8 +190,7 @@ const App = () => {
                 setIsLoading(false)
                 setAlerts(tasksFromServer)
             } catch (error) {
-                console.log("failed to fetch tasks")
-                console.log(error)
+                showToast('danger', error)
             }
         }
 
@@ -219,33 +217,42 @@ const App = () => {
         await DeleteTask(id, token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
-        showToast('danger')
+        showToast('danger', 'You have deleted a task')
     }
 
     // Toggle Reminder
     //takes id so it knows which on to toggle
     const toggleReminder = async (id) => {
-        const taskToToggle = await fetchTask(id)
-        const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
-        //const updateTask = UpdateTask
-        //update is put
-        // 
-        const res = await fetch(`${Constant()}/api/tasks/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': 'Bearer ' + token             
-            },
-            body: JSON.stringify(updTask)
-        })
+        try {
+            const taskToToggle = await fetchTask(id, token)
+            const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
+            //const updateTask = UpdateTask
+            //update is put
+            // 
+            const res = await fetch(`${Constant()}/api/tasks/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + token             
+                },
+                body: JSON.stringify(updTask)
+            })
 
-        const data = await res.json()
+            const data = await res.json()
 
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, reminder: data.reminder } : task
+            setTasks(
+                tasks.map((task) =>
+                    task.id === id ? { ...task, reminder: data.reminder } : task
+                )
             )
-        )
+
+            if (data.reminder) {
+                showToast('addedReminder')
+            }
+        } catch (err) {
+            showToast('danger', err)
+        }
+        
     }
 
     const updateTask = async (task) => {
