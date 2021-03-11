@@ -2,14 +2,22 @@
 //Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-const Login = ({ setToken }) => {
+const Login = ({ setToken, toast }) => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+
+    useEffect(() => {
+
+        return function cleanup() {
+            setUserName('')
+            setPassword('')
+        }
+    }, [])
 
     const onSubmit = async e => {
         e.preventDefault()
@@ -25,6 +33,7 @@ const Login = ({ setToken }) => {
             if (!token.error) {
                 setErrorMessage('')
                 setToken(token)
+                toast('login', username)
             }
             else {
                 setErrorMessage(token.error)

@@ -101,6 +101,24 @@ const App = () => {
                     icon: infoIcon
                 }
                 break
+            case 'register':
+                toastProperties = {
+                    id,
+                    title: 'Registered',
+                    description: `Welcome to your new task tracker ${text}!`,
+                    backgroundColor: '#5bc0de',
+                    icon: infoIcon
+                }
+                break
+            case 'login':
+                toastProperties = {
+                    id,
+                    title: 'Logged In',
+                    description: `Welcome back to your task tracker ${text}!`,
+                    backgroundColor: '#5bc0de',
+                    icon: infoIcon
+                }
+                break
             case 'warning':
                 toastProperties = {
                     id,
@@ -359,8 +377,8 @@ const App = () => {
                             <Footer isLoggedIn={token} />
                         </>
                     ) : (
-                            <>
-                                <RegisterAndLoginRoutes setToken={setToken} token={token} />
+                        <>
+                            <RegisterAndLoginRoutes setToken={setToken} token={token} toast={showToast} />
                             </>
 
                         )}
