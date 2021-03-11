@@ -6,6 +6,11 @@ import './Toast.css';
 const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
     const [list, setList] = useState(toastList)
 
+    //function sleep(ms) {
+    //    console.log('sleeping')
+    //    return new Promise(resolve => setTimeout(resolve, ms));
+    //  }
+
     useEffect(() => {
         setList([...toastList]);
 
@@ -13,13 +18,13 @@ const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
     }, [toastList]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (autoDelete && toastList.length && list.length) {
+        const interval = setInterval(async () => {
+            if (autoDelete && toastList.length && list.length) {            
                 deleteToast(toastList[0].id);
             }
         }, dismissTime);
 
-        return () => {
+        return async () => {                     
             clearInterval(interval);
         }
 
@@ -41,7 +46,7 @@ const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
                     list.map((toast, i) =>
                         <div
                             key={i}
-                            className={`notification toast ${position}`}
+                            className={`notification toast ${('hidden' in toast) ? ('hidden') : ('show')} ${position}`}
                             style={{ backgroundColor: toast.backgroundColor }}
                         >
                             <button onClick={() => deleteToast(toast.id)}>

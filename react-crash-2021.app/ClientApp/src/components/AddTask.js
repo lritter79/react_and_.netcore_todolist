@@ -55,8 +55,9 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
       //data returned is the new task
       //const data = await res.json()
       //take existings takes and add data on
-      if (!didAdd?.error) {
+      if (!('error' in didAdd)) {
           setTasks([...tasks, didAdd])
+          onAdd('addedTask', text)
           setShowAddTask(false)
           //clears the form
           setText('')
@@ -64,6 +65,10 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
           setLocation('')
           setDetails('')
           setReminder(false)
+      }
+      else {
+          console.log('added')
+          onAdd('danger', didAdd.error)
       }
 
   }

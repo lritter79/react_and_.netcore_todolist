@@ -59,12 +59,21 @@ const App = () => {
     const [alerts, setAlerts] = useState([])
     const [list, setList] = useState([])
     const [checkValue, setCheckValue] = useState(true)
-    const [autoDeleteTime, setAutoDeleteTime] = useState(3000)
+    const [autoDeleteTime, setAutoDeleteTime] = useState(10000)
 
     const showToast = (type, text) => {
         let toastProperties = null
         const id = Math.floor((Math.random() * 100) + 1)
         switch (type) {
+            case 'addedTask':
+                toastProperties = {
+                    id,
+                    title: 'Added Task',
+                    description: `Added ${text}`,
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                }
+                break
             case 'addedReminder':
                 toastProperties = {
                     id,
@@ -324,7 +333,7 @@ const App = () => {
                                         <Header
                                             onAdd={() => setShowAddTask(!showAddTask)}
                                             showAdd={showAddTask} />
-                                        <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} setShowAddTask={setShowAddTask} />
+                                        <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} onAdd={showToast} setShowAddTask={setShowAddTask} />
                                         {!isLoading ? (
                                             (tasks.length > 0) ? (
                                                 <Tasks
