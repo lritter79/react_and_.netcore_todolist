@@ -18,7 +18,11 @@ import useToken from './components/api-authorization/UseToken'
 import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
-
+import Toast from './components/toast/Toast';
+import checkIcon from './assets/check.svg';
+import errorIcon from './assets/error.svg';
+import infoIcon from './assets/info.svg';
+import warningIcon from './assets/warning.svg';
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
 //    sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -53,6 +57,85 @@ const App = () => {
     const { token, setToken } = useToken()
     const [userId, setUserId] = useState('')
     const [alerts, setAlerts] = useState([])
+    const [list, setList] = useState([])
+    const [checkValue, setCheckValue] = useState(true)
+    const [autoDeleteTime, setAutoDeleteTime] = useState(3000)
+
+    const showToast = (type) => {
+        let toastProperties = null
+        const id = Math.floor((Math.random() * 100) + 1)
+        switch (type) {
+            case 'success':
+                toastProperties = {
+                    id,
+                    title: 'Success',
+                    description: 'This is a success toast component',
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                }
+                break
+            case 'danger':
+                toastProperties = {
+                    id,
+                    title: 'Danger',
+                    description: 'This is an error toast component',
+                    backgroundColor: '#d9534f',
+                    icon: errorIcon
+                }
+                break
+            case 'info':
+                toastProperties = {
+                    id,
+                    title: 'Info',
+                    description: 'This is an info toast component',
+                    backgroundColor: '#5bc0de',
+                    icon: infoIcon
+                }
+                break
+            case 'warning':
+                toastProperties = {
+                    id,
+                    title: 'Warning',
+                    description: 'This is a warning toast component',
+                    backgroundColor: '#f0ad4e',
+                    icon: warningIcon
+                }
+                break
+            default:
+                setList([])
+        }
+        setList([...list, toastProperties])
+    }
+    const testList = [
+        {
+            id: 1,
+            title: 'Success',
+            description: 'This is a success toast component',
+            backgroundColor: '#5cb85c',
+            icon: checkIcon
+        },
+        {
+            id: 2,
+            title: 'Danger',
+            description: 'This is an error toast component',
+            backgroundColor: '#d9534f',
+            icon: errorIcon
+        },
+        {
+            id: 3,
+            title: 'Info',
+            description: 'This is an info toast component',
+            backgroundColor: '#5bc0de',
+            icon: infoIcon
+        },
+        {
+            id: 4,
+            title: 'Warning',
+            description: 'This is a warning toast component',
+            backgroundColor: '#f0ad4e',
+            icon: warningIcon
+        }
+    ]
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -136,6 +219,7 @@ const App = () => {
         await DeleteTask(id, token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
+        showToast('danger')
     }
 
     // Toggle Reminder
@@ -179,7 +263,9 @@ const App = () => {
     return (
 
         <Router>
+            
             <div id="backdrop">
+                
             </div>
             <Navbar bg="light" expand="lg">
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
@@ -203,7 +289,13 @@ const App = () => {
                 </Navbar.Collapse>
             </Navbar>
             
-                <div className='container'>
+            <div className='container'>
+                <Toast
+                    toastList={list}
+                    position="bottom-right"
+                    autoDelete={checkValue}
+                    dismissTime={autoDeleteTime}
+                />
                     <Route path='/about' exact component={About} />
                     <Route path='/logout' exact component={Logout} />
                     {token ? (
