@@ -55,7 +55,7 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true)
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
     const { token, setToken } = useToken()
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState(undefined)
     const [alerts, setAlerts] = useState([])
     const [list, setList] = useState([])
     const [checkValue, setCheckValue] = useState(true)
@@ -223,7 +223,8 @@ const App = () => {
 
         getId()
 
-        if (userId != null || userId != undefined) {
+        if (userId != undefined) {
+            console.log(userId)
             getTasks()
             getAlerts()
         }

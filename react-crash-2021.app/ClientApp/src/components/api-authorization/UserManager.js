@@ -8,6 +8,7 @@ const UserManager = ({ handleLogout, token, id }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState('')
     const [isChecked, setIsChecked] = useState()
+    const [bio, setBio] = useState()
     const [showDeleteForm, setShowDeleteForm] = useState(false)
     const [deleteDisabled, setDeleteDisabled] = useState(false)
     
@@ -85,6 +86,10 @@ const UserManager = ({ handleLogout, token, id }) => {
     //}
 
     const onSubmit = async e => {
+
+    }
+
+    const onSubmitDelete = async e => {
         e.preventDefault()
         setDeleteDisabled(true)
         setShowDeleteForm(true)
@@ -148,8 +153,19 @@ const UserManager = ({ handleLogout, token, id }) => {
                             </div>                          
                         </div>
                     )}
-                    
                     <form onSubmit={onSubmit}>
+                        <input type="" />
+                        <input type="checkbox" checked={isChecked} onChange={onChange} />
+                        <label>Open to collaboration?</label>
+                        <button
+                            type='submit'
+                            className='btn'
+                            style={{ backgroundColor: 'green' }}
+                        >
+                            Save Changes
+                        </button>
+                    </form>
+                    <form onSubmit={onSubmitDelete}>
                         <button
                             type='submit'
                             className='btn'
@@ -159,10 +175,7 @@ const UserManager = ({ handleLogout, token, id }) => {
                         Delete Account
                         </button>
                     </form >                 
-                    <form>
-                        <input type="checkbox" checked={isChecked} onChange={onChange} />
-                        <label>Open to collaboration?</label>
-                    </form>
+                    
                 </div>)}
             
         </>
