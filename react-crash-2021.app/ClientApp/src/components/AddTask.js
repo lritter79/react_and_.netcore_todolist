@@ -5,7 +5,7 @@ import Constant from './Constant'
 import CreateTask from './task-crud-operations/CreateTask'
 
 //take in the function onAdd
-const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddTask }) => {
+const AddTask = ({ isToggled, userId, token, tasks, setTasks, showToast, setShowAddTask }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
   //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
   const [text, setText] = useState('')
@@ -57,7 +57,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
       //take existings takes and add data on
       if (!('error' in didAdd)) {
           setTasks([...tasks, didAdd])
-          onAdd('addedTask', text)
+          showToast('success', `Added "${text}"`)
           setShowAddTask(false)
           //clears the form
           setText('')
@@ -68,7 +68,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
       }
       else {
           console.log('added')
-          onAdd('danger', didAdd.error)
+          showToast('error', didAdd.error)
       }
 
   }

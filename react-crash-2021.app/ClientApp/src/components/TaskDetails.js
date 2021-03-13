@@ -7,7 +7,7 @@ import FetchTask from './task-crud-operations/FetchTask'
 import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
 
-const TaskDetails = ({ onUpdate, token, userId }) => {
+const TaskDetails = ({ token, userId, showToast }) => {
 
     //gets the params passed in from the router
     //is a react hook
@@ -48,10 +48,10 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
         try {
             task.userId = userId
             setShowEditTask(!showEditTask)
-            const updTask = await UpdateTask(task)
+            const updTask = await UpdateTask(task, token)
             setTask(updTask)
             setIsLoading(false)
-            onUpdate(updTask)
+            showToast('success', `Updated "${task.text}"`)
         } catch (error) {
             console.log(error)
         }

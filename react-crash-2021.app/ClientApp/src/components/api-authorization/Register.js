@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 
-const Register = ({ setToken, toast }) => {
+const Register = ({ setToken, showToast }) => {
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -24,7 +24,7 @@ const Register = ({ setToken, toast }) => {
                     setErrorMessage('')
                     setToken(token)
                     setDisabled(true)
-                    toast('register', username)
+                    showToast('success', `Welcome ${username}`)
                 }
                 else {
                     setErrorMessage(token.error)

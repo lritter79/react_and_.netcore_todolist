@@ -64,70 +64,36 @@ const App = () => {
     const showToast = (type, text) => {
         let toastProperties = null
         const id = Math.floor((Math.random() * 100) + 1)
+        console.log('type: ' + type)
         switch (type) {
-            case 'addedTask':
+            case 'error':
                 toastProperties = {
                     id,
-                    title: 'Added Task',
-                    description: `Added ${text}`,
+                    title: 'Error!',
+                    description: `${text}`,
                     backgroundColor: '#5cb85c',
                     icon: checkIcon
                 }
                 break
-            case 'addedReminder':
+            case 'success':
                 toastProperties = {
                     id,
-                    title: 'Added Reminder',
-                    description: 'You have added a reminder',
+                    title: 'Success!',
+                    description: `${text}`,
                     backgroundColor: '#5cb85c',
                     icon: checkIcon
-                }
-                break
-            case 'danger':
-                toastProperties = {
-                    id,
-                    title: 'Danger',
-                    description: `Error: ${text}`,
-                    backgroundColor: '#d9534f',
-                    icon: errorIcon
                 }
                 break
             case 'info':
                 toastProperties = {
                     id,
                     title: 'Info',
-                    description: 'This is an info toast component',
+                    description: `${text}`,
                     backgroundColor: '#5bc0de',
                     icon: infoIcon
                 }
                 break
-            case 'register':
-                toastProperties = {
-                    id,
-                    title: 'Registered',
-                    description: `Welcome to your new task tracker ${text}!`,
-                    backgroundColor: '#5bc0de',
-                    icon: infoIcon
-                }
-                break
-            case 'login':
-                toastProperties = {
-                    id,
-                    title: 'Logged In',
-                    description: `Welcome back to your task tracker ${text}!`,
-                    backgroundColor: '#5bc0de',
-                    icon: infoIcon
-                }
-                break
-            case 'warning':
-                toastProperties = {
-                    id,
-                    title: 'Warning',
-                    description: 'This is a warning toast component',
-                    backgroundColor: '#f0ad4e',
-                    icon: warningIcon
-                }
-                break
+            
             default:
                 setList([])
         }
@@ -195,7 +161,7 @@ const App = () => {
                 setIsLoading(false)
                 setTasks(tasksFromServer)
             } catch (error) {
-                showToast('danger', error)
+                showToast('error', error)
             }
         }
         const fetchAlerts = async (id) => {
@@ -217,7 +183,7 @@ const App = () => {
                 setIsLoading(false)
                 setAlerts(tasksFromServer)
             } catch (error) {
-                showToast('danger', error)
+                showToast('error', error)
             }
         }
 
@@ -245,7 +211,6 @@ const App = () => {
         await DeleteTask(id, token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
-        showToast('danger', 'You have deleted a task')
     }
 
     // Toggle Reminder
@@ -254,9 +219,7 @@ const App = () => {
         try {
             const taskToToggle = await fetchTask(id, token)
             const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
-            //const updateTask = UpdateTask
-            //update is put
-            // 
+
             const res = await fetch(`${Constant()}/api/tasks/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -274,11 +237,9 @@ const App = () => {
                 )
             )
 
-            if (data.reminder) {
-                showToast('addedReminder')
-            }
-        } catch (err) {
-            showToast('danger', err)
+
+        } catch (error) {
+            showToast('error', 'error')
         }
         
     }
@@ -342,8 +303,8 @@ const App = () => {
                         />
                             <Redirect from='/login' to="/" />
                             <Route path='/userManager' exact
-                                render={(props) => (
-                                    <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
+                            render={(props) => (
+                                <UserManager handleLogout={handleLogoutClick} token={token} id={userId} showToast={showToast} />
                                 )}
                             />
                             <Route path='/' exact
@@ -352,7 +313,10 @@ const App = () => {
                                         <Header
                                             onAdd={() => setShowAddTask(!showAddTask)}
                                             showAdd={showAddTask} />
-                                        <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} onAdd={showToast} setShowAddTask={setShowAddTask} />
+                                        <AddTask isToggled={showAddTask}
+                                            userId={userId} token={token}
+                                            tasks={tasks} setTasks={setTasks}
+                                            showToast={showToast} setShowAddTask={setShowAddTask} />
                                         {!isLoading ? (
                                             (tasks.length > 0) ? (
                                                 <Tasks
@@ -372,6 +336,7 @@ const App = () => {
                                         onUpdate={updateTask}
                                         userId={userId}
                                         token={token}
+                                        showToast={showToast}
                                     />
                                 )}
                             />
@@ -379,7 +344,7 @@ const App = () => {
                         </>
                     ) : (
                         <>
-                            <RegisterAndLoginRoutes setToken={setToken} token={token} toast={showToast} />
+                            <RegisterAndLoginRoutes setToken={setToken} token={token} showToast={showToast} />
                             </>
 
                         )}

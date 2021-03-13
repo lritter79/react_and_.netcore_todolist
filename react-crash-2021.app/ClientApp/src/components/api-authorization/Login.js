@@ -5,7 +5,7 @@ import Constant from '../Constant'
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-const Login = ({ setToken, toast }) => {
+const Login = ({ setToken, showToast }) => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
@@ -33,7 +33,7 @@ const Login = ({ setToken, toast }) => {
             if (!token.error) {
                 setErrorMessage('')
                 setToken(token)
-                toast('login', username)
+                showToast('success', `Welcome back, ${username}`)
             }
             else {
                 setErrorMessage(token.error)
@@ -51,9 +51,7 @@ const Login = ({ setToken, toast }) => {
             body: JSON.stringify(credentials),
         })
             .then(data => data.json())
-            .catch((error) => {
-                console.error('Fetch Error:', error);
-            });
+            .catch((error) => error);
 
     }
 

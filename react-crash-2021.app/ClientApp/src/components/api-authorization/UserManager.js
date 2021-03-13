@@ -3,12 +3,10 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import userFunctions from './UserFunctions'
 
-const UserManager = ({ handleLogout, token, id }) => {
+const UserManager = ({ handleLogout, token, id, onSave }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState('')
-    const [isChecked, setIsChecked] = useState()
-    const [bio, setBio] = useState()
     const [showDeleteForm, setShowDeleteForm] = useState(false)
     const [deleteDisabled, setDeleteDisabled] = useState(false)
     
@@ -17,28 +15,24 @@ const UserManager = ({ handleLogout, token, id }) => {
     useEffect(async () => {
         setIsLoading(false)
         const userData = await userFunctions.getUser(id, token)
-        setUser(userData)
-
-        
+        setUser(userData)      
     }, [])
 
     useEffect(() => {
         return function cleanup() {
             console.log('clean up')
-            setIsChecked(undefined)
         }
     }, [])
 
     useEffect(async () => {
         console.log('user use effect')
-        if (isChecked != undefined) {
-            const updatedUser = await userFunctions.saveUser({ user, id, token })        
-        }
-        else {
-            console.log('first time')
-        }
+        //if (isChecked != undefined) {
+        //    //const updatedUser = await userFunctions.saveUser({ user, id, token })        
+        //}
+        //else {
+        //    console.log('first time')
+        //}
         console.log('set')
-        setIsChecked(user?.isOpenToCollaboration)
     }, [user])
 
     useEffect(() => {
@@ -47,46 +41,29 @@ const UserManager = ({ handleLogout, token, id }) => {
 
     
 
-    async function onChange(e) {
-        setIsLoading(true)  
 
-        try {
-            const value = e.target.checked
-            setIsChecked(value)
-            console.log(`val: ${value}`)
-            console.log("inside of try block")
-            console.log(user)
-            await setUser(prev => { 
-                return { ...prev, isOpenToCollaboration: value }
-            })                  
-        } catch (error) {
-            console.log("failed to update user")
-            console.log(error)
-        }
-
-        setIsLoading(false)
+    async function updateUser(appUser) {
+        
+        return fetch(`${Constant()}/api/users/toggleCollab`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(appUser),
+        })
+            .then(function (data) {
+               onSave('succes', 'Your changes have been saved')
+               return data.json()
+            })
+            .catch((error) => {
+                console.error('Fetch Error:', error);
+            });
     }
 
-
-
-    //async function toggleIsOpenToCollaboration(appUser) {
-        
-    //    return fetch(`${Constant()}/api/users/toggleCollab`, {
-    //        method: 'PUT',
-    //        headers: {
-    //            'Authorization': 'Bearer ' + token,
-    //            'Content-type': 'application/json',
-    //        },
-    //        body: JSON.stringify(appUser),
-    //    })
-    //        .then(data => data.json())
-    //        .catch((error) => {
-    //            console.error('Fetch Error:', error);
-    //        });
-    //}
-
     const onSubmit = async e => {
-
+        e.preventDefault()
+        let res = await updateUser(user)
     }
 
     const onSubmitDelete = async e => {
@@ -153,18 +130,36 @@ const UserManager = ({ handleLogout, token, id }) => {
                             </div>                          
                         </div>
                     )}
-                    <form onSubmit={onSubmit}>
-                        <input type="" />
-                        <input type="checkbox" checked={isChecked} onChange={onChange} />
-                        <label>Open to collaboration?</label>
+                    <Form onSubmit={onSubmit}>
+                        <Form.Group>
+                            <Form.Check
+                                type="checkbox"
+                                label="Open To Collaboration?: "
+                                checked={user.isOpenToCollaboration}
+                                onChange={(e) => setUser({ ...user, isOpenToCollaboration: e.currentTarget.checked })} />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>
+                                Bio: 
+                            </Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder=''
+                                value={user.bio}
+                                onChange={(e) => setUser({ ...user, bio: e.target.value })}
+                            />
+                        </Form.Group>
+
                         <button
                             type='submit'
-                            className='btn'
+                            className='btn btn-block'
                             style={{ backgroundColor: 'green' }}
                         >
                             Save Changes
                         </button>
-                    </form>
+                    </Form>
+
                     <form onSubmit={onSubmitDelete}>
                         <button
                             type='submit'

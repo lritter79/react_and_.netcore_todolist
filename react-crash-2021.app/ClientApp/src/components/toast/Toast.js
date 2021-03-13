@@ -12,6 +12,7 @@ const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
     //  }
 
     useEffect(() => {
+        console.log(toastList)
         setList([...toastList]);
 
         // eslint-disable-next-line
