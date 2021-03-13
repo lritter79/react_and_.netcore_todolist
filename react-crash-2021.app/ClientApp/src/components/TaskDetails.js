@@ -6,8 +6,9 @@ import FormatDateString from './FormatDateString'
 import FetchTask from './task-crud-operations/FetchTask'
 import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
+import { useShowToast } from './toast/ToastContext'
 
-const TaskDetails = ({ token, userId, showToast }) => {
+const TaskDetails = ({ token, userId }) => {
 
     //gets the params passed in from the router
     //is a react hook
@@ -16,6 +17,7 @@ const TaskDetails = ({ token, userId, showToast }) => {
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
     const [comments, setComments] = useState()
+    const showToast = useShowToast() 
 
     useEffect(() => {
         console.log("using effect: task details")

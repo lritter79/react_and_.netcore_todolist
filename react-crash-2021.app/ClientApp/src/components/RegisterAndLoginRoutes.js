@@ -4,7 +4,7 @@ import { Route, Redirect  } from 'react-router-dom'
 import Intro from './Intro'
 
 
-const RegisterAndLoginRoutes = ({ setToken, showToast}) => {
+const RegisterAndLoginRoutes = ({ setToken}) => {
     return (
         <>
             <Redirect from='/userManager' to="/" />
@@ -14,7 +14,6 @@ const RegisterAndLoginRoutes = ({ setToken, showToast}) => {
                 render={(props) => (
                     <Login
                         setToken={setToken}
-                        showToast={showToast}
                     />
                 )}
             />
@@ -23,7 +22,6 @@ const RegisterAndLoginRoutes = ({ setToken, showToast}) => {
                 render={(props) =>
                     <Register
                         setToken={setToken}
-                        showToast={showToast}
                     />
                 }
             />

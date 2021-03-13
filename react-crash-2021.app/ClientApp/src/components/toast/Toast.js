@@ -1,9 +1,11 @@
 ﻿import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useToast } from './ToastContext'
 
 import './Toast.css';
 //source:     transition: max-height 0.5s, opacity 0.5s;
-const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
+const Toast = ({ position, autoDelete, dismissTime }) => {
+    const toastList = useToast()
     const [list, setList] = useState(toastList)
 
     //function sleep(ms) {
@@ -12,6 +14,7 @@ const Toast = ({ toastList, position, autoDelete, dismissTime }) => {
     //  }
 
     useEffect(() => {
+        console.log('toastlist side effect')
         console.log(toastList)
         setList([...toastList]);
 

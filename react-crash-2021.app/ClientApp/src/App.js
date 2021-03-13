@@ -18,11 +18,9 @@ import useToken from './components/api-authorization/UseToken'
 import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
-import Toast from './components/toast/Toast';
-import checkIcon from './assets/check.svg';
-import errorIcon from './assets/error.svg';
-import infoIcon from './assets/info.svg';
-import warningIcon from './assets/warning.svg';
+import Toast from './components/toast/Toast'
+import { ToastProvider, useShowToast } from './components/toast/ToastContext'
+
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
 //    sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -57,78 +55,10 @@ const App = () => {
     const { token, setToken } = useToken()
     const [userId, setUserId] = useState(undefined)
     const [alerts, setAlerts] = useState([])
-    const [list, setList] = useState([])
     const [checkValue, setCheckValue] = useState(true)
-    const [autoDeleteTime, setAutoDeleteTime] = useState(10000)
+    const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
 
-    const showToast = (type, text) => {
-        let toastProperties = null
-        const id = Math.floor((Math.random() * 100) + 1)
-        console.log('type: ' + type)
-        switch (type) {
-            case 'error':
-                toastProperties = {
-                    id,
-                    title: 'Error!',
-                    description: `${text}`,
-                    backgroundColor: '#5cb85c',
-                    icon: checkIcon
-                }
-                break
-            case 'success':
-                toastProperties = {
-                    id,
-                    title: 'Success!',
-                    description: `${text}`,
-                    backgroundColor: '#5cb85c',
-                    icon: checkIcon
-                }
-                break
-            case 'info':
-                toastProperties = {
-                    id,
-                    title: 'Info',
-                    description: `${text}`,
-                    backgroundColor: '#5bc0de',
-                    icon: infoIcon
-                }
-                break
-            
-            default:
-                setList([])
-        }
-        setList([...list, toastProperties])
-    }
-    //const testList = [
-    //    {
-    //        id: 1,
-    //        title: 'Success',
-    //        description: 'This is a success toast component',
-    //        backgroundColor: '#5cb85c',
-    //        icon: checkIcon
-    //    },
-    //    {
-    //        id: 2,
-    //        title: 'Danger',
-    //        description: 'This is an error toast component',
-    //        backgroundColor: '#d9534f',
-    //        icon: errorIcon
-    //    },
-    //    {
-    //        id: 3,
-    //        title: 'Info',
-    //        description: 'This is an info toast component',
-    //        backgroundColor: '#5bc0de',
-    //        icon: infoIcon
-    //    },
-    //    {
-    //        id: 4,
-    //        title: 'Warning',
-    //        description: 'This is a warning toast component',
-    //        backgroundColor: '#f0ad4e',
-    //        icon: warningIcon
-    //    }
-    //]
+    const showToast = useShowToast()
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -257,54 +187,53 @@ const App = () => {
     //wrap everything in <Router> to use routes
     //exact menas match path exactly
     return (
-
+        
         <Router>
-            
-            <div id="backdrop">
-                
-            </div>
-            <Navbar bg="light" expand="lg">
-                <Navbar.Brand>Task Tracker</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">    
-                        <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>      
-                        {token ? (
-                            <>                               
-                                <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
-                                <Nav.Link as={NavLink} to="/alerts" exact>Alerts 
-                                    {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}                                                                                                     
-                                </Nav.Link>
-                                <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
-                            </>) : (<>
-                                <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
-                                <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-                            </>)}                                                                
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
-            
-            <div className='container'>
-                <Toast
-                    toastList={list}
-                    position="bottom-right"
-                    autoDelete={checkValue}
-                    dismissTime={autoDeleteTime}
-                />
+            <ToastProvider>
+                <div id="backdrop">
+
+                </div>
+                <Navbar bg="light" expand="lg">
+                    <Navbar.Brand>Task Tracker</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                            <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+                            <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
+                            {token ? (
+                                <>
+                                    <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/alerts" exact>Alerts
+                                    {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}
+                                    </Nav.Link>
+                                    <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
+                                </>) : (<>
+                                    <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
+                                </>)}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+
+                <div className='container'>
+                    <Toast
+                        position="bottom-right"
+                        autoDelete={checkValue}
+                        dismissTime={autoDeleteTime}
+                    />
                     <Route path='/about' exact component={About} />
                     <Route path='/logout' exact component={Logout} />
                     {token ? (
-                    <>
-                        <Route path='/alerts' exact
-                            render={(props) => (
-                                <AlertCenter alerts={alerts} setAlerts={setAlerts} />
-                            )}
-                        />
+                        <>
+                            <Route path='/alerts' exact
+                                render={(props) => (
+                                    <AlertCenter alerts={alerts} setAlerts={setAlerts} />
+                                )}
+                            />
                             <Redirect from='/login' to="/" />
                             <Route path='/userManager' exact
-                            render={(props) => (
-                                <UserManager handleLogout={handleLogoutClick} token={token} id={userId} showToast={showToast} />
+                                render={(props) => (
+                                    <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
                                 )}
                             />
                             <Route path='/' exact
@@ -316,7 +245,7 @@ const App = () => {
                                         <AddTask isToggled={showAddTask}
                                             userId={userId} token={token}
                                             tasks={tasks} setTasks={setTasks}
-                                            showToast={showToast} setShowAddTask={setShowAddTask} />
+                                            setShowAddTask={setShowAddTask} />
                                         {!isLoading ? (
                                             (tasks.length > 0) ? (
                                                 <Tasks
@@ -336,22 +265,22 @@ const App = () => {
                                         onUpdate={updateTask}
                                         userId={userId}
                                         token={token}
-                                        showToast={showToast}
                                     />
                                 )}
                             />
                             <Footer isLoggedIn={token} />
                         </>
                     ) : (
-                        <>
-                            <RegisterAndLoginRoutes setToken={setToken} token={token} showToast={showToast} />
+                            <>
+                                <RegisterAndLoginRoutes setToken={setToken} token={token} />
                             </>
 
                         )}
-            </div>
-            
-            
+                </div>
+
+            </ToastProvider>
         </Router>
+            
     )
 }
 

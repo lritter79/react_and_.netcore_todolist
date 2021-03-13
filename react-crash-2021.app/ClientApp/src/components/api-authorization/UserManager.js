@@ -2,14 +2,16 @@
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import userFunctions from './UserFunctions'
+import { useShowToast } from '../toast/ToastContext'
 
-const UserManager = ({ handleLogout, token, id, onSave }) => {
+const UserManager = ({ handleLogout, token, id }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState('')
     const [showDeleteForm, setShowDeleteForm] = useState(false)
     const [deleteDisabled, setDeleteDisabled] = useState(false)
-    
+    const [submitDisabled, setSubmitDisabled] = useState(false)
+    const onSave = useShowToast()
 
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
     useEffect(async () => {
@@ -53,7 +55,7 @@ const UserManager = ({ handleLogout, token, id, onSave }) => {
             body: JSON.stringify(appUser),
         })
             .then(function (data) {
-               onSave('succes', 'Your changes have been saved')
+               onSave('success', 'Your changes have been saved')
                return data.json()
             })
             .catch((error) => {
@@ -61,9 +63,16 @@ const UserManager = ({ handleLogout, token, id, onSave }) => {
             });
     }
 
+    const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
     const onSubmit = async e => {
         e.preventDefault()
-        let res = await updateUser(user)
+        setSubmitDisabled(true)
+        let res = await updateUser(user)  
+        await sleep(1000)
+        setSubmitDisabled(false)
     }
 
     const onSubmitDelete = async e => {
@@ -155,6 +164,7 @@ const UserManager = ({ handleLogout, token, id, onSave }) => {
                             type='submit'
                             className='btn btn-block'
                             style={{ backgroundColor: 'green' }}
+                            disabled={submitDisabled}
                         >
                             Save Changes
                         </button>
@@ -165,9 +175,9 @@ const UserManager = ({ handleLogout, token, id, onSave }) => {
                             type='submit'
                             className='btn'
                             style={{ backgroundColor: 'red' }}
-                            isEnabled={deleteDisabled}
+                            disabled={deleteDisabled}
                         >
-                        Delete Account
+                            Delete Account
                         </button>
                     </form >                 
                     

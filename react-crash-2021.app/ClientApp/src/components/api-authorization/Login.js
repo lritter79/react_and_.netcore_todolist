@@ -4,12 +4,16 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useShowToast } from '../toast/ToastContext'
 
-const Login = ({ setToken, showToast }) => {
+const Login = ({ setToken }) => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+    const [disabled, setDisabled] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+
+    const showToast = useShowToast()
 
     useEffect(() => {
 
@@ -21,6 +25,7 @@ const Login = ({ setToken, showToast }) => {
 
     const onSubmit = async e => {
         e.preventDefault()
+        setDisabled(true)
         if (password === "") {
             setErrorMessage("Enter Password")
         }
@@ -38,7 +43,8 @@ const Login = ({ setToken, showToast }) => {
             else {
                 setErrorMessage(token.error)
             }
-        }             
+        }
+        setDisabled(false)
     }
 
 
@@ -81,6 +87,7 @@ const Login = ({ setToken, showToast }) => {
                     type='submit'
                     className='btn'
                     style={{ backgroundColor: 'skyblue' }}
+                    disabled={false}
                 >
                     Login
                 </button>
