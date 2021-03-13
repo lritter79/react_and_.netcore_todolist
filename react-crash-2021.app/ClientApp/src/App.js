@@ -8,13 +8,18 @@ import Footer from './components/Footer'
 import Tasks from './components/Tasks'
 import Constant from './components/Constant'
 import AddTask from './components/AddTask'
+import AlertCenter from './components/AlertCenter'
 import TaskDetails from './components/TaskDetails'
 import About from './components/About'
-import FetchTask from './components/FetchTask'
+import DeleteTask from './components/task-crud-operations/DeleteTask'
+import FetchTask from './components/task-crud-operations/FetchTask'
+import FetchTasks from './components/task-crud-operations/FetchTasks'
 import useToken from './components/api-authorization/UseToken'
 import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
+import Toast from './components/toast/Toast'
+import { ToastProvider, useShowToast } from './components/toast/ToastContext'
 
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
@@ -40,12 +45,20 @@ import Logout from './components/api-authorization/Logout'
 //calls fetch tasks whihc returns a promise
 //sets tasks as the state
 const App = () => {
+    //showAddTask = current state
+    //setShowAddTask = function that aloows you to update the current state
+    //when you update state, the component rerenders
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     //this is for authentication, see: https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
     const { token, setToken } = useToken()
-    const [userId, setUserId] = useState()
+    const [userId, setUserId] = useState(undefined)
+    const [alerts, setAlerts] = useState([])
+    const [checkValue, setCheckValue] = useState(true)
+    const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
+
+    const showToast = useShowToast()
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -62,7 +75,6 @@ const App = () => {
 
     // Fetch Tasks
     //gets the tasks we have on the server with async java
-
     useEffect(() => {
         const getId = () => {
             console.log('%c using effect in app', 'background: #222, color:#87CEEB')
@@ -70,34 +82,47 @@ const App = () => {
             const userToken = JSON.parse(tokenString);
             setUserId(userToken?.id)
         }
-        
-        const fetchTasks = async (id) => {
-            const res = await fetch(Constant() + `/api/Users/${id}/tasks`, {
+
+        const fetchTasks = FetchTasks
+
+        const getTasks = async () => {
+            try {
+                const tasksFromServer = await fetchTasks(userId, token)
+                setIsLoading(false)
+                setTasks(tasksFromServer)
+            } catch (error) {
+                showToast('error', error)
+            }
+        }
+        const fetchAlerts = async (id) => {
+            const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
             })
+
             const data = await res.json()
 
             return data
         }
 
-        const getTasks = async () => {
+        const getAlerts = async () => {
             try {
-                const tasksFromServer = await fetchTasks(userId)
+                const tasksFromServer = await fetchAlerts(userId)
                 setIsLoading(false)
-                setTasks(tasksFromServer)
+                setAlerts(tasksFromServer)
             } catch (error) {
-                console.log("failed to fetch tasks")
-                console.log(error)
+                showToast('error', error)
             }
         }
 
         getId()
 
-        if (userId != null || userId != undefined) {
+        if (userId != undefined) {
+            console.log(userId)
             getTasks()
+            getAlerts()
         }
    
 
@@ -112,10 +137,8 @@ const App = () => {
 
     // Delete Task
     //takes in an id
-    const deleteTask = async (id) => {
-        await fetch(`${Constant()}/api/tasks/${id}`, {
-            method: 'DELETE',
-        })
+    const onDelete = async (id) => {
+        await DeleteTask(id, token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
     }
@@ -123,27 +146,32 @@ const App = () => {
     // Toggle Reminder
     //takes id so it knows which on to toggle
     const toggleReminder = async (id) => {
-        const taskToToggle = await fetchTask(id)
-        const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
-        //const updateTask = UpdateTask
-        //update is put
-        // 
-        const res = await fetch(`${Constant()}/api/tasks/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': 'Bearer ' + token             
-            },
-            body: JSON.stringify(updTask),
-        })
+        try {
+            const taskToToggle = await fetchTask(id, token)
+            const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
 
-        const data = await res.json()
+            const res = await fetch(`${Constant()}/api/tasks/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + token             
+                },
+                body: JSON.stringify(updTask)
+            })
 
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, reminder: data.reminder } : task
+            const data = await res.json()
+
+            setTasks(
+                tasks.map((task) =>
+                    task.id === id ? { ...task, reminder: data.reminder } : task
+                )
             )
-        )
+
+
+        } catch (error) {
+            showToast('error', 'error')
+        }
+        
     }
 
     const updateTask = async (task) => {
@@ -159,34 +187,49 @@ const App = () => {
     //wrap everything in <Router> to use routes
     //exact menas match path exactly
     return (
-
+        
         <Router>
-            <div id="backdrop">
-            </div>
-            <Navbar bg="light" expand="lg">
-                <Navbar.Brand>Task Tracker</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">        
-                        {token ? (
-                            <>
-                                <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
-                                <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
-                            </>) : (<>
-                                <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
-                                <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-                            </>)}
-                        <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>                                               
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
-            
+            <ToastProvider>
+                <div id="backdrop">
+
+                </div>
+                <Navbar bg="light" expand="lg">
+                    <Navbar.Brand>Task Tracker</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                            <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+                            <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
+                            {token ? (
+                                <>
+                                    <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/alerts" exact>Alerts
+                                    {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}
+                                    </Nav.Link>
+                                    <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
+                                </>) : (<>
+                                    <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
+                                </>)}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+
                 <div className='container'>
+                    <Toast
+                        position="bottom-right"
+                        autoDelete={checkValue}
+                        dismissTime={autoDeleteTime}
+                    />
                     <Route path='/about' exact component={About} />
                     <Route path='/logout' exact component={Logout} />
                     {token ? (
                         <>
+                            <Route path='/alerts' exact
+                                render={(props) => (
+                                    <AlertCenter alerts={alerts} setAlerts={setAlerts} />
+                                )}
+                            />
                             <Redirect from='/login' to="/" />
                             <Route path='/userManager' exact
                                 render={(props) => (
@@ -199,12 +242,15 @@ const App = () => {
                                         <Header
                                             onAdd={() => setShowAddTask(!showAddTask)}
                                             showAdd={showAddTask} />
-                                        <AddTask isToggled={showAddTask} userId={userId} token={token} tasks={tasks} setTasks={setTasks} setShowAddTask={setShowAddTask} />
+                                        <AddTask isToggled={showAddTask}
+                                            userId={userId} token={token}
+                                            tasks={tasks} setTasks={setTasks}
+                                            setShowAddTask={setShowAddTask} />
                                         {!isLoading ? (
                                             (tasks.length > 0) ? (
                                                 <Tasks
                                                     tasks={tasks}
-                                                    onDelete={deleteTask}
+                                                    onDelete={onDelete}
                                                     onToggle={toggleReminder}
                                                     onGoToDetail={() => { setShowAddTask(false) }} />) :
                                                 ('No Tasks To Show')
@@ -230,10 +276,11 @@ const App = () => {
                             </>
 
                         )}
-            </div>
-            
-            
+                </div>
+
+            </ToastProvider>
         </Router>
+            
     )
 }
 

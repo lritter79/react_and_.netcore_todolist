@@ -3,36 +3,21 @@ import { useState, useEffect } from 'react'
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
-import FetchTask from './FetchTask'
-import UpdateTask from "./UpdateTask";
+import FetchTask from './task-crud-operations/FetchTask'
+import UpdateTask from './task-crud-operations/UpdateTask'
+import CommentSection from './comment-components/CommentSection'
+import { useShowToast } from './toast/ToastContext'
 
-const TaskDetails = ({ onUpdate, token, userId }) => {
+const TaskDetails = ({ token, userId }) => {
 
     //gets the params passed in from the router
     //is a react hook
-    let { id } = useParams()
+    const { id } = useParams()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
-
-    const updateTask = async (task) => {  
-        setIsLoading(true)  
-        try {
-            task.userId = userId
-            setShowEditTask(!showEditTask)
-            const updateTask = UpdateTask  
-            const updTask = await updateTask(task, token)                
-            setTask(updTask) 
-            setIsLoading(false)
-            onUpdate(updTask)          
-        } catch (error) {
-            console.log(error)
-        }                     
-    }
-
-    const onCancel = () => {
-        setShowEditTask(!showEditTask)
-    }
+    const [comments, setComments] = useState()
+    const showToast = useShowToast() 
 
     useEffect(() => {
         console.log("using effect: task details")
@@ -41,8 +26,10 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
 
         const getTask = async () => {          
             try {       
-                const taskFromServer = await fetchTask(id)         
+                const taskFromServer = await fetchTask(id, token)         
                 setTask(taskFromServer)
+                console.log(taskFromServer)
+                setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
                 console.log("failed") 
@@ -52,7 +39,25 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
       
         getTask()
 
-    }, [id]) 
+    }, []) 
+
+    const onCancel = () => {
+        setShowEditTask(!showEditTask)
+    }
+
+    const update = async (task) => {
+        setIsLoading(true)
+        try {
+            task.userId = userId
+            setShowEditTask(!showEditTask)
+            const updTask = await UpdateTask(task, token)
+            setTask(updTask)
+            setIsLoading(false)
+            showToast('success', `Updated "${task.text}"`)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -81,11 +86,14 @@ const TaskDetails = ({ onUpdate, token, userId }) => {
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
+                            {(comments != undefined) && (
+                                <CommentSection comments={comments} token={token} taskId={task.id} userId={userId} /> 
+                            )}                         
                         </div>
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onUpdate={updateTask} onCancel={onCancel}/>
+                        <EditTask task={task} onUpdate={update} onCancel={onCancel} token={token}/>
                     )}        
                 </div>) : (
                 <div>

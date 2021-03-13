@@ -13,7 +13,10 @@ namespace react_crash_2021.Data.MappingProfiles
     {
         public UserMappingProfile()
         {
-            CreateMap<reactCrashUser, ReactCrashUserModel>().ForMember(m => m.Tasks, c => c.MapFrom(e => e.tasks))
+            CreateMap<reactCrashUser, ReactCrashUserModel>()
+                .ForMember(m => m.Tasks, c => c.MapFrom(e => e.tasks))
+                .ForMember(m => m.Collaborations, c => c.MapFrom(e => e.collaboratorations.Select(t => t.task)))
+                .ForMember(m => m.IsOpenToCollaboration, c => c.MapFrom(e => e.isOpenToCollaboration))
                 .ReverseMap();
         }
             

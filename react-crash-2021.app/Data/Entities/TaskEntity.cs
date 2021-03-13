@@ -20,5 +20,11 @@ namespace react_crash_2021.Data.Entities
         public string details { get; set; }
         public string location { get; set; }
         public reactCrashUser user { get; set; }
+ 
+
+        public IEnumerable<Collaboration> collaboratorations { get; set; }
+        public IEnumerable<comment> comments { get; set; }
+        
+
     }
 }

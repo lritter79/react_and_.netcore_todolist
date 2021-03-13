@@ -28,7 +28,8 @@ namespace react_crash_2021
                     var userManager = serviceProvider.
                                         GetRequiredService<UserManager<reactCrashUser>>();
                     var repository = serviceProvider.GetRequiredService<ITaskRepository>();
-                    Seeder.SeedUsers(userManager, repository).GetAwaiter().GetResult();
+                    var alertRepository = serviceProvider.GetRequiredService<IAlertRepository>();
+                    Seeder.SeedUsers(userManager, repository, alertRepository).GetAwaiter().GetResult();
                 }
                 catch (Exception e)
                 {

@@ -56,6 +56,8 @@ namespace react_crash_2021
             //scoped makes it available for the whole http request
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<IReactCrashUserRepository, ReactCrashUserRepository>();
+            services.AddScoped<IAlertRepository, AlertRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddTransient<UserManager<reactCrashUser>>();
             services.AddTransient<SignInManager<reactCrashUser>>();
             //IdentityServer with an additional AddApiAuthorization helper method that sets up some 

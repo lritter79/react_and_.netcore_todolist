@@ -1,7 +1,6 @@
-import Constant from './Constant'
+import Constant from '../Constant'
 
 const UpdateTask = async (task, token) => {
-    
     const res = await fetch(`${Constant()}/api/tasks/${task.id}`, {
         method: 'PUT',
         headers: {

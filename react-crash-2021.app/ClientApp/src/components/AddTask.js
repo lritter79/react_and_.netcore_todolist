@@ -1,9 +1,12 @@
+
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from './Constant'
+import { useShowToast } from './toast/ToastContext'
+import CreateTask from './task-crud-operations/CreateTask'
 
 //take in the function onAdd
-const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddTask }) => {
+const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
   //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
   const [text, setText] = useState('')
@@ -12,26 +15,27 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
   const [day, setDay] = useState('')
   const [reminder, setReminder] = useState(false)
 
+    const showToast = useShowToast()
     // Add Task
     //post because we're adding tasks
     //turns it from js object into json string
-    async function addTask(task) {
+    //async function addTask(task) {
         
-        return fetch(Constant() + '/api/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify(task)
-        })
-           .then(data => data.json())
-           .catch((error) => {
-               console.error('Fetch Error:', error);
-           });
+    //    return fetch(Constant() + '/api/tasks', {
+    //        method: 'POST',
+    //        headers: {
+    //            'Content-type': 'application/json',
+    //            'Authorization': 'Bearer ' + token
+    //        },
+    //        body: JSON.stringify(task)
+    //    })
+    //       .then(data => data.json())
+    //       .catch((error) => {
+    //           console.error('Fetch Error:', error);
+    //       });
 
         
-    }
+    //}
 
   const onSubmit = async (e) => {
     //e.preventDefault() is so it doesnt actually submit to the page
@@ -48,13 +52,14 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
       return
     }
 
-      const didAdd = await addTask({ text, details, location, day, reminder, userId, isCompleted:false })
+      const didAdd = await CreateTask({ text, details, location, day, reminder, userId, isCompleted: false }, token)
       console.log(didAdd)
       //data returned is the new task
       //const data = await res.json()
       //take existings takes and add data on
-      if (!didAdd?.error) {
+      if (!('error' in didAdd)) {
           setTasks([...tasks, didAdd])
+          showToast('success', `Added "${text}"`)
           setShowAddTask(false)
           //clears the form
           setText('')
@@ -62,6 +67,10 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, onAdd, setShowAddT
           setLocation('')
           setDetails('')
           setReminder(false)
+      }
+      else {
+          console.log('added')
+          showToast('error', didAdd.error)
       }
 
   }

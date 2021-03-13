@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Button from './Button'
 import Form from 'react-bootstrap/Form'
 
-const EditTask = ({task, onCancel, onUpdate}) => {
+const EditTask = ({task, onCancel, onUpdate, token}) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
     const [day, setDay] = useState(task.day)
@@ -27,7 +27,7 @@ const EditTask = ({task, onCancel, onUpdate}) => {
             return
         }
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted })
+        onUpdate({ id, text, details, location, day, reminder, isCompleted }, token)
     
         //clears the form
         setId('')

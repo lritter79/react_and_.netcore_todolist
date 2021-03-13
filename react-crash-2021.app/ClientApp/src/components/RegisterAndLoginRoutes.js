@@ -20,7 +20,9 @@ const RegisterAndLoginRoutes = ({ setToken}) => {
 
             <Route path='/register' exact
                 render={(props) =>
-                    <Register setToken={setToken} />
+                    <Register
+                        setToken={setToken}
+                    />
                 }
             />
             

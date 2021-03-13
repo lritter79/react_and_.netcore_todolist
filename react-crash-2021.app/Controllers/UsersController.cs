@@ -48,10 +48,11 @@ namespace react_crash_2021.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        //[Authorize]
-        public string Get(Guid id)
+        [Authorize]
+        public async Task<ActionResult<ReactCrashUserModel>> Get(Guid id)
         {
-            return "value";
+            var user = await _reactCrashUserRepository.GetUser(id);
+            return _mapper.Map<ReactCrashUserModel>(user);
         }
 
         // POST api/Users
@@ -86,7 +87,7 @@ namespace react_crash_2021.Controllers
                         error = enumerator.Current.Description;
                     }
 
-                    return BadRequest(new { error } );
+                    return BadRequest(new { error });
                 }
 
             }
@@ -131,8 +132,34 @@ namespace react_crash_2021.Controllers
         //PUT api/<UsersController>/5
         [HttpPut("{id}")]
         [Authorize]
-        public void Put(int id, [FromBody] string value)
+        [Route("~/api/Users/")]
+        
+        public async Task<ActionResult> Put(ReactCrashUserModel model)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //stores sign in result
+                    var result = await _reactCrashUserRepository.UpdateUser(_mapper.Map<reactCrashUser>(model));
+
+                    if (result > 0)
+                    {
+                        return Ok(new { message = "Success!", user = model });
+                    }
+                    else
+                    {
+                        return BadRequest(new { error = result });
+                    }
+                }
+
+                return BadRequest(new { error = ModelState.ToString() });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+
 
         }
 

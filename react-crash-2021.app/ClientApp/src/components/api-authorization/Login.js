@@ -2,17 +2,30 @@
 //Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useShowToast } from '../toast/ToastContext'
 
 const Login = ({ setToken }) => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+    const [disabled, setDisabled] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+
+    const showToast = useShowToast()
+
+    useEffect(() => {
+
+        return function cleanup() {
+            setUserName('')
+            setPassword('')
+        }
+    }, [])
 
     const onSubmit = async e => {
         e.preventDefault()
+        setDisabled(true)
         if (password === "") {
             setErrorMessage("Enter Password")
         }
@@ -25,11 +38,13 @@ const Login = ({ setToken }) => {
             if (!token.error) {
                 setErrorMessage('')
                 setToken(token)
+                showToast('success', `Welcome back, ${username}`)
             }
             else {
                 setErrorMessage(token.error)
             }
-        }             
+        }
+        setDisabled(false)
     }
 
 
@@ -42,9 +57,7 @@ const Login = ({ setToken }) => {
             body: JSON.stringify(credentials),
         })
             .then(data => data.json())
-            .catch((error) => {
-                console.error('Fetch Error:', error);
-            });
+            .catch((error) => error);
 
     }
 
@@ -74,6 +87,7 @@ const Login = ({ setToken }) => {
                     type='submit'
                     className='btn'
                     style={{ backgroundColor: 'skyblue' }}
+                    disabled={false}
                 >
                     Login
                 </button>

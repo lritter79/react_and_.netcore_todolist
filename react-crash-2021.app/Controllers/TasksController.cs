@@ -11,7 +11,6 @@ using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Models;
 using react_crash_2021.Data.Repositories;
-using ReactCrashAppContext = react_crash_2021.Data.ReactCrashAppContext;
 
 namespace react_crash_2021.Controllers
 {
@@ -23,16 +22,20 @@ namespace react_crash_2021.Controllers
        /// Provides a layer between API logic and the database to keep things more loosely coupled and flexible
        /// </summary>
         private readonly ITaskRepository _repo;
+        private readonly IAlertRepository _alertRepo;
+        private readonly IReactCrashUserRepository _userRepo;
         /// <summary>
         /// We're using mapper here because mapping makes more sense to do the controller side since the Model is what users deal with
         /// where as the entity is dealt with by the context directly, so the model should be converted to the entity for repo methods
         /// </summary>
         private IMapper _mapper;
 
-        public TasksController(ITaskRepository repo, IMapper mapper)
+        public TasksController(ITaskRepository repo, IMapper mapper, IAlertRepository alertRepository, IReactCrashUserRepository userRepository)
         {
             _repo = repo;
             _mapper = mapper;
+            _alertRepo = alertRepository;
+            _userRepo = userRepository;
         }
 
         // GET: api/Tasks
@@ -70,17 +73,21 @@ namespace react_crash_2021.Controllers
                 }
                 else
                 {
+
                     return _mapper.Map<TaskModel>(task);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
             
-        }// GET: api/Tasks/5
-        [HttpGet("{id}")]
+        }
+        
+        // GET: api/Tasks/5
 
+        [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<TaskModel>> GetTask(long id)
         {
             try
@@ -98,7 +105,7 @@ namespace react_crash_2021.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
             
         }
@@ -114,6 +121,7 @@ namespace react_crash_2021.Controllers
                 if (task.IsCompleted)
                 {
                     task.DateCompleted = DateTime.Now;
+                    var users = _userRepo.GetUsersByTask(_mapper.Map<TaskEntity>(task));
                 }
                 var updatedTask = await _repo.UpdateTask(id, _mapper.Map<TaskEntity>(task));
                 //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
@@ -121,7 +129,7 @@ namespace react_crash_2021.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
 
             
@@ -143,7 +151,7 @@ namespace react_crash_2021.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.InnerException.Message);
+                return BadRequest(new { message = e.InnerException.Message });
             }
            
         }
@@ -169,7 +177,7 @@ namespace react_crash_2021.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
             
         }
