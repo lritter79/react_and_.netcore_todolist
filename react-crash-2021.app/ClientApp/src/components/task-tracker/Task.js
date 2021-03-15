@@ -15,7 +15,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
   return (
     <div style={borderStyle}
       className={`task ${task.reminder ? 'reminder' : ''}`}
-      onDoubleClick={() => onToggle(task.id)}
+      onDoubleClick={() => onToggle(task)}
     >
       <h3>
         {task.text}{' '}

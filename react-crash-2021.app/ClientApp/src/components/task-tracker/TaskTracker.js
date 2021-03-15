@@ -51,12 +51,12 @@ const TaskTracker = () => {
 
     // Toggle Reminder
     //takes id so it knows which on to toggle
-    const toggleReminder = async (id) => {
+    const toggleReminder = async (taskToToggle) => {
         try {
-            const taskToToggle = await CrudOperations.FetchTask(id, token)
+            //const taskToToggle = await CrudOperations.FetchTask(id, token)
             const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
-            console.log(updTask)
-            const res = await fetch(`${Constant()}/api/tasks/${id}`, {
+            //console.log(updTask)
+            const res = await fetch(`${Constant()}/api/tasks/${taskToToggle.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',
@@ -69,11 +69,9 @@ const TaskTracker = () => {
 
             setTasks(
                 tasks.map((task) =>
-                    task.id === id ? { ...task, reminder: data.reminder } : task
+                    task.id === taskToToggle.id ? { ...task, reminder: data.reminder } : task
                 )
             )
-
-
         } catch (error) {
             showToast('error', 'error')
         }
