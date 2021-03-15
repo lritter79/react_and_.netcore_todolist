@@ -3,7 +3,7 @@ import Comments from "./Comments"
 import { useState, useEffect } from 'react'
 
 
-const CommentSection = ({ comments, userId, token, taskId }) => {
+const CommentSection = ({ comments, taskId }) => {
 
     console.log(comments)
 
@@ -16,7 +16,7 @@ const CommentSection = ({ comments, userId, token, taskId }) => {
                     <></>
                 )}
 
-            <CommentForm userId={userId} token={token} taskId={taskId} />
+            <CommentForm taskId={taskId} />
         </div>
    )
 }

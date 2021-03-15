@@ -16,7 +16,7 @@ export default function useToken() {
         //console.log(`%c saving token ${userToken}`, 'background: #222; color: #87CEEB')
         sessionStorage.setItem('token', JSON.stringify(userToken));
         setToken(userToken?.token);
-    };
+    }
 
     //const removeToken = userToken => {
     //    localStorage.removeItem('token');

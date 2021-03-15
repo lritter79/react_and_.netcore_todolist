@@ -1,9 +1,9 @@
 
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
-import Constant from './Constant'
-import { useShowToast } from './toast/ToastContext'
-import CreateTask from './task-crud-operations/CreateTask'
+import Constant from '../Constant'
+import { useShowToast } from '../toast/ToastContext'
+import CreateTask from '../task-crud-operations/CreateTask'
 
 //take in the function onAdd
 const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) => {
@@ -42,7 +42,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
     e.preventDefault()
 
     //filters if text is blank
-    if (!text) {
+      if (!(text.trim())) {
       alert('Please add a task')
       return
     }
@@ -69,7 +69,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
           setReminder(false)
       }
       else {
-          console.log('added')
+          //console.log('added')
           showToast('error', didAdd.error)
       }
 

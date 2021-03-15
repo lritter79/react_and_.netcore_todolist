@@ -1,10 +1,11 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import userFunctions from './UserFunctions'
 import { useShowToast } from '../toast/ToastContext'
+import { useToken, useUserId }  from './UserContext'
 
-const UserManager = ({ handleLogout, token, id }) => {
+const UserManager = ({ handleLogout }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState('')
@@ -12,29 +13,32 @@ const UserManager = ({ handleLogout, token, id }) => {
     const [deleteDisabled, setDeleteDisabled] = useState(false)
     const [submitDisabled, setSubmitDisabled] = useState(false)
     const onSave = useShowToast()
-
+    const { token, setToken } = useToken()
+    const { userId, setUserId } = useUserId()
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
-    useEffect(async () => {
+    useEffect(() => {
+
         setIsLoading(false)
-        const userData = await userFunctions.getUser(id, token)
-        setUser(userData)      
+        const userData = async () => await userFunctions.getUser(userId, token)
+        setUser(userData) 
+        userData()     
     }, [])
 
     useEffect(() => {
         return function cleanup() {
-            console.log('clean up')
+            //console.log('clean up')
         }
     }, [])
 
-    useEffect(async () => {
-        console.log('user use effect')
+    useEffect(() => {
+        //console.log('user use effect')
         //if (isChecked != undefined) {
         //    //const updatedUser = await userFunctions.saveUser({ user, id, token })        
         //}
         //else {
         //    console.log('first time')
         //}
-        console.log('set')
+        //console.log('set')
     }, [user])
 
     useEffect(() => {
@@ -59,8 +63,8 @@ const UserManager = ({ handleLogout, token, id }) => {
                return data.json()
             })
             .catch((error) => {
-                console.error('Fetch Error:', error);
-            });
+               onSave('error', error)
+            })
     }
 
     const sleep = (milliseconds) => {
@@ -86,7 +90,7 @@ const UserManager = ({ handleLogout, token, id }) => {
     const onDelete = async e => {
         e.preventDefault()
         handleLogout(e)
-        let res = await deleteAccount(id)
+        let res = await deleteAccount(userId)
     }
 
     async function deleteAccount(id) {

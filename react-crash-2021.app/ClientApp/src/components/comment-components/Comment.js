@@ -1,4 +1,4 @@
-﻿
+
 const Comment = ({ comment }) => (
 
     <div className='comment'>

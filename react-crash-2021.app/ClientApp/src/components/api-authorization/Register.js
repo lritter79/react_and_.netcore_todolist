@@ -3,15 +3,17 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
+import { useToken, useUserId } from './UserContext'
 
-const Register = ({ setToken }) => {
+const Register = () => {
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [honeyPot, setHoneyPot] = useState('')
     const [disabled, setDisabled] = useState(false)
-
+    const { token, setToken } = useToken()
+    const { userId, setUserId } = useUserId()
     const showToast = useShowToast()
 
     const onSubmit = async e => {
@@ -26,6 +28,7 @@ const Register = ({ setToken }) => {
                 if (!token.error) {                   
                     setErrorMessage('')
                     setToken(token)
+                    setUserId(token)
                     setDisabled(true)
                     showToast('success', `Welcome ${username}`)
                 }
@@ -54,7 +57,7 @@ const Register = ({ setToken }) => {
             })
                 .then(data => data.json())
                 .catch((error) => {
-                    console.error('Fetch Error:', error);
+                   console.error('Fetch Error:', error);
                 });
 
         

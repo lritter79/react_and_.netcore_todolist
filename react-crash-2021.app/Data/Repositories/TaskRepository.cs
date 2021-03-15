@@ -59,7 +59,23 @@ namespace react_crash_2021.Data.Repositories
         public async Task<TaskEntity> GetTask(long id)
         {
             //throw new NotImplementedException();
-            var task = await _context.Tasks.Where(task => task.id == id).FirstAsync();
+            var task = await _context.Tasks
+                                .Join(_context.Users,
+                                task => task.user.Id,
+                                user => user.Id,
+                                (task, user) => new TaskEntity
+                                {
+                                    text= task.text,
+                                    date_completed = task.date_completed,
+                                    details = task.details,
+                                    id = task.id,
+                                    is_completed = task.is_completed,
+                                    location = task.location,
+                                    reminder = task.reminder,
+                                    task_date = task.task_date,
+                                    user = user
+                                })
+                                .Where(task => task.id == id).FirstAsync();
             task.comments = await (from c in _context.Comment
                             where c.task.id == id
                             join u in _context.Users on c.user.Id equals u.Id

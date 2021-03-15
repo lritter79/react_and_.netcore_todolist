@@ -1,6 +1,6 @@
 import { FaTimes } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import FormatDateString from './FormatDateString'
+import FormatDateString from '../FormatDateString'
 
 //fatimes is a preloaded react component for the delete "x" icon
 

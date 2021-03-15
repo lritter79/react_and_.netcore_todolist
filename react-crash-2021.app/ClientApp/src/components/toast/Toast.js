@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useToast } from './ToastContext'
 
@@ -14,8 +14,8 @@ const Toast = ({ position, autoDelete, dismissTime }) => {
     //  }
 
     useEffect(() => {
-        console.log('toastlist side effect')
-        console.log(toastList)
+        //console.log('toastlist side effect')
+        //console.log(toastList)
         setList([...toastList]);
 
         // eslint-disable-next-line

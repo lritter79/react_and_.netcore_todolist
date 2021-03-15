@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
@@ -7,12 +7,15 @@ import FetchTask from './task-crud-operations/FetchTask'
 import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
 import { useShowToast } from './toast/ToastContext'
+import { useToken, useUserId } from './api-authorization/UserContext'
 
-const TaskDetails = ({ token, userId }) => {
+const TaskDetails = () => {
 
     //gets the params passed in from the router
     //is a react hook
     const { id } = useParams()
+    const { token, setToken } = useToken()
+    const { userId, setUserId } = useUserId()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
@@ -20,7 +23,7 @@ const TaskDetails = ({ token, userId }) => {
     const showToast = useShowToast() 
 
     useEffect(() => {
-        console.log("using effect: task details")
+        //console.log("using effect: task details")
         // Fetch Task
         const fetchTask = FetchTask
 
@@ -28,7 +31,7 @@ const TaskDetails = ({ token, userId }) => {
             try {       
                 const taskFromServer = await fetchTask(id, token)         
                 setTask(taskFromServer)
-                console.log(taskFromServer)
+                //console.log(taskFromServer)
                 setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
@@ -87,7 +90,7 @@ const TaskDetails = ({ token, userId }) => {
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
                             {(comments != undefined) && (
-                                <CommentSection comments={comments} token={token} taskId={task.id} userId={userId} /> 
+                                <CommentSection comments={comments} taskId={id} /> 
                             )}                         
                         </div>
                     )}                               
