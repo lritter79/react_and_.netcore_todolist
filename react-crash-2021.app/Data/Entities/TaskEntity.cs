@@ -19,6 +19,7 @@ namespace react_crash_2021.Data.Entities
         public DateTime? date_completed { get; set; }
         public string details { get; set; }
         public string location { get; set; }
+        public string category { get; set; }
         public reactCrashUser user { get; set; }
  
 

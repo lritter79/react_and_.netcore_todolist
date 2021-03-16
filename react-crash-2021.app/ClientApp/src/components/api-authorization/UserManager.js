@@ -18,10 +18,24 @@ const UserManager = ({ handleLogout }) => {
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
     useEffect(() => {
 
-        setIsLoading(false)
-        const userData = async () => await userFunctions.getUser(userId, token)
-        setUser(userData) 
-        userData()     
+        const getUser = async () => {
+            try {
+                //console.log(CrudOperations)                               
+                //console.log(`token = ${token}`)
+                //console.log(`user = ${userId}`)
+                if (userId != undefined) {
+                    const userData = await userFunctions.getUser(userId, token)
+                    setUser(userData)
+                    setIsLoading(false)
+                }
+
+            } catch (error) {
+                onSave('error', error)
+            }
+        }
+
+        getUser()
+        
     }, [])
 
     useEffect(() => {
@@ -50,7 +64,7 @@ const UserManager = ({ handleLogout }) => {
 
     async function updateUser(appUser) {
         
-        return fetch(`${Constant()}/api/users/toggleCollab`, {
+        return fetch(`${Constant()}/api/users/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token,

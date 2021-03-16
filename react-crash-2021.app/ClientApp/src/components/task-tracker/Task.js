@@ -31,7 +31,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
           </p>
           {(task.deadlineMessage) && (
               <>
-                  <p style={{ color: task.deadlineMessage.color }}>
+                  <p style={{ color: task.deadlineMessage.color, fontWeight: task.deadlineMessage.fontWeight }}>
                       {task.deadlineMessage.message}
                   </p>
               </>

@@ -13,6 +13,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
   const [details, setDetails] = useState('')
   const [location, setLocation] = useState('')
   const [day, setDay] = useState('')
+  const [category, setCategory] = useState()
   const [reminder, setReminder] = useState(false)
 
     const showToast = useShowToast()
@@ -89,6 +90,15 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
                       onChange={(e) => setText(e.target.value)} />
         </Form.Group>
 
+        <Form.Group>
+          <Form.Label>Category: </Form.Label>
+          <Form.Control 
+                  type='text'
+                      placeholder=''
+                      value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  />
+        </Form.Group>
         <Form.Group>
           <Form.Label>Location: </Form.Label>
           <Form.Control 

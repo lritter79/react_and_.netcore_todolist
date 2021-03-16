@@ -12,8 +12,8 @@ const Register = () => {
     const [errorMessage, setErrorMessage] = useState('')
     const [honeyPot, setHoneyPot] = useState('')
     const [disabled, setDisabled] = useState(false)
-    const { token, setToken } = useToken()
-    const { userId, setUserId } = useUserId()
+    const { setToken } = useToken()
+    const { setUserId } = useUserId()
     const showToast = useShowToast()
 
     const onSubmit = async e => {

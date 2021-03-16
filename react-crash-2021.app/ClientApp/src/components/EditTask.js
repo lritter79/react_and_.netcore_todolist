@@ -8,6 +8,7 @@ const EditTask = ({task, onCancel, onUpdate }) => {
     const [text, setText] = useState(task.text)
     const [day, setDay] = useState(task.day)
     const [details, setDetails] = useState(task.details)
+    const [category, setCategory] = useState(task.category)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
@@ -28,13 +29,14 @@ const EditTask = ({task, onCancel, onUpdate }) => {
             return
         }
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted }, token)
+        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token)
     
         //clears the form
         setId('')
         setText('')
         setDay('')
         setLocation('')
+        setCategory('')
         setDetails('')
         setReminder(false)
       }
@@ -58,6 +60,15 @@ const EditTask = ({task, onCancel, onUpdate }) => {
             placeholder=''
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            />
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Category: </Form.Label>
+    <Form.Control 
+            type='text'
+            placeholder=''
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             />
   </Form.Group>
   <Form.Group>

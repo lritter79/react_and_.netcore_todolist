@@ -73,6 +73,9 @@ const TaskDetails = () => {
                             </h3>
                             <hr></hr>
                             <p>
+                                Category: {task.category}
+                            </p>
+                            <p>
                                 Location: {task.location}
                             </p>
                             <p>
