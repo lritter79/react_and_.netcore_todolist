@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Alba';
+    src: url('Alba.eot');
+    src: url('Alba.eot?#iefix') format('embedded-opentype'),
+        url('Alba.woff2') format('woff2'),
+        url('Alba.woff') format('woff'),
+        url('Alba.ttf') format('truetype'),
+        url('Alba.svg#Alba') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

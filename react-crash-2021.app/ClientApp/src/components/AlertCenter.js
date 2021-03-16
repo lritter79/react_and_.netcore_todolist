@@ -1,4 +1,4 @@
-﻿import Table from 'react-bootstrap/Table'
+import Table from 'react-bootstrap/Table'
 import { FaTimes } from 'react-icons/fa'
 import FormatDateString from './FormatDateString'
 import Constant from './Constant'

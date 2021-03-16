@@ -1,17 +1,18 @@
-
 //Handles the app's login flow.
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useShowToast } from '../toast/ToastContext'
+import { useToken, useUserId }  from './UserContext'
 
-const Login = ({ setToken }) => {
+const Login = () => {
     //when the form is submitted, we want to issue a post request to log in the user
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [disabled, setDisabled] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const { setToken } = useToken()
+    const { setUserId } = useUserId()
 
     const showToast = useShowToast()
 
@@ -37,7 +38,9 @@ const Login = ({ setToken }) => {
 
             if (!token.error) {
                 setErrorMessage('')
+                setUserId(token)
                 setToken(token)
+                
                 showToast('success', `Welcome back, ${username}`)
             }
             else {
@@ -87,7 +90,7 @@ const Login = ({ setToken }) => {
                     type='submit'
                     className='btn'
                     style={{ backgroundColor: 'skyblue' }}
-                    disabled={false}
+                    disabled={disabled}
                 >
                     Login
                 </button>
@@ -98,10 +101,6 @@ const Login = ({ setToken }) => {
         </>
     )
 
-}
-
-Login.propTypes = {
-    setToken: PropTypes.func.isRequired
 }
 
 export default Login

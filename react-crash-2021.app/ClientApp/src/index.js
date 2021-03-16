@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { UserProvider } from './components/api-authorization/UserContext'
 
 
 
@@ -11,8 +12,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //takes params of the react component, and the html element to render it in
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
+    <React.StrictMode>
+        <UserProvider>
+            <App />
+        </UserProvider>   
   </React.StrictMode>,
   document.getElementById('root')
 );
