@@ -1,9 +1,9 @@
 
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
-import Constant from './Constant'
-import { useShowToast } from './toast/ToastContext'
-import CreateTask from './task-crud-operations/CreateTask'
+import Constant from '../Constant'
+import { useShowToast } from '../toast/ToastContext'
+import CreateTask from '../task-crud-operations/CreateTask'
 
 //take in the function onAdd
 const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) => {
@@ -13,6 +13,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
   const [details, setDetails] = useState('')
   const [location, setLocation] = useState('')
   const [day, setDay] = useState('')
+  const [category, setCategory] = useState()
   const [reminder, setReminder] = useState(false)
 
     const showToast = useShowToast()
@@ -42,7 +43,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
     e.preventDefault()
 
     //filters if text is blank
-    if (!text) {
+      if (!(text.trim())) {
       alert('Please add a task')
       return
     }
@@ -69,7 +70,7 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
           setReminder(false)
       }
       else {
-          console.log('added')
+          //console.log('added')
           showToast('error', didAdd.error)
       }
 
@@ -89,6 +90,15 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
                       onChange={(e) => setText(e.target.value)} />
         </Form.Group>
 
+        <Form.Group>
+          <Form.Label>Category: </Form.Label>
+          <Form.Control 
+                  type='text'
+                      placeholder=''
+                      value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  />
+        </Form.Group>
         <Form.Group>
           <Form.Label>Location: </Form.Label>
           <Form.Control 

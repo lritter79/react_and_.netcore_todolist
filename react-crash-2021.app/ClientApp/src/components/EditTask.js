@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import Button from './Button'
 import Form from 'react-bootstrap/Form'
+import { useToken } from './api-authorization/UserContext'
 
-const EditTask = ({task, onCancel, onUpdate, token}) => {
+const EditTask = ({task, onCancel, onUpdate }) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
     const [day, setDay] = useState(task.day)
     const [details, setDetails] = useState(task.details)
+    const [category, setCategory] = useState(task.category)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
-
+    const { token, setToken } = useToken()
 
     const onSubmit = (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -27,13 +29,14 @@ const EditTask = ({task, onCancel, onUpdate, token}) => {
             return
         }
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted }, token)
+        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token)
     
         //clears the form
         setId('')
         setText('')
         setDay('')
         setLocation('')
+        setCategory('')
         setDetails('')
         setReminder(false)
       }
@@ -57,6 +60,15 @@ const EditTask = ({task, onCancel, onUpdate, token}) => {
             placeholder=''
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            />
+  </Form.Group>
+  <Form.Group>
+    <Form.Label>Category: </Form.Label>
+    <Form.Control 
+            type='text'
+            placeholder=''
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             />
   </Form.Group>
   <Form.Group>

@@ -23,6 +23,7 @@ namespace react_crash_2021.Data.Models
         public DateTime DateCompleted { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }
+        public string Category { get; set; }
         public Guid UserId { get; set; }
         public IEnumerable<ReactCrashUserModel> Collaborators { get; set; }
         public IEnumerable<CommentModel> Comments { get; set; }
@@ -39,31 +40,37 @@ namespace react_crash_2021.Data.Models
                     {
                         keyValuePairs.Add("message", "Passed deadline");
                         keyValuePairs.Add("color", "Grey");
+                        keyValuePairs.Add("fontWeight", "normal");
                     }
                     else if (t.TotalDays == 0)
                     {
                         keyValuePairs.Add("message", "Due today");
                         keyValuePairs.Add("color", "Red");
+                        keyValuePairs.Add("fontWeight", "bold");
                     }
                     else if (t.TotalDays == 1)
                     {
                         keyValuePairs.Add("message", "Due tomorrow");
                         keyValuePairs.Add("color", "Red");
+                        keyValuePairs.Add("fontWeight", "normal");
                     }
                     else if(t.TotalDays < 7)
                     {
                         keyValuePairs.Add("message", "Due in less than a week");
                         keyValuePairs.Add("color", "Goldenrod");
+                        keyValuePairs.Add("fontWeight", "normal");
                     }
                     else if(t.TotalDays == 7)
                     {
                         keyValuePairs.Add("message", "Due in a week");
                         keyValuePairs.Add("color", "Green");
+                        keyValuePairs.Add("fontWeight", "normal");
                     }
                     else if (t.TotalDays > 7)
                     {
                         keyValuePairs.Add("message", "Due in more than a week");
                         keyValuePairs.Add("color", "Green");
+                        keyValuePairs.Add("fontWeight", "normal");
                     }
 
                     

@@ -1,10 +1,10 @@
-﻿//instructions https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
+//instructions https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
 import Constant from '../Constant'
 
 const userFunctions = {
 
     'getUser': async (id, token) => {
-        console.log('getting user data')
+        //console.log('getting user data')
         const res = await fetch(Constant() + `/api/users/${id}`, {
             method: 'GET',
             headers: {
@@ -13,13 +13,14 @@ const userFunctions = {
             }
         })
         const user = await res.json()
+        console.log(user)
         return user
     },
 
     'saveUser': async (credentials) => {
         
-        console.log("saving user")
-        console.log(credentials.user)
+        //console.log("saving user")
+        //console.log(credentials.user)
         const response = await fetch(`${Constant()}/api/users/${credentials.id}`, {
             method: 'PUT',
             headers: {

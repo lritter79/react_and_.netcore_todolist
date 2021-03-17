@@ -1,9 +1,12 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
+import { useToken, useUserId } from '../api-authorization/UserContext'
 
-const CommentForm = ({ userId, token, taskId }) => {
+const CommentForm = ({ taskId }) => {
     const [text, setText] = useState('')
+    const { token, setToken } = useToken
+    const { userId, setUserId } = useUserId
 
     const onSubmit = async (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page

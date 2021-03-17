@@ -1,6 +1,6 @@
 import { FaTimes } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import FormatDateString from './FormatDateString'
+import FormatDateString from '../FormatDateString'
 
 //fatimes is a preloaded react component for the delete "x" icon
 
@@ -15,7 +15,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
   return (
     <div style={borderStyle}
       className={`task ${task.reminder ? 'reminder' : ''}`}
-      onDoubleClick={() => onToggle(task.id)}
+      onDoubleClick={() => onToggle(task)}
     >
       <h3>
         {task.text}{' '}
@@ -31,7 +31,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
           </p>
           {(task.deadlineMessage) && (
               <>
-                  <p style={{ color: task.deadlineMessage.color }}>
+                  <p style={{ color: task.deadlineMessage.color, fontWeight: task.deadlineMessage.fontWeight }}>
                       {task.deadlineMessage.message}
                   </p>
               </>

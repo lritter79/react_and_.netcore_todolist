@@ -1,10 +1,10 @@
-import Login from './api-authorization/Login'
-import Register from './api-authorization/Register'
+import Login from './Login'
+import Register from './Register'
 import { Route, Redirect  } from 'react-router-dom'
-import Intro from './Intro'
+import Intro from '../Intro'
 
 
-const RegisterAndLoginRoutes = ({ setToken}) => {
+const RegisterAndLoginRoutes = () => {
     return (
         <>
             <Redirect from='/userManager' to="/" />
@@ -12,17 +12,13 @@ const RegisterAndLoginRoutes = ({ setToken}) => {
 
             <Route path='/login' exact
                 render={(props) => (
-                    <Login
-                        setToken={setToken}
-                    />
+                    <Login/>
                 )}
             />
 
             <Route path='/register' exact
                 render={(props) =>
-                    <Register
-                        setToken={setToken}
-                    />
+                    <Register/>
                 }
             />
             

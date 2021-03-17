@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import checkIcon from '../../assets/check.svg';
 import errorIcon from '../../assets/error.svg';
 import infoIcon from '../../assets/info.svg';
@@ -22,14 +22,14 @@ export function ToastProvider({ children }) {
     const showToast = (type, text) => {
         let toastProperties = null
         const id = Math.floor((Math.random() * 100) + 1)
-        console.log('type: ' + type)
+        //console.log('type: ' + type)
         switch (type) {
             case 'error':
                 toastProperties = {
                     id,
                     title: 'Error!',
                     description: `${text}`,
-                    backgroundColor: '#5cb85c',
+                    backgroundColor: 'salmon',
                     icon: errorIcon
                 }
                 break
