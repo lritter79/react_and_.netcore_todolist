@@ -1,7 +1,9 @@
 import Task from './Task'
+import { useState } from 'react'
 
 //.map() takes in  a function
 const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
+    const [showCompleted, setShowCompleted] = useState(true)
   const coolColor = (i) => {
     i = i > 3 ? i % 4 : i 
     switch(i) {
@@ -18,12 +20,28 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     }
   }
 
-  return (
-    <>
-      {tasks.map((task, index) => (
-        <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} onGoToDetail={onGoToDetail}  />
-      ))}
-    </>
+    return (
+        <>
+            <div id='tasksFilter'>
+                <span>Show Completed Tasks?
+                    <input
+                        checked={showCompleted}
+                        onChange={() => setShowCompleted(!showCompleted)}
+                        type="checkbox"
+                    />
+                </span>
+            </div>
+            {showCompleted ?
+                (tasks.map((task, index) => (
+                    <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} onGoToDetail={onGoToDetail} />
+                ))
+            ) : (
+                tasks.filter(t => !t.isCompleted).map((task, index) => (
+                    <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} onGoToDetail={onGoToDetail} />
+                ))
+            )}
+            
+        </>
   )
 }
 

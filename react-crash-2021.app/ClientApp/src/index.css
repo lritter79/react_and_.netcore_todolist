@@ -117,6 +117,10 @@ a:visited {
   align-items: center;
   justify-content: space-between;
 }
+
+    .task p {
+        margin-bottom: 0px;
+    }
 /*
 .add-form {
   margin-bottom: 40px;

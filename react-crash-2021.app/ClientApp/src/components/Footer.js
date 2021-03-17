@@ -5,7 +5,7 @@ const Footer = ({ isLoggedIn }) => {
   return (
     <footer>
           <Link to="/" exact>Home</Link> | <Link to="/about" exact>About</Link>
-          {isLoggedIn ? (<></>): (
+          {isLoggedIn ? (<> | <Link to="/userManager" exact>Manage Account</Link> | <Link to="/alerts" exact>Alerts</Link></>) : (
                   <> | <Link to = "/login" exact>Login</Link> | <Link to="/register" exact>Register</Link></>                           
           )}
       <br></br>
