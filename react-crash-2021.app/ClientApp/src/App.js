@@ -164,14 +164,15 @@ const App = () => {
                                         <TaskDetails/>
                                     )}
                                 />
-                                <Footer isLoggedIn={token} />
+                                
                             </>
                         ) : (
                                 <>
                                     <RegisterAndLoginRoutes setToken={setToken} token={token} />
                                 </>
 
-                            )}
+                        )}
+                        <Footer isLoggedIn={token} />
                     </div>
 
                 </ToastProvider>
