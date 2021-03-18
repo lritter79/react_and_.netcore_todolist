@@ -169,6 +169,12 @@ a:visited {
 }
 
 */
+#tasksFilter > label > span {
+    margin: 10px;
+    margin-left: 20px;
+    margin-bottom: 900px;
+}
+.
 footer {
   margin-top: 30px;
   text-align: center;

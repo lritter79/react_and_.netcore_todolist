@@ -1,5 +1,7 @@
 import Task from './Task'
 import { useState } from 'react'
+import Toggle from 'react-toggle'
+import "react-toggle/style.css"
 
 //.map() takes in  a function
 const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
@@ -23,13 +25,13 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     return (
         <>
             <div id='tasksFilter'>
-                <span>Show Completed Tasks?
-                    <input
-                        checked={showCompleted}
-                        onChange={() => setShowCompleted(!showCompleted)}
-                        type="checkbox"
-                    />
-                </span>
+                <label>
+                    <Toggle
+                        id='toggleShowCompleted'
+                        defaultChecked={showCompleted}
+                        onChange={() => setShowCompleted(!showCompleted)} />
+                    <span>Show Completed Tasks?</span>
+                </label>
             </div>
             {showCompleted ?
                 (tasks.map((task, index) => (
