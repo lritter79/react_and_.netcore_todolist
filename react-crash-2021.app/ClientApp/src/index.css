@@ -169,12 +169,23 @@ a:visited {
 }
 
 */
-#tasksFilter > label > span {
+/*#tasksFilter > label > span {
     margin: 10px;
     margin-left: 20px;
     margin-bottom: 900px;
+}*/
+
+label {
+    vertical-align: middle;
+    font-weight: normal;
+    margin-bottom: 0;
 }
-.
+
+.react-toggle {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 footer {
   margin-top: 30px;
   text-align: center;

@@ -24,15 +24,15 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
 
     return (
         <>
-            <div id='tasksFilter'>
-                <label>
-                    <Toggle
-                        id='toggleShowCompleted'
-                        defaultChecked={showCompleted}
-                        onChange={() => setShowCompleted(!showCompleted)} />
-                    <span>Show Completed Tasks?</span>
-                </label>
-            </div>
+            <label>
+                <Toggle
+                    id='toggleShowCompleted'
+                    defaultChecked={showCompleted}
+                    onChange={() => setShowCompleted(!showCompleted)}
+                />
+                <span>Show Completed Tasks?</span>
+            </label>                
+
             {showCompleted ?
                 (tasks.map((task, index) => (
                     <Task key={index} task={task} onDelete={onDelete} coolColor={coolColor(index)} onToggle={onToggle} onGoToDetail={onGoToDetail} />
