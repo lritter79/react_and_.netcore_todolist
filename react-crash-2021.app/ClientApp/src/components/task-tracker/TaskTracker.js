@@ -17,7 +17,6 @@ const TaskTracker = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const showToast = useShowToast()
-    
    
     useEffect(() => {
         const getTasks = async () => {

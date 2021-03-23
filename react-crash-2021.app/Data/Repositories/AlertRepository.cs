@@ -16,11 +16,17 @@ namespace react_crash_2021.Data.Repositories
         {
             _context = context;
         }
-        public async Task<int> CreateAlert(alert a)
+        public async Task<long> CreateAlert(alert a)
         {
-
+            var user = await  _context.Users.Where(u => u.Id == a.user.Id).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                a.user = user;
+            }
             await _context.Alerts.AddAsync(a);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return a.id;
         }
 
         public async Task<int> CreateAlerts(IEnumerable<alert> a)

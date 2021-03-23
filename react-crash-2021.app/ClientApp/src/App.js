@@ -5,13 +5,14 @@ import { Navbar, Nav } from 'react-bootstrap'
 //import authService from './api-authorization/AuthorizeService'
 import Footer from './components/Footer'
 import Constant from './components/Constant'
+import * as signalR from '@microsoft/signalr'
 import AlertCenter from './components/AlertCenter'
 import About from './components/About'
 import UserManager from './components/api-authorization/UserManager'
 import RegisterAndLoginRoutes from './components/api-authorization/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
 import Toast from './components/toast/Toast'
-import { ToastProvider, useShowToast } from './components/toast/ToastContext'
+import { useShowToast } from './components/toast/ToastContext'
 import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
 import { useToken, useUserId } from './components/api-authorization/UserContext'
@@ -46,8 +47,8 @@ const App = () => {
     const [alerts, setAlerts] = useState([])
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
-
     const showToast = useShowToast()
+
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -64,36 +65,56 @@ const App = () => {
     // Fetch Tasks
     //gets the tasks we have on the server with async java
     useEffect(() => {
-     
+        
+        // const fetchAlerts = async (id) => {
+        //     const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + token
+        //         }
+        //     })
 
-        const fetchAlerts = async (id) => {
-            const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
+        //     const data = await res.json()
 
-            const data = await res.json()
+        //     return data
+        // }
 
-            return data
-        }
-
-        const getAlerts = async () => {
-            try {
-                const tasksFromServer = await fetchAlerts(userId)
-                setAlerts(tasksFromServer)
-            } catch (error) {
-                showToast('error', error)
-            }
-        }
+        // const getAlerts = async () => {
+        //     try {
+        //         //const tasksFromServer = await fetchAlerts(userId)
+        //         //setAlerts(tasksFromServer)
+        //     } catch (error) {
+        //         showToast('error', error)
+        //     }
+        // }
 
         if (userId != undefined) {
+            const connection = new signalR.HubConnectionBuilder()
+            .withUrl(Constant() + "/api/alerts")
+            .withAutomaticReconnect()
+            .build();
+            
+            connection.start()
+            .then(result => {
+                console.log(showToast);
+                //showToast('info', 'Connected!')
+                connection.on('sendToReact', alert => {
+                    console.log(alert.message)
+                    showToast('info', alert.message)
+                    setAlerts(prev => [...prev, alert])
+                    console.log(alerts)
+                })
+            })
+            .catch(e => console.log('Connection failed: ', e))
+            
+
             //console.log(userId)
-            getAlerts()
+            //getAlerts()
         }
    
-
+        return () => {
+            setAlerts([])
+        }
     }, [token, userId])
 
     //if there are no tasks, it shows  'No Tasks To Show'
@@ -104,7 +125,7 @@ const App = () => {
     return (
         
         <Router>        
-                <ToastProvider>
+                <>
                     <div id="backdrop">
 
                     </div>
@@ -175,7 +196,7 @@ const App = () => {
                         <Footer isLoggedIn={token} />
                     </div>
 
-                </ToastProvider>
+                </>
         </Router>
             
     )

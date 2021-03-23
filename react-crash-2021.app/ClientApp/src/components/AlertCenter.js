@@ -6,9 +6,9 @@ import Constant from './Constant'
 const AlertCenter = ({ alerts, setAlerts }) => {
 
     const deleteTask = async (id) => {
-        await fetch(`${Constant()}/api/alerts/${id}`, {
-            method: 'DELETE',
-        })
+        //await fetch(`${Constant()}/api/alerts/${id}`, {
+        //    method: 'DELETE',
+        //})
         //.filter removes the task with the same id as the id passed up
         setAlerts(alerts.filter((alert) => alert.id !== id))
     }
@@ -24,7 +24,7 @@ const AlertCenter = ({ alerts, setAlerts }) => {
                 </thead>
                 <tbody>
                     {alerts.map((alert, index) =>
-                    (<tr>
+                    (<tr key={index}>
                         <td>{FormatDateString(alert.date)}</td>
                         <td>{alert.message}</td>
                         <td>

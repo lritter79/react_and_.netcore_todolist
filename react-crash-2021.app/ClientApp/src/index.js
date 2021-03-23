@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { UserProvider } from './components/api-authorization/UserContext'
+import { ToastProvider } from './components/toast/ToastContext'
 
 
 
@@ -14,7 +15,9 @@ import { UserProvider } from './components/api-authorization/UserContext'
 ReactDOM.render(
     <React.StrictMode>
         <UserProvider>
-            <App />
+            <ToastProvider>
+                <App />
+            </ToastProvider>            
         </UserProvider>   
   </React.StrictMode>,
   document.getElementById('root')

@@ -137,7 +137,7 @@ namespace react_crash_2021
                 options.SlidingExpiration = true;
             });
 
-
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -175,6 +175,7 @@ namespace react_crash_2021
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<AlertHub>("/api/alerts");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
@@ -184,10 +185,12 @@ namespace react_crash_2021
 
             app.UseSpa(spa =>
             {
+                //set the source path folder
                 spa.Options.SourcePath = "ClientApp";
-
+                //specify that if it's development use the script start
                 if (env.IsDevelopment())
                 {
+                    //this can be found in package.json in the client app folder
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });

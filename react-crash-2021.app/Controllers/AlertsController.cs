@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Repositories;
 using react_crash_2021.Models;
@@ -27,10 +28,12 @@ namespace react_crash_2021.Controllers
         /// </summary>
         private IMapper _mapper;
 
-        public AlertsController(IAlertRepository repo, IMapper mapper)
+        private readonly IHubContext<AlertHub> _alertHub;
+        public AlertsController(IAlertRepository repo, IMapper mapper, IHubContext<AlertHub> hubContext)
         {
             _repo = repo;
             _mapper = mapper;
+            _alertHub = hubContext;
         }
         // GET: api/<AlertsController>
         //[HttpGet]
@@ -71,6 +74,7 @@ namespace react_crash_2021.Controllers
         //}
 
         // POST api/<AlertsController>
+        //everytime this is hit 
         [HttpPost]
         public async Task<ActionResult> Post(AlertModel alertModel)
         {
@@ -84,6 +88,8 @@ namespace react_crash_2021.Controllers
                 }
                 else
                 {
+                    alertModel.Id = isCreated;
+                    await _alertHub.Clients.All.SendAsync("sendToReact", alertModel);
                     return Ok(new { message = "created"});
                 }
             }
