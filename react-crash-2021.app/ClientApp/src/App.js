@@ -48,7 +48,19 @@ const App = () => {
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
     const showToast = useShowToast()
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl(Constant() + "/api/alerts")
+        .withAutomaticReconnect()
+        .build()
 
+    const getConnectionId = () => {
+        this.hubConnection.invoke('getconnectionid').then(
+            (data) => {
+                console.log(data);
+                this.connectionId = data;
+            }
+        )
+    }
 
     const removeToken = () => {
         localStorage.removeItem('token');
@@ -65,7 +77,7 @@ const App = () => {
     // Fetch Tasks
     //gets the tasks we have on the server with async java
     useEffect(() => {
-        
+        console.log('using effect in app component')
         // const fetchAlerts = async (id) => {
         //     const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
         //         method: 'GET',
@@ -89,22 +101,23 @@ const App = () => {
         // }
 
         if (userId != undefined) {
-            const connection = new signalR.HubConnectionBuilder()
-            .withUrl(Constant() + "/api/alerts")
-            .withAutomaticReconnect()
-            .build();
+            console.log('building connenction')
+            
             
             connection.start()
-            .then(result => {
-                console.log(showToast);
-                //showToast('info', 'Connected!')
-                connection.on('sendToReact', alert => {
-                    console.log(alert.message)
-                    showToast('info', alert.message)
-                    setAlerts(prev => [...prev, alert])
-                    console.log(alerts)
+                .then(function () {
+                    connection.invoke('GetUserAlerts', userId)
                 })
-            })
+                .then(result => {
+                    //console.log(showToast);
+                    //showToast('info', 'Connected!')
+                    connection.on('sendToReact', alert => {
+                        console.log(alert.message)
+                        showToast('info', alert.message)
+                        setAlerts(prev => [...prev, alert])
+                        console.log(alerts)
+                    })
+                })
             .catch(e => console.log('Connection failed: ', e))
             
 
@@ -113,9 +126,14 @@ const App = () => {
         }
    
         return () => {
+            console.log('clean up in app.js')
+            if (userId != undefined) {
+                connection.stop()
+            }
+            
             setAlerts([])
         }
-    }, [token, userId])
+    }, [userId])
 
     //if there are no tasks, it shows  'No Tasks To Show'
     //short ternary in jsx:

@@ -25,7 +25,7 @@ namespace react_crash_2021.Models
             this.jwtLifespan = jwtLifespan;
             this.jwtIssuer = jwtIssuer;
         }
-        public AuthData GetAuthData(Guid id)
+        public AuthData GetAuthData(Guid id, string userName)
         {
             var expirationTime = DateTime.UtcNow.AddSeconds(jwtLifespan);
 
@@ -33,8 +33,10 @@ namespace react_crash_2021.Models
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    //Claims are actually a simple concept, but too many articles go into the “abstract” thought process around them. In really simply terms, a claim is a “fact” stored in the token about the user/person that holds that token.
-                    new Claim("Id", id.ToString())
+                    //Claims are actually a simple concept, but too many articles go into the “abstract” thought process around them.
+                    //In really simply terms, a claim is a “fact” stored in the token about the user/person that holds that token.
+                    new Claim("Id", id.ToString()),
+                    new Claim(ClaimTypes.Name, userName)
                 }),
                 Expires = expirationTime,
                 Issuer = jwtIssuer,

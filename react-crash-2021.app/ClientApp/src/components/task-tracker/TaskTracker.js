@@ -19,6 +19,7 @@ const TaskTracker = () => {
     const showToast = useShowToast()
    
     useEffect(() => {
+        console.log('task tracker use effect')
         const getTasks = async () => {
             try {
                 //console.log(CrudOperations)                               
@@ -40,7 +41,7 @@ const TaskTracker = () => {
         return function cleanup() {
             setTasks([])
         }
-    }, [token, userId])
+    }, [])
 
     const onDelete = async (id) => {
         await CrudOperations.DeleteTask(id, token)

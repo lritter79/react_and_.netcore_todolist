@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 const Footer = ({ isLoggedIn }) => {
   return (
     <footer>
-          <Link to="/" exact>Home</Link> | <Link to="/about" exact>About</Link>
-          {isLoggedIn ? (<> | <Link to="/userManager" exact>Manage Account</Link> | <Link to="/alerts" exact>Alerts</Link></>) : (
-                  <> | <Link to = "/login" exact>Login</Link> | <Link to="/register" exact>Register</Link></>                           
+          <Link to="/">Home</Link> | <Link to="/about">About</Link>
+          {isLoggedIn ? (<> | <Link to="/userManager">Manage Account</Link> | <Link to="/alerts" >Alerts</Link></>) : (
+                  <> | <Link to = "/login">Login</Link> | <Link to="/register">Register</Link></>                           
           )}
       <br></br>
       <p>Made with <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Repositories;
 using react_crash_2021.Models;
+using react_crash_2021.Providers;
 using System;
 using System.Reflection;
 using System.Text;
@@ -138,6 +140,7 @@ namespace react_crash_2021
             });
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
