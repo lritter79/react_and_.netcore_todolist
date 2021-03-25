@@ -3,6 +3,7 @@ import Button from './Button'
 import Form from 'react-bootstrap/Form'
 import { useToken } from './api-authorization/UserContext'
 
+
 const EditTask = ({task, onCancel, onUpdate }) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
@@ -12,7 +13,7 @@ const EditTask = ({task, onCancel, onUpdate }) => {
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
-    const { token, setToken } = useToken()
+    const { token } = useToken()
 
     const onSubmit = (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -29,7 +30,7 @@ const EditTask = ({task, onCancel, onUpdate }) => {
             return
         }
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token)
+        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token?.token)
     
         //clears the form
         setId('')

@@ -5,28 +5,28 @@ import AddTask from '../task-tracker/AddTask'
 import Tasks from '../task-tracker/Tasks'
 import { useState, useEffect } from 'react'
 import { useShowToast } from '../toast/ToastContext'
-import { useToken, useUserId } from '../api-authorization/UserContext'
+import { useToken} from '../api-authorization/UserContext'
 
 const TaskTracker = () => {
         //showAddTask = current state
     //setShowAddTask = function that aloows you to update the current state
     //when you update state, the component rerenders
-    const { userId } = useUserId()
     const { token } = useToken()
+
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const showToast = useShowToast()
    
     useEffect(() => {
-        console.log('task tracker use effect')
+        //console.log('task tracker use effect')
         const getTasks = async () => {
             try {
                 //console.log(CrudOperations)                               
                 //console.log(`token = ${token}`)
                 //console.log(`user = ${userId}`)
-                if (userId != undefined) {
-                    const tasksFromServer = await CrudOperations.FetchTasks(userId, token)
+                if (token != undefined) {
+                    const tasksFromServer = await CrudOperations.FetchTasks(token?.id, token?.token)
                     setIsLoading(false)
                     setTasks(tasksFromServer)
                 }
@@ -44,7 +44,7 @@ const TaskTracker = () => {
     }, [])
 
     const onDelete = async (id) => {
-        await CrudOperations.DeleteTask(id, token)
+        await CrudOperations.DeleteTask(id, token?.token)
         //.filter removes the task with the same id as the id passed up
         setTasks(tasks.filter((task) => task.id !== id))
     }
@@ -60,7 +60,7 @@ const TaskTracker = () => {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + token?.token
                 },
                 body: JSON.stringify(updTask)
             })
@@ -79,7 +79,7 @@ const TaskTracker = () => {
     }
 
     const updateTask = async (task) => {
-        console.log(task)
+        //console.log(task)
         setTasks(
             tasks.map((oldTask) => task.id === oldTask.id ? task : oldTask)
         )
@@ -92,7 +92,6 @@ const TaskTracker = () => {
                 onAdd={() => setShowAddTask(!showAddTask)}
                 showAdd={showAddTask} />
             <AddTask isToggled={showAddTask}
-                userId={userId} token={token}
                 tasks={tasks} setTasks={setTasks}
                 setShowAddTask={setShowAddTask} />
             {!isLoading ? (

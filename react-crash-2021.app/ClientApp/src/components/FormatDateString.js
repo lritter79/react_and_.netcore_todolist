@@ -5,7 +5,7 @@ const FormatDateString = (date) => {
     let dt = date.getDate()
 
 
-    return year +'-' + month + '-'+ dt + ' at ' + date.toLocaleTimeString()
+    return year + '-' + month + '-' + dt + ' at ' + date.toLocaleTimeString('en-US')
 }
 
 export default FormatDateString

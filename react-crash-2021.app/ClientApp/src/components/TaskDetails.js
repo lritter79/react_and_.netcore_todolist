@@ -4,18 +4,17 @@ import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
 import FetchTask from './task-crud-operations/FetchTask'
-import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
 import { useShowToast } from './toast/ToastContext'
-import { useToken, useUserId } from './api-authorization/UserContext'
+import { useToken } from './api-authorization/UserContext'
+import UpdateTask from './task-crud-operations/UpdateTask'
 
 const TaskDetails = () => {
 
     //gets the params passed in from the router
     //is a react hook
     const { id } = useParams()
-    const { token, setToken } = useToken()
-    const { userId, setUserId } = useUserId()
+    const { token } = useToken()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
@@ -30,10 +29,10 @@ const TaskDetails = () => {
 
         const getTask = async () => {          
             try {       
-                const taskFromServer = await fetchTask(id, token)         
+                const taskFromServer = await FetchTask(id, token?.token)         
                 setTask(taskFromServer)
                 //console.log(taskFromServer)
-                setComments(taskFromServer.comments)
+                //setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
                 console.log("failed") 
@@ -52,9 +51,9 @@ const TaskDetails = () => {
     const update = async (task) => {
         setIsLoading(true)
         try {
-            task.userId = userId
+            task.userId = token?.id
             setShowEditTask(!showEditTask)
-            const updTask = await UpdateTask(task, token)
+            const updTask = await UpdateTask(task, token?.token)
             setTask(updTask)
             setIsLoading(false)
             showToast('success', `Updated "${task.text}"`)
@@ -100,7 +99,7 @@ const TaskDetails = () => {
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onUpdate={update} onCancel={onCancel} token={token}/>
+                        <EditTask task={task} onUpdate={update} onCancel={onCancel} />
                     )}        
                 </div>) : (
                 <div>

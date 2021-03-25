@@ -4,11 +4,13 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
 import CreateTask from '../task-crud-operations/CreateTask'
+import { useToken } from '../api-authorization/UserContext'
 
 //take in the function onAdd
-const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) => {
+const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
-  //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
+    //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
+    const { token } = useToken()
   const [text, setText] = useState('')
   const [details, setDetails] = useState('')
   const [location, setLocation] = useState('')
@@ -53,8 +55,8 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
       return
     }
 
-      const didAdd = await CreateTask({ text, details, location, day, reminder, userId, isCompleted: false }, token)
-      console.log(didAdd)
+      const didAdd = await CreateTask({ text, details, location, day, reminder, userId: token?.id, isCompleted: false }, token?.token)
+      //console.log(didAdd)
       //data returned is the new task
       //const data = await res.json()
       //take existings takes and add data on

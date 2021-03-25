@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 
 const CommentSection = ({ comments, taskId }) => {
 
-    console.log(comments)
+    //console.log(comments)
 
     
     return (

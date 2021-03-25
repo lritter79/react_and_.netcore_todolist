@@ -3,33 +3,38 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import userFunctions from './UserFunctions'
 import { useShowToast } from '../toast/ToastContext'
-import { useToken, useUserId }  from './UserContext'
+import { useToken } from './UserContext'
+import Helpers from '../../Helpers'
+
 
 const UserManager = ({ handleLogout }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
-    const [user, setUser] = useState('')
+    const [user, setUser] = useState()
     const [showDeleteForm, setShowDeleteForm] = useState(false)
     const [deleteDisabled, setDeleteDisabled] = useState(false)
     const [submitDisabled, setSubmitDisabled] = useState(false)
+    const { token } = useToken()
+
     const onSave = useShowToast()
-    const { token, setToken } = useToken()
-    const { userId, setUserId } = useUserId()
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
+
     useEffect(() => {
 
         const getUser = async () => {
             try {
-                //console.log(CrudOperations)                               
-                //console.log(`token = ${token}`)
+                //
+                //(CrudOperations)                               
+                console.log('getting user')
                 //console.log(`user = ${userId}`)
-                if (userId != undefined) {
-                    const userData = await userFunctions.getUser(userId, token)
+                if (token != undefined) {
+                    const userData = await userFunctions.getUser(token?.id, token?.token)
                     setUser(userData)
                     setIsLoading(false)
                 }
 
             } catch (error) {
+                console.log(error)
                 onSave('error', error)
             }
         }
@@ -64,10 +69,10 @@ const UserManager = ({ handleLogout }) => {
 
     async function updateUser(appUser) {
         
-        return fetch(`${Constant()}/api/users/${userId}`, {
+        return fetch(`${Constant()}/api/users/${token?.id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token,
+                'Authorization': 'Bearer ' + token?.token,
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(appUser),
@@ -104,17 +109,17 @@ const UserManager = ({ handleLogout }) => {
     const onDelete = async e => {
         e.preventDefault()
         handleLogout(e)
-        let res = await deleteAccount(userId)
+        let res = await deleteAccount()
     }
 
-    async function deleteAccount(id) {
-        return fetch(`${Constant()}/api/users/${id}`, {
+    async function deleteAccount() {
+        return fetch(`${Constant()}/api/users/${token?.id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer ' + token,
+                'Authorization': 'Bearer ' + token?.token,
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({userId: id}),
+            body: JSON.stringify({ userId: token?.id }),
         })
         .then(data => data.json())
         .catch((error) => {
@@ -173,7 +178,7 @@ const UserManager = ({ handleLogout }) => {
                                 as="textarea"
                                 rows={3}
                                 placeholder=''
-                                value={user.bio}
+                                value={Helpers.replaceNullWithEmptyString(user?.bio)}
                                 onChange={(e) => setUser({ ...user, bio: e.target.value })}
                             />
                         </Form.Group>

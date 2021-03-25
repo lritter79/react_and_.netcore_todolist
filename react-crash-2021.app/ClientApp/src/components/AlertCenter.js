@@ -5,10 +5,13 @@ import Constant from './Constant'
 
 const AlertCenter = ({ alerts, setAlerts }) => {
 
-    const deleteTask = async (id) => {
-        //await fetch(`${Constant()}/api/alerts/${id}`, {
-        //    method: 'DELETE',
-        //})
+    const deleteAlert = async (id) => {
+        let deleted = await fetch(`${Constant()}/api/alerts/${id}`, {
+            method: 'DELETE',
+        })
+        if (deleted?.error) {
+            console.log(deleted?.error)
+        }
         //.filter removes the task with the same id as the id passed up
         setAlerts(alerts.filter((alert) => alert.id !== id))
     }
@@ -30,7 +33,7 @@ const AlertCenter = ({ alerts, setAlerts }) => {
                         <td>
                             <FaTimes
                                 style={{ color: 'red', cursor: 'pointer' }}
-                                onClick={() => deleteTask(alert.id)}
+                                onClick={() => deleteAlert(alert.id)}
                             />
                         </td>
                     </tr>)

@@ -79,6 +79,7 @@ namespace react_crash_2021.Data.Repositories
                                     location = task.location,
                                     reminder = task.reminder,
                                     task_date = task.task_date,
+                                    category = task.category,
                                     user = user
                                 })
                                 .Where(task => task.id == id).FirstAsync();

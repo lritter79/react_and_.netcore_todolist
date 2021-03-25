@@ -16,7 +16,7 @@ import Toast from './components/toast/Toast'
 import { useShowToast } from './components/toast/ToastContext'
 import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
-import { useToken, useUserId } from './components/api-authorization/UserContext'
+import { useToken } from './components/api-authorization/UserContext'
 
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
@@ -43,8 +43,8 @@ import { useToken, useUserId } from './components/api-authorization/UserContext'
 //sets tasks as the state
 const App = () => {
     
-    const { userId, setUserId } = useUserId()
     const { token, setToken } = useToken()
+    //console.log(token)
     const [alerts, setAlerts] = useState([])
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
@@ -64,7 +64,7 @@ const App = () => {
     }
 
     const setAlertsOnLogin = async () => {
-        let userAlerts = await UserFunctions.getAlertsByUser(userId, token)
+        let userAlerts = await UserFunctions.getAlertsByUser(token?.id, token?.token)
         setAlerts(userAlerts)
     }
     
@@ -72,7 +72,6 @@ const App = () => {
     const removeToken = () => {
         localStorage.removeItem('token');
         setToken(null)
-        setUserId(null)
     }
 
 
@@ -107,7 +106,7 @@ const App = () => {
         //     }
         // }
 
-        if (userId != undefined && token != undefined) {
+        if (token != undefined) {
             setAlertsOnLogin()
             
             connection.start()
@@ -125,10 +124,10 @@ const App = () => {
                     //console.log(showToast);
                     //showToast('info', 'Connected!')
                     connection.on('sendToReact', alert => {
-                        console.log(alert.message)
+                        //console.log(alert.message)
                         showToast('info', alert.message)
                         setAlerts(prev => [...prev, alert])
-                        console.log(alerts)
+                        //console.log(alerts)
                     })
                 })
             .catch(e => console.log('Connection failed: ', e))
@@ -140,7 +139,7 @@ const App = () => {
    
         return () => {
             console.log('clean up in app.js')
-            if (userId != undefined) {
+            if (token != undefined) {
                 setAlerts([])
                 connection.stop()
             }
@@ -168,7 +167,7 @@ const App = () => {
                             <Nav className="mr-auto">
                                 <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
                                 <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
-                                {token ? (
+                                {token?.token ? (
                                     <>
                                         <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
                                         <Nav.Link as={NavLink} to="/alerts" exact>Alerts
@@ -191,7 +190,7 @@ const App = () => {
                         />
                         <Route path='/about' exact component={About} />
                         <Route path='/logout' exact component={Logout} />
-                        {token ? (
+                        {token?.token ? (
                             <>
                                 <Route path='/alerts' exact
                                     render={(props) => (
@@ -200,8 +199,8 @@ const App = () => {
                                 />
                                 <Redirect from='/login' to="/" />
                                 <Route path='/userManager' exact
-                                    render={(props) => (
-                                        <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
+                                render={(props) => (
+                                    <UserManager handleLogout={handleLogoutClick} />
                                     )}
                                 />
                                 <Route path='/' exact
@@ -221,11 +220,11 @@ const App = () => {
                             </>
                         ) : (
                                 <>
-                                    <RegisterAndLoginRoutes setToken={setToken} token={token} />
+                                    <RegisterAndLoginRoutes />
                                 </>
 
                         )}
-                        <Footer isLoggedIn={token} />
+                        <Footer isLoggedIn={token?.token} />
                     </div>
 
                 </>

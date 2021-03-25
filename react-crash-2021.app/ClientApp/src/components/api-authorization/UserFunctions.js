@@ -13,11 +13,11 @@ const userFunctions = {
             }
         })
         const user = await res.json()
-        console.log(user)
+
         return user
     },
     'getAlertsByUser': async (id, token) => {
-        console.log(token)
+        //console.log(token)
         const res = await fetch(Constant() + `/api/users/${id}/alerts`, {
             method: 'GET',
             headers: {
@@ -26,7 +26,7 @@ const userFunctions = {
             }
         })
         const alerts = await res.json()
-        console.log(alerts)
+        //console.log(alerts)
         return alerts
     },
     'saveUser': async (credentials) => {
