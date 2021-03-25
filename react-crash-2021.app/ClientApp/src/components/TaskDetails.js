@@ -4,10 +4,10 @@ import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
 import FetchTask from './task-crud-operations/FetchTask'
-import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
 import { useShowToast } from './toast/ToastContext'
 import { useToken } from './api-authorization/UserContext'
+import UpdateTask from './task-crud-operations/UpdateTask'
 
 const TaskDetails = () => {
 
@@ -29,10 +29,10 @@ const TaskDetails = () => {
 
         const getTask = async () => {          
             try {       
-                const taskFromServer = await fetchTask(token?.id, token?.token)         
+                const taskFromServer = await FetchTask(id, token?.token)         
                 setTask(taskFromServer)
                 //console.log(taskFromServer)
-                setComments(taskFromServer.comments)
+                //setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
                 console.log("failed") 
@@ -99,7 +99,7 @@ const TaskDetails = () => {
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onUpdate={update} onCancel={onCancel} token={token?.token}/>
+                        <EditTask task={task} onUpdate={update} onCancel={onCancel} />
                     )}        
                 </div>) : (
                 <div>

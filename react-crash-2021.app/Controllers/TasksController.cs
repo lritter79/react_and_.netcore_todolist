@@ -121,7 +121,7 @@ namespace react_crash_2021.Controllers
                 if (task.IsCompleted)
                 {
                     task.DateCompleted = DateTime.Now;
-                    var users = _userRepo.GetUsersByTask(_mapper.Map<TaskEntity>(task));
+                    //var users = _userRepo.GetUsersByTask(_mapper.Map<TaskEntity>(task));
                 }
                 var updatedTask = await _repo.UpdateTask(id, _mapper.Map<TaskEntity>(task));
                 //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio

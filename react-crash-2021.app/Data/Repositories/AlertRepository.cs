@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using react_crash_2021.Extensions;
 
 namespace react_crash_2021.Data.Repositories
 {
@@ -59,14 +60,14 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<IEnumerable<alert>> GetTaskRemindersByUser(Guid id)
         {
-            var reminders = await _context.Tasks.Where(t => t.reminder).Join(_context.Users.Where(u => u.Id == id),
+            var reminders = await _context.Tasks.Where(t => t.reminder && !t.is_completed).Join(_context.Users.Where(u => u.Id == id),
                 task => task.user,
                 u => u,
                 (task, u) => new alert
                 {
                     date = DateTime.Now,
                     id = task.id,
-                    message = $"{task.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", (task.task_date - DateTime.Now).Days, (task.task_date - DateTime.Now).Hours, (task.task_date - DateTime.Now).Minutes)}",
+                    message = task.GetTaskMessage(),
                     user = u
                 })
                 .ToListAsync();
