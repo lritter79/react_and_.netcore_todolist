@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
-import { useToken, useUserId } from '../api-authorization/UserContext'
+import { useToken } from '../api-authorization/UserContext'
 
 const CommentForm = ({ taskId }) => {
     const [text, setText] = useState('')
-    const { token, setToken } = useToken
-    const { userId, setUserId } = useUserId
+    const { token, setToken } = useToken()
 
     const onSubmit = async (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -16,9 +15,9 @@ const CommentForm = ({ taskId }) => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + token?.token
             },
-            body: JSON.stringify({ userId, taskId, text })
+            body: JSON.stringify({ userId: token?.id, taskId, text })
         })
             .then(data => data.json())
             .catch((error) => {

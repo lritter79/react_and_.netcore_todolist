@@ -3,18 +3,19 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import userFunctions from './UserFunctions'
 import { useShowToast } from '../toast/ToastContext'
-import { useToken, useUserId }  from './UserContext'
+import { useToken } from './UserContext'
+
 
 const UserManager = ({ handleLogout }) => {
     //console.log(`id: ${id}`)
     const [isLoading, setIsLoading] = useState(true)
-    const [user, setUser] = useState('')
+    const [user, setUser] = useState()
     const [showDeleteForm, setShowDeleteForm] = useState(false)
     const [deleteDisabled, setDeleteDisabled] = useState(false)
     const [submitDisabled, setSubmitDisabled] = useState(false)
+    const { tokenObj, setTokenObj } = useToken()
+
     const onSave = useShowToast()
-    const { token, setToken } = useToken()
-    const { userId, setUserId } = useUserId()
     //https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
     useEffect(() => {
 
@@ -23,8 +24,8 @@ const UserManager = ({ handleLogout }) => {
                 //console.log(CrudOperations)                               
                 //console.log(`token = ${token}`)
                 //console.log(`user = ${userId}`)
-                if (userId != undefined) {
-                    const userData = await userFunctions.getUser(userId, token)
+                if (tokenObj != undefined) {
+                    const userData = await userFunctions.getUser(tokenObj?.id, tokenObj?.token)
                     setUser(userData)
                     setIsLoading(false)
                 }
@@ -64,10 +65,10 @@ const UserManager = ({ handleLogout }) => {
 
     async function updateUser(appUser) {
         
-        return fetch(`${Constant()}/api/users/${userId}`, {
+        return fetch(`${Constant()}/api/users/${tokenObj?.id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token,
+                'Authorization': 'Bearer ' + tokenObj?.token,
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(appUser),
@@ -104,17 +105,17 @@ const UserManager = ({ handleLogout }) => {
     const onDelete = async e => {
         e.preventDefault()
         handleLogout(e)
-        let res = await deleteAccount(userId)
+        let res = await deleteAccount()
     }
 
-    async function deleteAccount(id) {
-        return fetch(`${Constant()}/api/users/${id}`, {
+    async function deleteAccount() {
+        return fetch(`${Constant()}/api/users/${tokenObj.id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer ' + token,
+                'Authorization': 'Bearer ' + tokenObj.token,
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({userId: id}),
+            body: JSON.stringify({ userId: tokenObj.id }),
         })
         .then(data => data.json())
         .catch((error) => {

@@ -1,13 +1,13 @@
 ﻿import Constant from '../Constant'
 
-const CreateTask = async (task, token) => {
+const CreateTask = async (task, authToken) => {
 
-
+    console.log(authToken)
     return fetch(Constant() + '/api/tasks', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + authToken
         },
         body: JSON.stringify(task)
     })

@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useState, useEffect } from 'react'
 import { useShowToast } from '../toast/ToastContext'
-import { useToken, useUserId }  from './UserContext'
+import { useToken }  from './UserContext'
 
 const Login = () => {
     //when the form is submitted, we want to issue a post request to log in the user
@@ -12,7 +12,7 @@ const Login = () => {
     const [disabled, setDisabled] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const { setToken } = useToken()
-    const { setUserId } = useUserId()
+    
 
     const showToast = useShowToast()
 
@@ -38,7 +38,6 @@ const Login = () => {
 
             if (!token.error) {
                 setErrorMessage('')
-                setUserId(token)
                 setToken(token)
                 
                 showToast('success', `Welcome back, ${username}`)
