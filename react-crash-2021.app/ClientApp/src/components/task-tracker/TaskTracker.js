@@ -19,7 +19,7 @@ const TaskTracker = () => {
     const showToast = useShowToast()
    
     useEffect(() => {
-        console.log('task tracker use effect')
+        //console.log('task tracker use effect')
         const getTasks = async () => {
             try {
                 //console.log(CrudOperations)                               
@@ -79,7 +79,7 @@ const TaskTracker = () => {
     }
 
     const updateTask = async (task) => {
-        console.log(task)
+        //console.log(task)
         setTasks(
             tasks.map((oldTask) => task.id === oldTask.id ? task : oldTask)
         )

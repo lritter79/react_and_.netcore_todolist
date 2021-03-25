@@ -21,7 +21,7 @@ export function TokenProvider({ children }) {
 
     const saveToken = userToken => {     
         console.log('saving token')
-        console.log(userToken)
+        //console.log(userToken)
         setToken(userToken);
         //console.log('done saving token')
     }

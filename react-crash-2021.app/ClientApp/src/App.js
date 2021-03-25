@@ -44,7 +44,7 @@ import { useToken } from './components/api-authorization/UserContext'
 const App = () => {
     
     const { token, setToken } = useToken()
-    console.log(token)
+    //console.log(token)
     const [alerts, setAlerts] = useState([])
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
@@ -124,10 +124,10 @@ const App = () => {
                     //console.log(showToast);
                     //showToast('info', 'Connected!')
                     connection.on('sendToReact', alert => {
-                        console.log(alert.message)
+                        //console.log(alert.message)
                         showToast('info', alert.message)
                         setAlerts(prev => [...prev, alert])
-                        console.log(alerts)
+                        //console.log(alerts)
                     })
                 })
             .catch(e => console.log('Connection failed: ', e))

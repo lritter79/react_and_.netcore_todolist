@@ -2,7 +2,7 @@
 
 const CreateTask = async (task, authToken) => {
 
-    console.log(authToken)
+    //console.log(authToken)
     return fetch(Constant() + '/api/tasks', {
         method: 'POST',
         headers: {
