@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using react_crash_2021.Data.Entities;
@@ -29,11 +31,14 @@ namespace react_crash_2021.Controllers
         private IMapper _mapper;
 
         private readonly IHubContext<AlertHub> _alertHub;
-        public AlertsController(IAlertRepository repo, IMapper mapper, IHubContext<AlertHub> hubContext)
+        private readonly UserManager<reactCrashUser> _userManager;
+        public AlertsController(IAlertRepository repo, IMapper mapper, IHubContext<AlertHub> hubContext, UserManager<reactCrashUser> userManager)
         {
+
             _repo = repo;
             _mapper = mapper;
             _alertHub = hubContext;
+            _userManager = userManager;
         }
         // GET: api/<AlertsController>
         //[HttpGet]
@@ -44,7 +49,7 @@ namespace react_crash_2021.Controllers
 
         [HttpGet]
         [Route("~/api/Users/{userId}/Alerts")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<AlertModel>>> GetAlertsByUser(Guid userId)
         {
             try
@@ -65,17 +70,17 @@ namespace react_crash_2021.Controllers
                 return BadRequest(e.Message);
             }
 
-        }// GET: api/Tasks/5
-        // GET api/<AlertsController>/5
-        //[HttpGet("{id}")]
-        //public string Get(long id)
-        //{
-        //    return "value";
-        //}
+        }
 
         // POST api/<AlertsController>
         //everytime this is hit 
+        /// <summary>
+        /// This is going to be used when a user adds a comment to a task to notify the other collaborators that the comment was added via an alert
+        /// </summary>
+        /// <param name="alertModel"></param>
+        /// <returns></returns>
         [HttpPost]
+        
         public async Task<ActionResult> Post(AlertModel alertModel)
         {
             try
@@ -89,7 +94,10 @@ namespace react_crash_2021.Controllers
                 else
                 {
                     alertModel.Id = isCreated;
+                    //temp fix
+                    //var currentUser = await _userManager.GetUserAsync(User);
                     await _alertHub.Clients.All.SendAsync("sendToReact", alertModel);
+                    //await _alertHub.Clients.All.SendAsync("sendToReact", alertModel);
                     return Ok(new { message = "created"});
                 }
             }

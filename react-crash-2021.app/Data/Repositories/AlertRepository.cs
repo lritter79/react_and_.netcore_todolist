@@ -56,5 +56,22 @@ namespace react_crash_2021.Data.Repositories
                 .Where(alert => alert.user.Id == id)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<alert>> GetTaskRemindersByUser(Guid id)
+        {
+            var reminders = await _context.Tasks.Where(t => t.reminder).Join(_context.Users.Where(u => u.Id == id),
+                task => task.user,
+                u => u,
+                (task, u) => new alert
+                {
+                    date = DateTime.Now,
+                    id = task.id,
+                    message = $"{task.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", (task.task_date - DateTime.Now).Days, (task.task_date - DateTime.Now).Hours, (task.task_date - DateTime.Now).Minutes)}",
+                    user = u
+                })
+                .ToListAsync();
+            await _context.Alerts.AddRangeAsync(reminders);
+            return reminders;
+        }
     }
 }

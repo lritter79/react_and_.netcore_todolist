@@ -18,17 +18,17 @@ namespace react_crash_2021
         /// </summary>
         /// <returns></returns>
         //public string GetConnectionId() => Context.ConnectionId;
-        private UserManager<reactCrashUser> _userManager;
+        //private UserManager<reactCrashUser> _userManager;
         private IAlertRepository _alertRepository;
-        public AlertHub(UserManager<reactCrashUser> userManager, IAlertRepository alertRepository)
+        public AlertHub(IAlertRepository alertRepository)
         {
-            _userManager = userManager;
+            
             _alertRepository = alertRepository;
         }
         public async Task GetUserAlerts(Guid userId)
         {
             var alerts = await _alertRepository.GetAlertsByUser(userId);
-            await Clients.Caller.SendAsync("getUserAlerts", alerts);
+            await Clients.User(userId.ToString()).SendAsync("getUserAlerts", alerts);
         }
 
     }

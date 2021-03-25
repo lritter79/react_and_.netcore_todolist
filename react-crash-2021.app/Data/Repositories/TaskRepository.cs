@@ -28,6 +28,12 @@ namespace react_crash_2021.Data.Repositories
         {
             _context.Entry(model.user).State = EntityState.Unchanged;
             await _context.Tasks.AddAsync(model);
+            if (model.reminder)
+            {
+                TimeSpan span = (DateTime.Now - model.task_date);
+
+                await _context.Alerts.AddAsync(new alert { date = DateTime.Now, message = $"{model.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", span.Days, span.Hours, span.Minutes)}", user=model.user });
+            }
             await _context.SaveChangesAsync();
             return model;
         }

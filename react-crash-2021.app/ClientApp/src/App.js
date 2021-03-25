@@ -9,6 +9,7 @@ import * as signalR from '@microsoft/signalr'
 import AlertCenter from './components/AlertCenter'
 import About from './components/About'
 import UserManager from './components/api-authorization/UserManager'
+import UserFunctions from './components/api-authorization/UserFunctions'
 import RegisterAndLoginRoutes from './components/api-authorization/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
 import Toast from './components/toast/Toast'
@@ -62,6 +63,12 @@ const App = () => {
         )
     }
 
+    const setAlertsOnLogin = async () => {
+        let userAlerts = await UserFunctions.getAlertsByUser(userId, token)
+        setAlerts(userAlerts)
+    }
+    
+
     const removeToken = () => {
         localStorage.removeItem('token');
         setToken(null)
@@ -100,15 +107,21 @@ const App = () => {
         //     }
         // }
 
-        if (userId != undefined) {
-            console.log('building connenction')
-            
+        if (userId != undefined && token != undefined) {
+            setAlertsOnLogin()
             
             connection.start()
-                .then(function () {
-                    connection.invoke('GetUserAlerts', userId)
-                })
+                //.then(async function () {
+                //    try {
+                //        let res = await connection.invoke('GetUserAlerts', userId)
+                //        console.log(res)
+                //    }
+                //    catch (error) {
+                //        console.log(error)
+                //    }
+                //})
                 .then(result => {
+                    console.log('building connenction')
                     //console.log(showToast);
                     //showToast('info', 'Connected!')
                     connection.on('sendToReact', alert => {
@@ -128,12 +141,13 @@ const App = () => {
         return () => {
             console.log('clean up in app.js')
             if (userId != undefined) {
+                setAlerts([])
                 connection.stop()
             }
             
             setAlerts([])
         }
-    }, [userId])
+    }, [token])
 
     //if there are no tasks, it shows  'No Tasks To Show'
     //short ternary in jsx:
