@@ -144,6 +144,16 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<TaskEntity> UpdateTask(long id, TaskEntity task)
         {
+            if (task.is_completed)
+            {
+                task.date_completed = DateTime.Now;
+                //var users = _userRepo.GetUsersByTask(_mapper.Map<TaskEntity>(task));
+            }
+            else
+            {
+                task.date_completed = null;
+            }
+
             if (_context.Tasks.Any(t => t.id == id))
             {
                 var t = _context.Tasks.Attach(task);

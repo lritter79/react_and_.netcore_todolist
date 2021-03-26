@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
-import { Navbar, Nav } from 'react-bootstrap'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 //for authorization
 //import authService from './api-authorization/AuthorizeService'
 import Footer from './components/Footer'
@@ -17,7 +16,7 @@ import { useShowToast } from './components/toast/ToastContext'
 import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
 import { useToken } from './components/api-authorization/UserContext'
-
+import AppNavbar from './components/AppNavbar'
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
 //    sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -160,27 +159,8 @@ const App = () => {
                     <div id="backdrop">
 
                     </div>
-                    <Navbar bg="light" expand="lg">
-                        <Navbar.Brand>Task Tracker</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="mr-auto">
-                                <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                                <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
-                                {token?.token ? (
-                                    <>
-                                        <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/alerts" exact>Alerts
-                                        {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}
-                                        </Nav.Link>
-                                        <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
-                                    </>) : (<>
-                                        <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-                                    </>)}
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Navbar>
+
+                    <AppNavbar onLogoutClick={handleLogoutClick} alerts={alerts} />
 
                     <div className='container'>
                         <Toast
