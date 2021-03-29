@@ -36,7 +36,7 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
                   </p>
               </>
           )}         
-          <Link to={'/task/' + task.id} onClick={onGoToDetail} className='detailsLink'>Details</Link>
+          <Link to={`/task/${task.id}`} onClick={onGoToDetail} className='detailsLink'>Details</Link>
           
     </div>
   )

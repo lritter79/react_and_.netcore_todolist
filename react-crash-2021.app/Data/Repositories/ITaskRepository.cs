@@ -12,6 +12,7 @@ namespace react_crash_2021.Data.Repositories
         Task<IEnumerable<TaskEntity>> GetTasks();
         Task<TaskEntity> GetTask(long id);
         Task<TaskEntity> UpdateTask (long id, TaskEntity task);
+        Task<TaskEntity> UpdateTask (long id, DateTime date);
         Task<TaskEntity> AddTask(TaskEntity model);
         Task<IEnumerable<TaskEntity>> AddTasks(IEnumerable<TaskEntity> model);
         Task<TaskEntity> Deletetask(long id);

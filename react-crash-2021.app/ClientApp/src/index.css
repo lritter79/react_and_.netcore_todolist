@@ -246,6 +246,11 @@ footer {
     border-bottom: 3px solid white;
 }
 
+#divBtnContainer > button {
+  margin:0 auto;
+  display:block;
+}
+
 .container > div > ul {
     padding-left: 10px;
 }

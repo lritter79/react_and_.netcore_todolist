@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\components\calendar\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

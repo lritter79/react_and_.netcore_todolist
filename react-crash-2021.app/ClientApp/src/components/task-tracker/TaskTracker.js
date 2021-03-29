@@ -6,6 +6,8 @@ import Tasks from '../task-tracker/Tasks'
 import { useState, useEffect } from 'react'
 import { useShowToast } from '../toast/ToastContext'
 import { useToken} from '../api-authorization/UserContext'
+import Calendar from './Calendar'
+import Button from '../Button'
 
 const TaskTracker = () => {
         //showAddTask = current state
@@ -17,6 +19,7 @@ const TaskTracker = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const showToast = useShowToast()
+    const [showCalendarView, setShowCalendarView] = useState(false)
    
     useEffect(() => {
         //console.log('task tracker use effect')
@@ -94,13 +97,22 @@ const TaskTracker = () => {
             <AddTask isToggled={showAddTask}
                 tasks={tasks} setTasks={setTasks}
                 setShowAddTask={setShowAddTask} />
+            <div id='divBtnContainer'>
+                <Button text={showCalendarView ? ('Show List View') : ('Show Calendar View')}
+                    textColor='white'
+                    onClick={() => setShowCalendarView(!showCalendarView)}
+                />
+            </div>
             {!isLoading ? (
                 (tasks.length > 0) ? (
-                    <Tasks
-                        tasks={tasks}
-                        onDelete={onDelete}
-                        onToggle={toggleReminder}
-                        onGoToDetail={() => { setShowAddTask(false) }} />) :
+                    (showCalendarView) ?
+                        (<Calendar tasks={tasks} setTasks={setTasks} />) :
+                        (<Tasks
+                            tasks={tasks}
+                            onDelete={onDelete}
+                            onToggle={toggleReminder}
+                            onGoToDetail={() => { setShowAddTask(false) }} />)
+                    ) :
                     ('No Tasks To Show')
             ) : ('Loading ...')}
         </>

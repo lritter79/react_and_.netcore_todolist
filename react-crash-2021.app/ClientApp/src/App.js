@@ -17,7 +17,7 @@ import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
 import { useToken } from './components/api-authorization/UserContext'
 import AppNavbar from './components/AppNavbar'
-import Calendar from './components/calendar/Calendar'
+
 
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
@@ -211,10 +211,7 @@ const App = () => {
                                     render={(props) => (
                                         <TaskDetails/>
                                     )}
-                                />
-
-                            <Route path='/calendar' exact component={Calendar} />
-                                
+                                />                                                        
                             </>
                         ) : (
                                 <>

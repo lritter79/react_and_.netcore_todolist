@@ -17,7 +17,6 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
                         {token?.token ? (
                             <>
                                 <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
-                                <Nav.Link as={NavLink} to="/calendar" exact>Calendar</Nav.Link>
                                 <Nav.Link as={NavLink} to="/alerts" exact>Alerts
                                         {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}
                                 </Nav.Link>

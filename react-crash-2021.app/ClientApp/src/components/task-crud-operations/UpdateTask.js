@@ -8,7 +8,7 @@ const UpdateTask = async (task, token) => {
             'Content-type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify(task)
     })
 
     const data = await res.json()

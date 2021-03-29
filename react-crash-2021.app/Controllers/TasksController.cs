@@ -18,9 +18,9 @@ namespace react_crash_2021.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-       /// <summary>
-       /// Provides a layer between API logic and the database to keep things more loosely coupled and flexible
-       /// </summary>
+        /// <summary>
+        /// Provides a layer between API logic and the database to keep things more loosely coupled and flexible
+        /// </summary>
         private readonly ITaskRepository _repo;
         private readonly IAlertRepository _alertRepo;
         private readonly IReactCrashUserRepository _userRepo;
@@ -46,7 +46,7 @@ namespace react_crash_2021.Controllers
 
             return _mapper.Map<List<TaskModel>>(tasks);
         }
-        
+
         [HttpGet]
         [Route("~/api/Users/{userId}/Tasks")]
         [Authorize]
@@ -81,9 +81,9 @@ namespace react_crash_2021.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
-            
+
         }
-        
+
         // GET: api/Tasks/5
 
         [HttpGet("{id}")]
@@ -107,7 +107,7 @@ namespace react_crash_2021.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
-            
+
         }
 
         // PUT: api/Tasks/5
@@ -118,9 +118,30 @@ namespace react_crash_2021.Controllers
         {
             try
             {
-                
+
 
                 var updatedTask = await _repo.UpdateTask(id, _mapper.Map<TaskEntity>(task));
+                //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
+                return _mapper.Map<TaskModel>(updatedTask);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+
+
+
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("~/api/Tasks/{id}/UpdateTaskDate")]
+        public async Task<ActionResult<TaskModel>> UpdateTaskDate(long id, string date)
+        {
+            try
+            {
+                DateTime d = DateTime.Parse(date);
+                var updatedTask = await _repo.UpdateTask(id, d);
                 //should return a 204 no content: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
                 return _mapper.Map<TaskModel>(updatedTask);
             }

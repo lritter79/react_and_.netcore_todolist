@@ -170,6 +170,21 @@ namespace react_crash_2021.Data.Repositories
             return await _context.FindAsync<TaskEntity>(id);
         }
         
+        public async Task<TaskEntity> UpdateTask(long id, DateTime date)
+        {
+            
+            if (_context.Tasks.Any(t => t.id == id))
+            {
+                var task = await _context.Tasks.Where(t => t.id == id).FirstOrDefaultAsync();
+                task.task_date = date;
+                var t = _context.Tasks.Attach(task);
+                t.State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }          
+
+            return await _context.FindAsync<TaskEntity>(id);
+        }
+        
 
     }
 }
