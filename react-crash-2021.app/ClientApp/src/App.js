@@ -17,6 +17,8 @@ import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
 import { useToken } from './components/api-authorization/UserContext'
 import AppNavbar from './components/AppNavbar'
+import Calendar from './components/calendar/Calendar'
+
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
 //    sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -80,7 +82,22 @@ const App = () => {
     }
 
     // Fetch Tasks
-    //gets the tasks we have on the server with async java
+    //gets the tasks we have on the server with async java\\
+    //useEffect(() => {
+    //    console.log('changed alerts state')
+    //    console.log(alerts)
+    //}, [alerts])
+
+    //useEffect(() => {
+    //    console.log('changed check Value')
+    //    console.log(checkValue)
+    //}, [checkValue])
+
+    //useEffect(() => {
+    //    console.log('changed auto Delete Time state')
+    //    console.log(autoDeleteTime)
+    //}, [autoDeleteTime])
+
     useEffect(() => {
         console.log('using effect in app component')
         // const fetchAlerts = async (id) => {
@@ -142,8 +159,7 @@ const App = () => {
                 setAlerts([])
                 connection.stop()
             }
-            
-            setAlerts([])
+
         }
     }, [token])
 
@@ -196,6 +212,8 @@ const App = () => {
                                         <TaskDetails/>
                                     )}
                                 />
+
+                            <Route path='/calendar' exact component={Calendar} />
                                 
                             </>
                         ) : (
