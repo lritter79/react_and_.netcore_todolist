@@ -33,7 +33,7 @@ const Calendar = ({tasks, setTasks}) => {
         const result = arr.filter(task => !task?.date)
         return result.map(
             (task) => ({
-                id: task.id, title: getTitleWithEmojis(task), borderColor: CoolColor(task.id),
+                id: task.id, title: getTitleWithEmojis(task), backgroundColor: CoolColor(task.id),
                 start: task.day, end: task.day,
                 extendedProps: {
                     completed: task.isCompleted,
