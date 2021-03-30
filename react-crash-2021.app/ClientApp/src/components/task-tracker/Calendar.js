@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useToken} from '../api-authorization/UserContext'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
+import CoolColor from './CoolColor'
 
 const Calendar = ({tasks, setTasks}) => {
     const [events, setEvents] = useState([])
@@ -32,7 +33,7 @@ const Calendar = ({tasks, setTasks}) => {
         const result = arr.filter(task => !task?.date)
         return result.map(
             (task) => ({
-                id: task.id, title: getTitleWithEmojis(task), borderColor: (task.reminder ? 'green' : ''),
+                id: task.id, title: getTitleWithEmojis(task), borderColor: CoolColor(task.id),
                 start: task.day, end: task.day,
                 extendedProps: {
                     completed: task.isCompleted,
@@ -101,6 +102,11 @@ const Calendar = ({tasks, setTasks}) => {
         }        
     }
 
+
+    const onWindowResize = (arg) => {
+        console.log('The calendar has adjusted to a window resize. Current view: ' + arg.view.type);
+    }
+
     return (
         <>
             <FullCalendar
@@ -110,6 +116,8 @@ const Calendar = ({tasks, setTasks}) => {
                 editable={isEditable}
                 eventDrop={handleEventDrop}
                 events={events}
+                handleWindowResize={true}
+                windowResize={onWindowResize}
             />
         </>
         
