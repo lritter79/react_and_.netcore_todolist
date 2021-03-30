@@ -60,19 +60,38 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<IEnumerable<alert>> GetTaskRemindersByUser(Guid id)
         {
-            var reminders = await _context.Tasks.Where(t => t.reminder && !t.is_completed).Join(_context.Users.Where(u => u.Id == id),
+            var reminders = await _context.Tasks.Where(t => t.reminder && !t.is_completed && t.task_date.HasValue).Join(_context.Users.Where(u => u.Id == id),
                 task => task.user,
                 u => u,
                 (task, u) => new alert
                 {
                     date = DateTime.Now,
                     id = task.id,
-                    message = task.GetTaskMessage(),
+                    message = GetTaskMessage(task),
                     user = u
                 })
                 .ToListAsync();
             await _context.Alerts.AddRangeAsync(reminders);
             return reminders;
+        }
+
+        public string GetTaskMessage(TaskEntity task)
+        {
+            string message = "";
+            if (task.task_date.HasValue)
+            {
+                TimeSpan span = task.task_date.Value - DateTime.Now;
+                if (span.TotalMinutes > 0)
+                {
+                    message = $"{task.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", span.Days, span.Hours, span.Minutes)}";
+                }
+                else
+                {
+                    message = $"{ task.text} is overdue";
+                }
+            }
+
+            return message;
         }
     }
 }

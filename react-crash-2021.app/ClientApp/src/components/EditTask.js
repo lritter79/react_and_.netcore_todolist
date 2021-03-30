@@ -13,6 +13,7 @@ const EditTask = ({task, onCancel, onUpdate }) => {
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
+    const [includeDay, setIncludeDay] = useState(false)
     const { token } = useToken()
 
     const onSubmit = (e) => {
@@ -25,12 +26,13 @@ const EditTask = ({task, onCancel, onUpdate }) => {
           return
         }
     
-        if (!day) {
-            alert('Please add a datetime')
-            return
+        if (includeDay && !day) {
+          alert('Please add a datetime')
+          return
         }
+        let dayVal = includeDay ? day : null
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token?.token)
+        onUpdate({ id, text, details, location, day: dayVal, reminder, isCompleted, category }, token?.token)
     
         //clears the form
         setId('')
@@ -83,13 +85,25 @@ const EditTask = ({task, onCancel, onUpdate }) => {
              />
   </Form.Group>
   <Form.Group>
-    <Form.Label>Day & Time</Form.Label>
-    <Form.Control 
-            type='datetime-local'
-            placeholder='Add Day & Time'
-            value={day}
-            onChange={(e) => setDay(e.target.value)}/>
+          <Form.Check 
+            type="checkbox" 
+            label="Include Date?"
+            checked={includeDay}
+            value={includeDay}
+            onChange={(e) => setIncludeDay(e.currentTarget.checked)} 
+          />
   </Form.Group>
+  {includeDay && 
+    <Form.Group>
+      <Form.Label>Day & Time: </Form.Label>
+        <Form.Control 
+          type='datetime-local'
+          placeholder='Add Day & Time'
+          value={day}
+          onChange={(e) => setDay(e.target.value)}
+        />
+    </Form.Group>
+  }
   <Form.Group>
     <Form.Check 
     type="checkbox" 

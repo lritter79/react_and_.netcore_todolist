@@ -28,9 +28,9 @@ const Calendar = ({tasks, setTasks}) => {
 
     }
 
-    useEffect(() => {
-
-        setEvents(tasks.map(
+    function filterAndMap(arr) {
+        const result = arr.filter(task => !task?.date)
+        return result.map(
             (task) => ({
                 id: task.id, title: getTitleWithEmojis(task), borderColor: (task.reminder ? 'green' : ''),
                 start: task.day, end: task.day,
@@ -40,12 +40,24 @@ const Calendar = ({tasks, setTasks}) => {
                     day: task.day
                 }
             })
-        ))
+        )
+    }
+
+    useEffect(() => {
+        
+        setEvents(filterAndMap(tasks))
 
         return function cleanup() {
             setEvents([])
         }
     }, [])
+
+    useEffect(() => {
+        
+        setEvents(filterAndMap(tasks))
+
+
+    }, [tasks])
 
     //const handleDateClick = (arg) => { // bind with an arrow function
     //    alert(arg.dateStr)        

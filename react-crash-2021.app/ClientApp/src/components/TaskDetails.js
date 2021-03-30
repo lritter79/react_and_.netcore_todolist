@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
@@ -20,6 +21,7 @@ const TaskDetails = () => {
     const [showEditTask, setShowEditTask] = useState(false)
     const [comments, setComments] = useState()
     const showToast = useShowToast() 
+    const history = useHistory();
    
 
     useEffect(() => {
@@ -78,9 +80,12 @@ const TaskDetails = () => {
                             <p>
                                 Location: {task.location}
                             </p>
-                            <p>
-                                Day: {FormatDateString(task.day)}
-                            </p>
+                            {task?.day &&
+                                (<p>
+                                    Day: {FormatDateString(task.day)}
+                                </p>)
+                            }
+                            
                             <p>
                                 Details: {task.details !== undefined ? task.details : "None"}
                             </p>    
@@ -89,9 +94,14 @@ const TaskDetails = () => {
                             )}
                             <Button
                                 color='green'
+                                text='← Back'
+                                onClick={history.goBack}
+                            />
+                            <Button                                
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
+                            
                             {(comments != undefined) && (
                                 <CommentSection comments={comments} taskId={id} /> 
                             )}                         

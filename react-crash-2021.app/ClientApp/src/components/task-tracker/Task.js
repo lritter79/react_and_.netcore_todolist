@@ -24,11 +24,12 @@ const Task = ({ task, onDelete, onToggle, coolColor, onGoToDetail }) => {
           onClick={() => onDelete(task.id)}
         />
       </h3>
-      <p 
-        style={dayInlineStyle}
-      >
-        {FormatDateString(task.day)}
-          </p>
+      {task?.day && (
+        <p style={dayInlineStyle}>
+          {FormatDateString(task.day)}
+        </p>
+      )}
+      
           {(task.deadlineMessage) && (
               <>
                   <p style={{ color: task.deadlineMessage.color, fontWeight: task.deadlineMessage.fontWeight }}>

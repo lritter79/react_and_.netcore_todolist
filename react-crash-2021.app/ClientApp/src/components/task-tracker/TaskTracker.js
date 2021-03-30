@@ -14,7 +14,6 @@ const TaskTracker = () => {
     //setShowAddTask = function that aloows you to update the current state
     //when you update state, the component rerenders
     const { token } = useToken()
-
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -88,6 +87,11 @@ const TaskTracker = () => {
         )
     }
 
+    function calendarBtnClick(e) {
+        e.currentTarget.blur()
+        setShowCalendarView(!showCalendarView)
+    }
+
 
     return (
         <>
@@ -100,7 +104,7 @@ const TaskTracker = () => {
             <div id='divBtnContainer'>
                 <Button text={showCalendarView ? ('Show List View') : ('Show Calendar View')}
                     textColor='white'
-                    onClick={() => setShowCalendarView(!showCalendarView)}
+                    onClick={calendarBtnClick}
                 />
             </div>
             {!isLoading ? (

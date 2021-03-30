@@ -22,13 +22,18 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     }
   }
 
+  function toggleShowCompleted(e) {
+    e.currentTarget.blur()
+    setShowCompleted(!showCompleted)  
+  }
+
     return (
         <>
             <label>
                 <Toggle
                     id='toggleShowCompleted'
                     defaultChecked={showCompleted}
-                    onChange={() => setShowCompleted(!showCompleted)}
+                    onChange={toggleShowCompleted}
                 />
                 <span>Show Completed Tasks?</span>
             </label>                

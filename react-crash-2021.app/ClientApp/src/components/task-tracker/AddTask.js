@@ -17,7 +17,7 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
   const [day, setDay] = useState('')
   const [category, setCategory] = useState()
   const [reminder, setReminder] = useState(false)
-
+  const [includeDay, setIncludeDay] = useState(false)
     const showToast = useShowToast()
     // Add Task
     //post because we're adding tasks
@@ -50,12 +50,12 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
       return
     }
 
-    if (!day) {
+    if (includeDay && !day) {
       alert('Please add a datetime')
       return
     }
-
-      const didAdd = await CreateTask({ text, details, location, day, reminder, userId: token?.id, isCompleted: false }, token?.token)
+      let dayVal = includeDay ? day : null
+      const didAdd = await CreateTask({ text, details, location, day: dayVal, reminder, userId: token?.id, isCompleted: false }, token?.token)
       //console.log(didAdd)
       //data returned is the new task
       //const data = await res.json()
@@ -121,26 +121,38 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
                   />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Day & Time</Form.Label>
-          <Form.Control 
-                  type='datetime-local'
-                  placeholder='Add Day & Time'
-                  value={day}
-                  onChange={(e) => setDay(e.target.value)}/>
+          <Form.Check 
+            type="checkbox" 
+            label="Include Date?"
+            checked={includeDay}
+            value={includeDay}
+            onChange={(e) => setIncludeDay(e.currentTarget.checked)} 
+          />
         </Form.Group>
+        {includeDay && 
+          <Form.Group>
+            <Form.Label>Day & Time: </Form.Label>
+            <Form.Control 
+              type='datetime-local'
+              placeholder='Add Day & Time'
+              value={day}
+              onChange={(e) => setDay(e.target.value)}/>
+          </Form.Group>
+        }
         <Form.Group>
           <Form.Check 
-          type="checkbox" 
-          label="Set Reminder"
-          checked={reminder}
-                  value={reminder}
-                  onChange={(e) => setReminder(e.currentTarget.checked)} />
+            type="checkbox" 
+            label="Set Reminder"
+            checked={reminder}
+            value={reminder}
+            onChange={(e) => setReminder(e.currentTarget.checked)} 
+          />
         </Form.Group>
         
         <button
             type='submit'
             className='btn btn-block'
-            style={{ backgroundColor: 'skyblue' }}
+            style={{ backgroundColor: 'skyblue', color: 'white' }}
           >
             Save Task
         </button>
