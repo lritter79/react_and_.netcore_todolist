@@ -19,6 +19,8 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     const lastTaskRef = useCallback(node => {
         console.log(node)
         if (observer.current) observer.current.disconnect()
+        //https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+        //gist is it finds if the node is in the view of the window
         observer.current = new IntersectionObserver(entries => {
             //check if has more is true so we dont paginate forever
             if (entries[0].isIntersecting && hasMore) {
