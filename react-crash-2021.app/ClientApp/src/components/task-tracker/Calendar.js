@@ -2,7 +2,7 @@
 import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useToken} from '../api-authorization/UserContext'
 import Constant from '../Constant'
@@ -40,7 +40,7 @@ const Calendar = ({tasks, setTasks}) => {
         const result = arr.filter(task => !task?.date)
         return result.map(
             (task) => ({
-                id: task.id, title: getTitleWithEmojis(task), backgroundColor: CoolColor(task.id),
+                id: task.id, title: getTitleWithEmojis(task), borderColor: CoolColor(task.id), backgroundColor: CoolColor(task.id),
                 start: task.day, end: task.day,
                 extendedProps: {
                     completed: task.isCompleted,
@@ -121,17 +121,17 @@ const Calendar = ({tasks, setTasks}) => {
     }
 
     return (
-        <>
+        <> 
             <FullCalendar
-                plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
-                eventClick={handleEventClick}
-                initialView={window.innerWidth > 375 ?  'dayGridMonth' : 'listWeek'}
-                editable={isEditable}
-                eventDrop={handleEventDrop}
-                events={events}
-                handleWindowResize={true}
-                windowResize={onWindowResize}
-            />
+                    plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
+                    eventClick={handleEventClick}
+                    initialView={window.innerWidth > 375 ?  'dayGridMonth' : 'listWeek'}
+                    editable={isEditable}
+                    eventDrop={handleEventDrop}
+                    events={events}
+                    handleWindowResize={true}
+                    windowResize={onWindowResize}
+                />         
         </>
         
     )
