@@ -7,7 +7,7 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
     const { token } = useToken()
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="light" expand="lg" sticky="top"  >
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

@@ -1,18 +1,26 @@
 ﻿import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useToken} from '../api-authorization/UserContext'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
+import CoolColor from './CoolColor'
+
 
 const Calendar = ({tasks, setTasks}) => {
+
+    //function f() = {
+    //    
+    //}
     const [events, setEvents] = useState([])
     const [isEditable, setIsEditable] = useState(true)
     let history = useHistory()
     const { token } = useToken()
     const showToast = useShowToast()
+    //const initialView = useCallback(() => {}, [])
 
     function getTitleWithEmojis(task) {
         if (task?.isCompleted) return task.text + ' ✔️'
@@ -32,7 +40,7 @@ const Calendar = ({tasks, setTasks}) => {
         const result = arr.filter(task => !task?.date)
         return result.map(
             (task) => ({
-                id: task.id, title: getTitleWithEmojis(task), borderColor: (task.reminder ? 'green' : ''),
+                id: task.id, title: getTitleWithEmojis(task), borderColor: CoolColor(task.id), backgroundColor: CoolColor(task.id),
                 start: task.day, end: task.day,
                 extendedProps: {
                     completed: task.isCompleted,
@@ -101,16 +109,29 @@ const Calendar = ({tasks, setTasks}) => {
         }        
     }
 
+
+    const onWindowResize = (arg) => {
+        console.log(arg.view.calendar);
+        if (window.innerWidth > 375 ) {
+            arg.view.calendar.changeView('dayGridMonth')
+        }
+        else {
+            arg.view.calendar.changeView('listWeek')
+        }
+    }
+
     return (
-        <>
+        <> 
             <FullCalendar
-                plugins={[ dayGridPlugin, interactionPlugin ]}
-                eventClick={handleEventClick}
-                initialView="dayGridMonth"
-                editable={isEditable}
-                eventDrop={handleEventDrop}
-                events={events}
-            />
+                    plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
+                    eventClick={handleEventClick}
+                    initialView={window.innerWidth > 375 ?  'dayGridMonth' : 'listWeek'}
+                    editable={isEditable}
+                    eventDrop={handleEventDrop}
+                    events={events}
+                    handleWindowResize={true}
+                    windowResize={onWindowResize}
+                />         
         </>
         
     )
