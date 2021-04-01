@@ -31,24 +31,59 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
         if(node) observer.current.observe(node)
     }, [hasMore, pageNumber])
 
+    useEffect(() => { console.log('rendered') }, [])
+
     useEffect(() => {
-        if (showCompleted) {
-            if (tasks.filter(t => !t.isCompleted).length < pageNumber * 5) setHasMore(false)
+        if (!showCompleted) {
+            if (tasks.filter(t => !t.isCompleted).length <= pageNumber * 5) setHasMore(false)
+            else setHasMore(true)
         }
         else {
-            if (tasks.length < pageNumber * 5) setHasMore(false)
+            console.log(tasks.length)
+            console.log(pageNumber * 5)
+            console.log(tasks.length <= pageNumber * 5)
+            if (tasks.length <= pageNumber * 5) setHasMore(false)
+            else setHasMore(true)
         }
-        
-    }, [pageNumber])
+
+        console.log(hasMore)
+    }, [pageNumber, tasks, showCompleted])
 
   function toggleShowCompleted(e) {
     e.currentTarget.blur()
     setShowCompleted(!showCompleted)  
   }
 
-  const getSlicedTasks = () => {
+    const getSlicedTasks = () => {
+        //console.log('getting sliced tasks')
+        //console.log(pageNumber)
       let arr = showCompleted ? tasks.slice(0, (pageNumber * 5)) : tasks.filter(t => !t.isCompleted).slice(0, (pageNumber * 5))
-      return arr
+
+        let tasksToDisplay = arr.map((task, index) => {
+            return (arr.length === index + 1) ?
+                (<div key={task.id} ref={lastTaskRef}>
+                    <Task
+                        key={index}
+                        task={task}
+                        onDelete={onDelete}
+                        coolColor={CoolColor(index)}
+                        onToggle={onToggle}
+                        onGoToDetail={onGoToDetail}
+                    />
+                </div>) :
+                (<div key={task.id}>
+                    <Task
+                        key={index}
+                        task={task}
+                        onDelete={onDelete}
+                        coolColor={CoolColor(index)}
+                        onToggle={onToggle}
+                        onGoToDetail={onGoToDetail}
+                    />
+                </div>)
+        })
+
+        return tasksToDisplay
     }
       
     return (
@@ -62,30 +97,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
                 <span>Show Completed Tasks?</span>
             </label>                
             <ReactCSSTransitionGroup transitionName="example">
-                {getSlicedTasks().map((task, index) => {
-                    return (getSlicedTasks().length === index + 1) ? 
-                        (<div key={task.id} ref={lastTaskRef}>
-                            <Task 
-                                key={index} 
-                                task={task} 
-                                onDelete={onDelete}
-                                coolColor={CoolColor(index)} 
-                                onToggle={onToggle} 
-                                onGoToDetail={onGoToDetail}                                
-                            />
-                        </div>) : 
-                        (<div key={task.id}>
-                            <Task 
-                                key={index} 
-                                task={task} 
-                                onDelete={onDelete}
-                                coolColor={CoolColor(index)} 
-                                onToggle={onToggle} 
-                                onGoToDetail={onGoToDetail} 
-                            />
-                        </div>)                                       
-                    })
-                }
+                {getSlicedTasks()}
             </ReactCSSTransitionGroup>                              
         </>
   )
