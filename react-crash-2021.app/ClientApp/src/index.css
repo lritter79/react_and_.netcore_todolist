@@ -117,6 +117,7 @@ a:visited {
   margin: 5px;
   padding: 10px 20px;
   cursor: pointer;
+
 }
 
 .task.reminder {
@@ -356,7 +357,7 @@ footer {
   } */
 
 
-  .example-enter {
+.example-enter {
     opacity: 0;
 
 }
@@ -368,11 +369,16 @@ footer {
 	transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
 }
 .example-leave {
-	opacity: 1;
-  transition-property: transform, opacity;
-	transition-duration: 300ms;
-	transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+    opacity: 1;
+    transition-property: transform, opacity;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+    transition: height 0.5s, opacity 0.5s;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
 }
-.example-leave.example-leave-active {
-	opacity: 0;
-}
+    .example-leave.example-leave-active {
+        opacity: 0;
+        height: 0;
+    }
