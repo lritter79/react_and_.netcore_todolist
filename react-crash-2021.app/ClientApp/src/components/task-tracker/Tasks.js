@@ -13,7 +13,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     //the way inifitinte scroll works is it will query the rest of the tasks and append them
     //to the list of tasks to show
     const [pageNumber, setPageNumber] = useState(1)
-    //the giets set by the callback of last task ref
+    //the gets set by the callback of last task ref
     const observer = useRef()
     //node is the element with lastTaskRef as the ref
     const lastTaskRef = useCallback(node => {
@@ -31,7 +31,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
         if(node) observer.current.observe(node)
     }, [hasMore, pageNumber])
 
-    useEffect(() => { console.log('rendered') }, [])
+    useEffect(() => { //console.log('rendered') }, [])
 
     useEffect(() => {
         if (!showCompleted) {
@@ -39,14 +39,14 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
             else setHasMore(true)
         }
         else {
-            console.log(tasks.length)
-            console.log(pageNumber * 5)
-            console.log(tasks.length <= pageNumber * 5)
+            //console.log(tasks.length)
+            //console.log(pageNumber * 5)
+            //console.log(tasks.length <= pageNumber * 5)
             if (tasks.length <= pageNumber * 5) setHasMore(false)
             else setHasMore(true)
         }
 
-        console.log(hasMore)
+        //console.log(hasMore)
     }, [pageNumber, tasks, showCompleted])
 
   function toggleShowCompleted(e) {

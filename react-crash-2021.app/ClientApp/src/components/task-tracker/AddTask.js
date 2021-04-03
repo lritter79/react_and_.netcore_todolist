@@ -123,7 +123,7 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
         <Form.Group>
           <Form.Check 
             type="checkbox" 
-            label="Include Date?"
+            label="Set Due Date?"
             checked={includeDay}
             value={includeDay}
             onChange={(e) => setIncludeDay(e.currentTarget.checked)} 

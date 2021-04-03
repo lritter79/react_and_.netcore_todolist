@@ -7,13 +7,13 @@ import { useToken } from './api-authorization/UserContext'
 const EditTask = ({task, onCancel, onUpdate }) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
-    const [day, setDay] = useState(task.day)
+    const [day, setDay] = useState(task?.day ? task?.day.split('.')[0] : null)
     const [details, setDetails] = useState(task.details)
     const [category, setCategory] = useState(task.category)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
-    const [includeDay, setIncludeDay] = useState(false)
+    const [includeDay, setIncludeDay] = useState(task?.day)
     const { token } = useToken()
 
     const onSubmit = (e) => {
@@ -87,9 +87,8 @@ const EditTask = ({task, onCancel, onUpdate }) => {
   <Form.Group>
           <Form.Check 
             type="checkbox" 
-            label="Include Date?"
+            label="Set Due Date?"
             checked={includeDay}
-            value={includeDay}
             onChange={(e) => setIncludeDay(e.currentTarget.checked)} 
           />
   </Form.Group>
