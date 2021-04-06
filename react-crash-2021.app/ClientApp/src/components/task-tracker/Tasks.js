@@ -31,7 +31,9 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
         if(node) observer.current.observe(node)
     }, [hasMore, pageNumber])
 
-    useEffect(() => { //console.log('rendered') }, [])
+    //useEffect(() => {
+
+    //}
 
     useEffect(() => {
         if (!showCompleted) {
