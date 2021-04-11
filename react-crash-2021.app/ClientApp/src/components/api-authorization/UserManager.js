@@ -25,7 +25,8 @@ const UserManager = ({ handleLogout }) => {
             try {
                 //
                 //(CrudOperations)                               
-                console.log('getting user')
+
+                //console.log('getting user')
                 //console.log(`user = ${userId}`)
                 if (token != undefined) {
                     const userData = await userFunctions.getUser(token?.id, token?.token)

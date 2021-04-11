@@ -42,12 +42,15 @@ const TaskDetails = () => {
     useEffect(() => {
         //console.log("using effect: task details")
         // Fetch Task
-        const fetchTask = FetchTask
+        //const fetchTask = FetchTask
+
+
 
         const getTask = async () => {          
             try {       
                 const taskFromServer = await FetchTask(id, token?.token)         
                 setTask(taskFromServer)
+                setComments(taskFromServer.comments)
                 //console.log(taskFromServer)
                 //setComments(taskFromServer.comments)
                 setIsLoading(false)
@@ -117,9 +120,9 @@ const TaskDetails = () => {
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
                             
-                            {(comments != undefined) && (
-                                <CommentSection comments={comments} taskId={id} /> 
-                            )}                         
+
+                            <CommentSection comments={comments} setComments={setComments} taskId={id} /> 
+                                                    
                         </div>
                     )}                               
 

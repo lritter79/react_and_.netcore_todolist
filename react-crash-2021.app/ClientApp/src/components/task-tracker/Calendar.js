@@ -79,12 +79,12 @@ const Calendar = ({tasks, setTasks}) => {
     const handleEventDrop = async (args) => {
         setIsEditable(false)
         //console.log(args)
-        console.log(args.event.start)
+        //console.log(args.event.start)
         //console.log(args.event.id)
         //console.log(token)
         let date = new Date(args.event.start).toISOString()
         
-        console.log(date)
+        //console.log(date)
         try {
             const res = await fetch(`${Constant()}/api/tasks/${args.event.id}/UpdateTaskDate?date=${date}`, {
                 method: 'PUT',
@@ -111,7 +111,7 @@ const Calendar = ({tasks, setTasks}) => {
 
 
     const onWindowResize = (arg) => {
-        console.log(arg.view.calendar);
+        //console.log(arg.view.calendar);
         if (window.innerWidth > 375 ) {
             arg.view.calendar.changeView('dayGridMonth')
         }

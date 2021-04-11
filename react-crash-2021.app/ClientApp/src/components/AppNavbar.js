@@ -8,15 +8,15 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
     const { token } = useToken()
 
     useEffect(() => {
-        console.log('nav bar render')
+        //console.log('nav bar render')
 
         return () => {
-            console.log('nav bar clean up')
+            //console.log('nav bar clean up')
         }
     }, [])
 
     useEffect(() => {
-        console.log('nav bar token use effect')
+        //console.log('nav bar token use effect')
 
         if (!token?.token) setIsExpanded(false)
     }, [token])

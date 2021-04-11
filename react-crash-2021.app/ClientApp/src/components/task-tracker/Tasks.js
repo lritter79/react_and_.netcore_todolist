@@ -17,23 +17,21 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
     const observer = useRef()
     //node is the element with lastTaskRef as the ref
     const lastTaskRef = useCallback(node => {
-        console.log(node)
         if (observer.current) observer.current.disconnect()
         //https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
         //gist is it finds if the node is in the view of the window
         observer.current = new IntersectionObserver(entries => {
             //check if has more is true so we dont paginate forever
             if (entries[0].isIntersecting && hasMore) {
-                console.log('visible')
                 setPageNumber(prev => prev + 1)
             }
         })
         if(node) observer.current.observe(node)
     }, [hasMore, pageNumber])
 
-    //useEffect(() => {
-
-    //}
+    useEffect(() => {
+        //console.log('tasks has rendered')
+    }, [])
 
     useEffect(() => {
         if (!showCompleted) {
@@ -41,14 +39,11 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
             else setHasMore(true)
         }
         else {
-            //console.log(tasks.length)
-            //console.log(pageNumber * 5)
-            //console.log(tasks.length <= pageNumber * 5)
+
             if (tasks.length <= pageNumber * 5) setHasMore(false)
             else setHasMore(true)
         }
 
-        //console.log(hasMore)
     }, [pageNumber, tasks, showCompleted])
 
   function toggleShowCompleted(e) {
@@ -57,8 +52,6 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
   }
 
     const getSlicedTasks = () => {
-        //console.log('getting sliced tasks')
-        //console.log(pageNumber)
       let arr = showCompleted ? tasks.slice(0, (pageNumber * 5)) : tasks.filter(t => !t.isCompleted).slice(0, (pageNumber * 5))
 
         let tasksToDisplay = arr.map((task, index) => {

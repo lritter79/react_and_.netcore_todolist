@@ -17,7 +17,6 @@ const userFunctions = {
         return user
     },
     'getAlertsByUser': async (id, token) => {
-        //console.log(token)
         const res = await fetch(Constant() + `/api/users/${id}/alerts`, {
             method: 'GET',
             headers: {

@@ -16,7 +16,7 @@ namespace react_crash_2021.Data.MappingProfiles
         {
             CreateMap<comment, CommentModel>()
               .ForMember(m => m.UserId, e => e.MapFrom(t => t.user_id))
-              .ForMember(m => m.Username, e => e.MapFrom(t => t.user.UserName))
+              .ForMember(m => m.UserName, e => e.MapFrom(t => t.user.UserName))
               .ForMember(m => m.TaskId, e => e.MapFrom(t => t.task_id))
               .ReverseMap();
         }
