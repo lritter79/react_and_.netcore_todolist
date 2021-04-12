@@ -74,7 +74,7 @@ namespace react_crash_2021.Controllers
                 {
                     var user = await _reactCrashUserRepository.GetUser(registerModel.UserName);
 
-                    return _authService.GetAuthData(user.Id);
+                    return _authService.GetAuthData(user.Id, user.UserName);
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace react_crash_2021.Controllers
                     {
                         var user = await _reactCrashUserRepository.GetUser(loginModel.UserName);
 
-                        return _authService.GetAuthData(user.Id);
+                        return _authService.GetAuthData(user.Id, user.UserName);
                     }
                     else
                     {

@@ -1,14 +1,14 @@
 import Constant from '../Constant'
 
 const UpdateTask = async (task, token) => {
-    console.log(task)
+   // console.log(task)
     const res = await fetch(`${Constant()}/api/tasks/${task.id}`, {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify(task)
     })
 
     const data = await res.json()
@@ -30,7 +30,8 @@ const UpdateTask = async (task, token) => {
 // const FetchTask = async (id) => {
 //     const res = await fetch(`http://localhost:5000/tasks/${id}`)
 //     const data = await res.json()
-//     console.log("getting task")  
+//     
+//("getting task")  
 //     return data
 // }
 

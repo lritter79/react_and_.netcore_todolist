@@ -16,11 +16,10 @@ namespace react_crash_2021.Data.Models
         [Required]
         [MaxLength(30)]
         public string Text { get; set; }
-        [Required]
-        public DateTime Day { get; set; }
+        public DateTime? Day { get; set; }
         public bool Reminder { get; set; }
         public bool IsCompleted { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }
         public string Category { get; set; }
@@ -32,9 +31,9 @@ namespace react_crash_2021.Data.Models
             {
                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
 
-                if (!IsCompleted)
+                if (!IsCompleted && Day.HasValue)
                 {
-                    TimeSpan t = Day.Date.Subtract(DateTime.Now.Date);
+                    TimeSpan t = Day.Value.Date.Subtract(DateTime.Now.Date);
                     
                     if (t.TotalDays < 0)
                     {

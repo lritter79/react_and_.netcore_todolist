@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using react_crash_2021.Extensions;
 
 namespace react_crash_2021.Data.Repositories
 {
@@ -16,11 +17,17 @@ namespace react_crash_2021.Data.Repositories
         {
             _context = context;
         }
-        public async Task<int> CreateAlert(alert a)
+        public async Task<long> CreateAlert(alert a)
         {
-
+            var user = await  _context.Users.Where(u => u.Id == a.user.Id).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                a.user = user;
+            }
             await _context.Alerts.AddAsync(a);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return a.id;
         }
 
         public async Task<int> CreateAlerts(IEnumerable<alert> a)
@@ -49,6 +56,42 @@ namespace react_crash_2021.Data.Repositories
                 })
                 .Where(alert => alert.user.Id == id)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<alert>> GetTaskRemindersByUser(Guid id)
+        {
+            var reminders = await _context.Tasks.Where(t => t.reminder && !t.is_completed && t.task_date.HasValue).Join(_context.Users.Where(u => u.Id == id),
+                task => task.user,
+                u => u,
+                (task, u) => new alert
+                {
+                    date = DateTime.Now,
+                    id = task.id,
+                    message = GetTaskMessage(task),
+                    user = u
+                })
+                .ToListAsync();
+            await _context.Alerts.AddRangeAsync(reminders);
+            return reminders;
+        }
+
+        public string GetTaskMessage(TaskEntity task)
+        {
+            string message = "";
+            if (task.task_date.HasValue)
+            {
+                TimeSpan span = task.task_date.Value - DateTime.Now;
+                if (span.TotalMinutes > 0)
+                {
+                    message = $"{task.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", span.Days, span.Hours, span.Minutes)}";
+                }
+                else
+                {
+                    message = $"{ task.text} is overdue";
+                }
+            }
+
+            return message;
         }
     }
 }

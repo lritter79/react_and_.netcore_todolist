@@ -4,18 +4,20 @@ import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
 import CreateTask from '../task-crud-operations/CreateTask'
+import { useToken } from '../api-authorization/UserContext'
 
 //take in the function onAdd
-const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) => {
+const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
-  //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
+    //in a nutshell useState  is what we use to deal with properties in a function because functions cant have properties
+    const { token } = useToken()
   const [text, setText] = useState('')
   const [details, setDetails] = useState('')
   const [location, setLocation] = useState('')
   const [day, setDay] = useState('')
   const [category, setCategory] = useState()
   const [reminder, setReminder] = useState(false)
-
+  const [includeDay, setIncludeDay] = useState(false)
     const showToast = useShowToast()
     // Add Task
     //post because we're adding tasks
@@ -48,13 +50,13 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
       return
     }
 
-    if (!day) {
+    if (includeDay && !day) {
       alert('Please add a datetime')
       return
     }
-
-      const didAdd = await CreateTask({ text, details, location, day, reminder, userId, isCompleted: false }, token)
-      console.log(didAdd)
+      let dayVal = includeDay ? day : null
+      const didAdd = await CreateTask({ text, details, location, day: dayVal, reminder, userId: token?.id, isCompleted: false }, token?.token)
+      //console.log(didAdd)
       //data returned is the new task
       //const data = await res.json()
       //take existings takes and add data on
@@ -119,26 +121,38 @@ const AddTask = ({ isToggled, userId, token, tasks, setTasks, setShowAddTask }) 
                   />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Day & Time</Form.Label>
-          <Form.Control 
-                  type='datetime-local'
-                  placeholder='Add Day & Time'
-                  value={day}
-                  onChange={(e) => setDay(e.target.value)}/>
+          <Form.Check 
+            type="checkbox" 
+            label="Set Due Date?"
+            checked={includeDay}
+            value={includeDay}
+            onChange={(e) => setIncludeDay(e.currentTarget.checked)} 
+          />
         </Form.Group>
+        {includeDay && 
+          <Form.Group>
+            <Form.Label>Day & Time: </Form.Label>
+            <Form.Control 
+              type='datetime-local'
+              placeholder='Add Day & Time'
+              value={day}
+              onChange={(e) => setDay(e.target.value)}/>
+          </Form.Group>
+        }
         <Form.Group>
           <Form.Check 
-          type="checkbox" 
-          label="Set Reminder"
-          checked={reminder}
-                  value={reminder}
-                  onChange={(e) => setReminder(e.currentTarget.checked)} />
+            type="checkbox" 
+            label="Set Reminder"
+            checked={reminder}
+            value={reminder}
+            onChange={(e) => setReminder(e.currentTarget.checked)} 
+          />
         </Form.Group>
         
         <button
             type='submit'
             className='btn btn-block'
-            style={{ backgroundColor: 'skyblue' }}
+            style={{ backgroundColor: 'skyblue', color: 'white' }}
           >
             Save Task
         </button>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Repositories;
 using react_crash_2021.Models;
+using react_crash_2021.Providers;
 using System;
 using System.Reflection;
 using System.Text;
@@ -137,7 +139,8 @@ namespace react_crash_2021
                 options.SlidingExpiration = true;
             });
 
-
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -175,6 +178,7 @@ namespace react_crash_2021
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<AlertHub>("/api/alerts");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
@@ -184,10 +188,12 @@ namespace react_crash_2021
 
             app.UseSpa(spa =>
             {
+                //set the source path folder
                 spa.Options.SourcePath = "ClientApp";
-
+                //specify that if it's development use the script start
                 if (env.IsDevelopment())
                 {
+                    //this can be found in package.json in the client app folder
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });

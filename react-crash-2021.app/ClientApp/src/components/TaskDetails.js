@@ -1,38 +1,58 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import Button from './Button'
 import EditTask from './EditTask'
 import FormatDateString from './FormatDateString'
 import FetchTask from './task-crud-operations/FetchTask'
-import UpdateTask from './task-crud-operations/UpdateTask'
 import CommentSection from './comment-components/CommentSection'
 import { useShowToast } from './toast/ToastContext'
-import { useToken, useUserId } from './api-authorization/UserContext'
+import { useToken } from './api-authorization/UserContext'
+import UpdateTask from './task-crud-operations/UpdateTask'
 
 const TaskDetails = () => {
 
     //gets the params passed in from the router
     //is a react hook
     const { id } = useParams()
-    const { token, setToken } = useToken()
-    const { userId, setUserId } = useUserId()
+    const { token } = useToken()
     const [isLoading, setIsLoading] = useState(true);
     const [task, setTask] = useState(null)
     const [showEditTask, setShowEditTask] = useState(false)
     const [comments, setComments] = useState()
     const showToast = useShowToast() 
+    const history = useHistory();
+   
+    const coolColor = (i) => {
+        i = i > 3 ? i % 4 : i 
+        switch(i) {
+          case 0:
+            return 'pink';
+          case 1:
+            return 'white';
+          case 2:
+            return 'orange';
+          case 3:
+              return 'green';
+          default:
+            return '';
+        }
+    }
 
     useEffect(() => {
         //console.log("using effect: task details")
         // Fetch Task
-        const fetchTask = FetchTask
+        //const fetchTask = FetchTask
+
+
 
         const getTask = async () => {          
             try {       
-                const taskFromServer = await fetchTask(id, token)         
+                const taskFromServer = await FetchTask(id, token?.token)         
                 setTask(taskFromServer)
-                //console.log(taskFromServer)
                 setComments(taskFromServer.comments)
+                //console.log(taskFromServer)
+                //setComments(taskFromServer.comments)
                 setIsLoading(false)
             } catch (error) {
                 console.log("failed") 
@@ -51,9 +71,9 @@ const TaskDetails = () => {
     const update = async (task) => {
         setIsLoading(true)
         try {
-            task.userId = userId
+            task.userId = token?.id
             setShowEditTask(!showEditTask)
-            const updTask = await UpdateTask(task, token)
+            const updTask = await UpdateTask(task, token?.token)
             setTask(updTask)
             setIsLoading(false)
             showToast('success', `Updated "${task.text}"`)
@@ -78,9 +98,12 @@ const TaskDetails = () => {
                             <p>
                                 Location: {task.location}
                             </p>
-                            <p>
-                                Day: {FormatDateString(task.day)}
-                            </p>
+                            {task?.day &&
+                                (<p>
+                                    Day: {FormatDateString(task.day)}
+                                </p>)
+                            }
+                            
                             <p>
                                 Details: {task.details !== undefined ? task.details : "None"}
                             </p>    
@@ -89,17 +112,22 @@ const TaskDetails = () => {
                             )}
                             <Button
                                 color='green'
+                                text='← Back'
+                                onClick={history.goBack}
+                            />
+                            <Button                                
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
-                            {(comments != undefined) && (
-                                <CommentSection comments={comments} taskId={id} /> 
-                            )}                         
+                            
+
+                            <CommentSection comments={comments} setComments={setComments} taskId={id} /> 
+                                                    
                         </div>
                     )}                               
 
                     {showEditTask && (
-                        <EditTask task={task} onUpdate={update} onCancel={onCancel} token={token}/>
+                        <EditTask task={task} onUpdate={update} onCancel={onCancel} />
                     )}        
                 </div>) : (
                 <div>

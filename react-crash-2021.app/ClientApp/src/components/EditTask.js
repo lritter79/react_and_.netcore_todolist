@@ -3,16 +3,18 @@ import Button from './Button'
 import Form from 'react-bootstrap/Form'
 import { useToken } from './api-authorization/UserContext'
 
+
 const EditTask = ({task, onCancel, onUpdate }) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
-    const [day, setDay] = useState(task.day)
+    const [day, setDay] = useState(task?.day ? task?.day.split('.')[0] : null)
     const [details, setDetails] = useState(task.details)
     const [category, setCategory] = useState(task.category)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
-    const { token, setToken } = useToken()
+    const [includeDay, setIncludeDay] = useState(task?.day)
+    const { token } = useToken()
 
     const onSubmit = (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -24,12 +26,13 @@ const EditTask = ({task, onCancel, onUpdate }) => {
           return
         }
     
-        if (!day) {
-            alert('Please add a datetime')
-            return
+        if (includeDay && !day) {
+          alert('Please add a datetime')
+          return
         }
+        let dayVal = includeDay ? day : null
 
-        onUpdate({ id, text, details, location, day, reminder, isCompleted, category }, token)
+        onUpdate({ id, text, details, location, day: dayVal, reminder, isCompleted, category }, token?.token)
     
         //clears the form
         setId('')
@@ -82,13 +85,24 @@ const EditTask = ({task, onCancel, onUpdate }) => {
              />
   </Form.Group>
   <Form.Group>
-    <Form.Label>Day & Time</Form.Label>
-    <Form.Control 
-            type='datetime-local'
-            placeholder='Add Day & Time'
-            value={day}
-            onChange={(e) => setDay(e.target.value)}/>
+          <Form.Check 
+            type="checkbox" 
+            label="Set Due Date?"
+            checked={includeDay}
+            onChange={(e) => setIncludeDay(e.currentTarget.checked)} 
+          />
   </Form.Group>
+  {includeDay && 
+    <Form.Group>
+      <Form.Label>Day & Time: </Form.Label>
+        <Form.Control 
+          type='datetime-local'
+          placeholder='Add Day & Time'
+          value={day}
+          onChange={(e) => setDay(e.target.value)}
+        />
+    </Form.Group>
+  }
   <Form.Group>
     <Form.Check 
     type="checkbox" 

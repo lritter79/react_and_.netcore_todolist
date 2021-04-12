@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { UserProvider } from './components/api-authorization/UserContext'
+import { TokenProvider } from './components/api-authorization/UserContext'
+import { ToastProvider } from './components/toast/ToastContext'
 
 
 
@@ -13,9 +14,11 @@ import { UserProvider } from './components/api-authorization/UserContext'
 //takes params of the react component, and the html element to render it in
 ReactDOM.render(
     <React.StrictMode>
-        <UserProvider>
-            <App />
-        </UserProvider>   
+        <TokenProvider>
+            <ToastProvider>
+                <App />
+            </ToastProvider>            
+        </TokenProvider>   
   </React.StrictMode>,
   document.getElementById('root')
 );

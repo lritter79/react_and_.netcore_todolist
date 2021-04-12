@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
-import { Navbar, Nav } from 'react-bootstrap'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 //for authorization
 //import authService from './api-authorization/AuthorizeService'
 import Footer from './components/Footer'
 import Constant from './components/Constant'
+import * as signalR from '@microsoft/signalr'
 import AlertCenter from './components/AlertCenter'
 import About from './components/About'
 import UserManager from './components/api-authorization/UserManager'
+import UserFunctions from './components/api-authorization/UserFunctions'
 import RegisterAndLoginRoutes from './components/api-authorization/RegisterAndLoginRoutes'
 import Logout from './components/api-authorization/Logout'
 import Toast from './components/toast/Toast'
-import { ToastProvider, useShowToast } from './components/toast/ToastContext'
+import { useShowToast } from './components/toast/ToastContext'
 import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
-import { useToken, useUserId } from './components/api-authorization/UserContext'
+import { useToken } from './components/api-authorization/UserContext'
+import AppNavbar from './components/AppNavbar'
+
 
 //import UpdateTask from './components/UpdateTask'
 //function setToken(userToken) {
@@ -41,18 +44,35 @@ import { useToken, useUserId } from './components/api-authorization/UserContext'
 //sets tasks as the state
 const App = () => {
     
-    const { userId, setUserId } = useUserId()
     const { token, setToken } = useToken()
+    //console.log(token)
     const [alerts, setAlerts] = useState([])
     const [checkValue, setCheckValue] = useState(true)
     const [autoDeleteTime, setAutoDeleteTime] = useState(5000)
-
     const showToast = useShowToast()
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl(Constant() + "/api/alerts")
+        .withAutomaticReconnect()
+        .build()
+
+    const getConnectionId = () => {
+        this.hubConnection.invoke('getconnectionid').then(
+            (data) => {
+                //console.log(data);
+                this.connectionId = data;
+            }
+        )
+    }
+
+    const setAlertsOnLogin = async () => {
+        let userAlerts = await UserFunctions.getAlertsByUser(token?.id, token?.token)
+        setAlerts(userAlerts)
+    }
+    
 
     const removeToken = () => {
         localStorage.removeItem('token');
         setToken(null)
-        setUserId(null)
     }
 
 
@@ -62,39 +82,86 @@ const App = () => {
     }
 
     // Fetch Tasks
-    //gets the tasks we have on the server with async java
+    //gets the tasks we have on the server with async java\\
+    //useEffect(() => {
+    //    console.log('changed alerts state')
+    //    console.log(alerts)
+    //}, [alerts])
+
+    //useEffect(() => {
+    //    console.log('changed check Value')
+    //    console.log(checkValue)
+    //}, [checkValue])
+
+    //useEffect(() => {
+    //    console.log('changed auto Delete Time state')
+    //    console.log(autoDeleteTime)
+    //}, [autoDeleteTime])
+
     useEffect(() => {
-     
+        //console.log('using effect in app component')
+        // const fetchAlerts = async (id) => {
+        //     const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + token
+        //         }
+        //     })
 
-        const fetchAlerts = async (id) => {
-            const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
+        //     const data = await res.json()
 
-            const data = await res.json()
+        //     return data
+        // }
 
-            return data
-        }
+        // const getAlerts = async () => {
+        //     try {
+        //         //const tasksFromServer = await fetchAlerts(userId)
+        //         //setAlerts(tasksFromServer)
+        //     } catch (error) {
+        //         showToast('error', error)
+        //     }
+        // }
 
-        const getAlerts = async () => {
-            try {
-                const tasksFromServer = await fetchAlerts(userId)
-                setAlerts(tasksFromServer)
-            } catch (error) {
-                showToast('error', error)
-            }
-        }
+        if (token != undefined) {
+            setAlertsOnLogin()
+            
+            connection.start()
+                //.then(async function () {
+                //    try {
+                //        let res = await connection.invoke('GetUserAlerts', userId)
+                //        console.log(res)
+                //    }
+                //    catch (error) {
+                //        console.log(error)
+                //    }
+                //})
+                .then(result => {
+                   // console.log('building connenction')
+                    //console.log(showToast);
+                    //showToast('info', 'Connected!')
+                    connection.on('sendToReact', alert => {
+                        //console.log(alert.message)
+                        showToast('info', alert.message)
+                        setAlerts(prev => [...prev, alert])
+                        //console.log(alerts)
+                    })
+                })
+            .catch(e => console.log('Connection failed: ', e))
+            
 
-        if (userId != undefined) {
             //console.log(userId)
-            getAlerts()
+            //getAlerts()
         }
    
+        return () => {
+            //console.log('clean up in app.js')
+            if (token != undefined) {
+                setAlerts([])
+                connection.stop()
+            }
 
-    }, [token, userId])
+        }
+    }, [token])
 
     //if there are no tasks, it shows  'No Tasks To Show'
     //short ternary in jsx:
@@ -104,31 +171,12 @@ const App = () => {
     return (
         
         <Router>        
-                <ToastProvider>
+                <>
                     <div id="backdrop">
 
                     </div>
-                    <Navbar bg="light" expand="lg">
-                        <Navbar.Brand>Task Tracker</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="mr-auto">
-                                <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
-                                <Nav.Link as={NavLink} to="/about" exact>About</Nav.Link>
-                                {token ? (
-                                    <>
-                                        <Nav.Link as={NavLink} to="/userManager" exact>Manage Account</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/alerts" exact>Alerts
-                                        {(alerts.length > 0) ? (<span id='alertCounter'>{alerts.length}</span>) : (<></>)}
-                                        </Nav.Link>
-                                        <Nav.Link as={NavLink} to="/logout" exact onClick={handleLogoutClick}>Logout</Nav.Link>
-                                    </>) : (<>
-                                        <Nav.Link as={NavLink} to="/login" exact>Login</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/register" exact>Register</Nav.Link>
-                                    </>)}
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Navbar>
+
+                    <AppNavbar onLogoutClick={handleLogoutClick} alerts={alerts} />
 
                     <div className='container'>
                         <Toast
@@ -138,7 +186,7 @@ const App = () => {
                         />
                         <Route path='/about' exact component={About} />
                         <Route path='/logout' exact component={Logout} />
-                        {token ? (
+                        {token?.token ? (
                             <>
                                 <Route path='/alerts' exact
                                     render={(props) => (
@@ -147,8 +195,8 @@ const App = () => {
                                 />
                                 <Redirect from='/login' to="/" />
                                 <Route path='/userManager' exact
-                                    render={(props) => (
-                                        <UserManager handleLogout={handleLogoutClick} token={token} id={userId} />
+                                render={(props) => (
+                                    <UserManager handleLogout={handleLogoutClick} />
                                     )}
                                 />
                                 <Route path='/' exact
@@ -163,19 +211,18 @@ const App = () => {
                                     render={(props) => (
                                         <TaskDetails/>
                                     )}
-                                />
-                                
+                                />                                                        
                             </>
                         ) : (
                                 <>
-                                    <RegisterAndLoginRoutes setToken={setToken} token={token} />
+                                    <RegisterAndLoginRoutes />
                                 </>
 
                         )}
-                        <Footer isLoggedIn={token} />
+                        <Footer isLoggedIn={token?.token} />
                     </div>
 
-                </ToastProvider>
+                </>
         </Router>
             
     )

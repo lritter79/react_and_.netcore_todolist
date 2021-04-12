@@ -28,6 +28,12 @@ namespace react_crash_2021.Data.Repositories
         {
             _context.Entry(model.user).State = EntityState.Unchanged;
             await _context.Tasks.AddAsync(model);
+            if (model.reminder && model.task_date.HasValue)
+            {
+                TimeSpan span = (DateTime.Now - model.task_date.Value);
+
+                await _context.Alerts.AddAsync(new alert { date = DateTime.Now, message = $"{model.text} is due in {String.Format("{0} days, {1} hours, {2} minutes", span.Days, span.Hours, span.Minutes)}", user=model.user });
+            }
             await _context.SaveChangesAsync();
             return model;
         }
@@ -73,6 +79,7 @@ namespace react_crash_2021.Data.Repositories
                                     location = task.location,
                                     reminder = task.reminder,
                                     task_date = task.task_date,
+                                    category = task.category,
                                     user = user
                                 })
                                 .Where(task => task.id == id).FirstAsync();
@@ -137,6 +144,16 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<TaskEntity> UpdateTask(long id, TaskEntity task)
         {
+            if (task.is_completed)
+            {
+                task.date_completed = DateTime.Now;
+                //var users = _userRepo.GetUsersByTask(_mapper.Map<TaskEntity>(task));
+            }
+            else
+            {
+                task.date_completed = null;
+            }
+
             if (_context.Tasks.Any(t => t.id == id))
             {
                 var t = _context.Tasks.Attach(task);
@@ -149,6 +166,21 @@ namespace react_crash_2021.Data.Repositories
             }
 
             await _context.SaveChangesAsync();
+
+            return await _context.FindAsync<TaskEntity>(id);
+        }
+        
+        public async Task<TaskEntity> UpdateTask(long id, DateTime date)
+        {
+            
+            if (_context.Tasks.Any(t => t.id == id))
+            {
+                var task = await _context.Tasks.Where(t => t.id == id).FirstOrDefaultAsync();
+                task.task_date = date;
+                var t = _context.Tasks.Attach(task);
+                t.State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }          
 
             return await _context.FindAsync<TaskEntity>(id);
         }

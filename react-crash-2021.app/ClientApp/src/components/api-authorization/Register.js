@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
-import { useToken, useUserId } from './UserContext'
+import { useToken } from './UserContext'
 
 const Register = () => {
     const [username, setUserName] = useState('')
@@ -13,7 +13,6 @@ const Register = () => {
     const [honeyPot, setHoneyPot] = useState('')
     const [disabled, setDisabled] = useState(false)
     const { setToken } = useToken()
-    const { setUserId } = useUserId()
     const showToast = useShowToast()
 
     const onSubmit = async e => {
@@ -28,7 +27,6 @@ const Register = () => {
                 if (!token.error) {                   
                     setErrorMessage('')
                     setToken(token)
-                    setUserId(token)
                     setDisabled(true)
                     showToast('success', `Welcome ${username}`)
                 }
