@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Repositories;
@@ -65,6 +66,7 @@ namespace react_crash_2021.Controllers
 
         // POST api/<CommentsController>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post(CommentModel comment)
         {
             try

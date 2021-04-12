@@ -11,7 +11,7 @@ namespace react_crash_2021.Models
         public long Id { get; set; }
         public long TaskId { get; set; }
         public Guid UserId { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [MaxLength(200)]
         public string Text { get; set; }

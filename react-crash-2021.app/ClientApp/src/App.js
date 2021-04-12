@@ -58,7 +58,7 @@ const App = () => {
     const getConnectionId = () => {
         this.hubConnection.invoke('getconnectionid').then(
             (data) => {
-                console.log(data);
+                //console.log(data);
                 this.connectionId = data;
             }
         )
@@ -99,7 +99,7 @@ const App = () => {
     //}, [autoDeleteTime])
 
     useEffect(() => {
-        console.log('using effect in app component')
+        //console.log('using effect in app component')
         // const fetchAlerts = async (id) => {
         //     const res = await fetch(Constant() + `/api/Users/${id}/alerts`, {
         //         method: 'GET',
@@ -136,7 +136,7 @@ const App = () => {
                 //    }
                 //})
                 .then(result => {
-                    console.log('building connenction')
+                   // console.log('building connenction')
                     //console.log(showToast);
                     //showToast('info', 'Connected!')
                     connection.on('sendToReact', alert => {
@@ -154,7 +154,7 @@ const App = () => {
         }
    
         return () => {
-            console.log('clean up in app.js')
+            //console.log('clean up in app.js')
             if (token != undefined) {
                 setAlerts([])
                 connection.stop()
