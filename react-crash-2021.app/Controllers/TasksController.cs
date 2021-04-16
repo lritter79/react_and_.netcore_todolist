@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using react_crash_2021.Data;
 using react_crash_2021.Data.Entities;
 using react_crash_2021.Data.Models;
 using react_crash_2021.Data.Repositories;
+using react_crash_2021.Extensions;
 
 namespace react_crash_2021.Controllers
 {
@@ -198,6 +200,23 @@ namespace react_crash_2021.Controllers
                 return BadRequest(new { message = e.Message });
             }
             
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("~/api/Tasks/ExportTaskToiCal")]
+        public IActionResult ExportTaskToiCal(TaskModel model)
+        {
+            try
+            {
+                var bytes = Encoding.UTF8.GetBytes(model.GetiCalFormat());
+
+                return File(bytes, "text/calendar", model.Text);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         //private bool taskExists(long id)

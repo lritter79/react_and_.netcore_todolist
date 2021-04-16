@@ -68,6 +68,10 @@ const TaskDetails = () => {
         setShowEditTask(!showEditTask)
     }
 
+    const exportTaskToiCal = async () => {
+        console.log('expportTaskToiCal')
+    }
+
     const update = async (task) => {
         setIsLoading(true)
         try {
@@ -119,7 +123,7 @@ const TaskDetails = () => {
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
-                            
+                            <Button text='Export To iCal' color='#6f00ff' onClick={exportTaskToiCal} />
 
                             <CommentSection comments={comments} setComments={setComments} taskId={id} /> 
                                                     
