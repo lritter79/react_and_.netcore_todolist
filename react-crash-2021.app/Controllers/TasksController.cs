@@ -202,16 +202,17 @@ namespace react_crash_2021.Controllers
             
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         [Route("~/api/Tasks/ExportTaskToiCal")]
-        public IActionResult ExportTaskToiCal(TaskModel model)
+        public async Task<ActionResult> ExportTaskToiCal(TaskModel model)
         {
             try
             {
                 var bytes = Encoding.UTF8.GetBytes(model.GetiCalFormat());
 
                 return File(bytes, "text/calendar", model.Text);
+
             }
             catch (Exception e)
             {

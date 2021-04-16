@@ -9,6 +9,7 @@ import CommentSection from './comment-components/CommentSection'
 import { useShowToast } from './toast/ToastContext'
 import { useToken } from './api-authorization/UserContext'
 import UpdateTask from './task-crud-operations/UpdateTask'
+import Downloader from './Downloader'
 
 const TaskDetails = () => {
 
@@ -68,9 +69,7 @@ const TaskDetails = () => {
         setShowEditTask(!showEditTask)
     }
 
-    const exportTaskToiCal = async () => {
-        console.log('expportTaskToiCal')
-    }
+
 
     const update = async (task) => {
         setIsLoading(true)
@@ -123,8 +122,8 @@ const TaskDetails = () => {
                                 text='Edit Task'
                                 onClick={() => setShowEditTask(!showEditTask)}
                             />
-                            <Button text='Export To iCal' color='#6f00ff' onClick={exportTaskToiCal} />
 
+                            <Downloader task={task} token={token} />
                             <CommentSection comments={comments} setComments={setComments} taskId={id} /> 
                                                     
                         </div>

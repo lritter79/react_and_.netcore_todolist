@@ -26,27 +26,16 @@ namespace react_crash_2021.Extensions
             sb.AppendLine($"DESCRIPTION:{task.Details}");
             if (task.Day.HasValue)
             {
-                sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", task.Day));
+                sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", task.Day.Value.ToUniversalTime()));
             }
-            else
-            {
-                sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", DateTime.UtcNow));
-            }
-            if (task.DateCompleted.HasValue)
-            {
-                sb.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", task.DateCompleted));
-            }
-            else
-            {             
+
+            
                 if (task.Day.HasValue)
                 {
-                    sb.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", task.Day));
+                    sb.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", task.Day.Value.AddHours(1).ToUniversalTime()));
                 }
-                else
-                {
-                    sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", DateTime.UtcNow));
-                }
-            }
+
+            
             sb.AppendLine("SEQUENCE:0");
             sb.AppendLine($"UID:{task.Id}");
             sb.AppendLine($"LOCATION:{task.Location}");
