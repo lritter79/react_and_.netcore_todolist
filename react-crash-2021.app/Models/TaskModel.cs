@@ -22,7 +22,8 @@ namespace react_crash_2021.Data.Models
         public DateTime? DateCompleted { get; set; }
         public string Details { get; set; }
         public string Location { get; set; }
-        public string Category { get; set; }
+        public string CategoryName { get; set; }
+        public long CategoryId { get; set; }
         public Guid UserId { get; set; }
         public IEnumerable<ReactCrashUserModel> Collaborators { get; set; }
         public IEnumerable<CommentModel> Comments { get; set; }

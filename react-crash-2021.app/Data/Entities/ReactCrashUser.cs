@@ -18,6 +18,7 @@ namespace react_crash_2021.Data.Entities
         public string bio { get; set; }
         public string organization { get; set; }
         public IEnumerable<Collaboration> collaboratorations { get; set; }
+        public IEnumerable<Category> categories { get; set; }
         public IEnumerable<alert> alerts { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace react_crash_2021.Data
 
     {
         public DbSet<TaskEntity> Tasks { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Collaboration> Collaborations { get; set; }
         public override DbSet<reactCrashUser> Users { get; set; }
         public DbSet<comment> Comment { get; set; }
@@ -45,6 +46,7 @@ namespace react_crash_2021.Data
                 .HasOne(t => t.user)
                 .WithMany(u => u.tasks)
                 .HasForeignKey("user_id");
+
 
             modelBuilder.Entity<Collaboration>()
                 .HasKey(collab => new { collab.task_id, collab.user_id });

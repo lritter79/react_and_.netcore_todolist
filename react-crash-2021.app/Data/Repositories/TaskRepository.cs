@@ -65,24 +65,58 @@ namespace react_crash_2021.Data.Repositories
         public async Task<TaskEntity> GetTask(long id)
         {
             //throw new NotImplementedException();
-            var task = await _context.Tasks
-                                .Join(_context.Users,
-                                task => task.user.Id,
-                                user => user.Id,
-                                (task, user) => new TaskEntity
-                                {
-                                    text= task.text,
-                                    date_completed = task.date_completed,
-                                    details = task.details,
-                                    id = task.id,
-                                    is_completed = task.is_completed,
-                                    location = task.location,
-                                    reminder = task.reminder,
-                                    task_date = task.task_date,
-                                    category = task.category,
-                                    user = user
-                                })
-                                .Where(task => task.id == id).FirstAsync();
+            var task = await (from t in _context.Tasks
+                       where t.id == id
+                       join c in _context.Categories on t.category equals c
+                       join u in _context.Users on t.user equals u
+                       select new TaskEntity
+                       {
+                           text = t.text,
+                           date_completed = t.date_completed,
+                           details = t.details,
+                           id = t.id,
+                           is_completed = t.is_completed,
+                           location = t.location,
+                           reminder = t.reminder,
+                           task_date = t.task_date,
+                           category = c,
+                           user = u
+                       }).FirstAsync();
+                //linq
+                //await _context.Tasks
+                //                .Join(_context.Users,
+                //                task => task.user.Id,
+                //                user => user.Id,                              
+                //                (task, user) => new TaskEntity
+                //                {
+                //                    text= task.text,
+                //                    date_completed = task.date_completed,
+                //                    details = task.details,
+                //                    id = task.id,
+                //                    is_completed = task.is_completed,
+                //                    location = task.location,
+                //                    reminder = task.reminder,
+                //                    task_date = task.task_date,
+                //                    category = task.category,
+                //                    user = user
+                //                })
+                //                .Join(_context.Categories,
+                //                task => task.category.id,
+                //                cat => cat.id,
+                //                (task, cat) => new TaskEntity
+                //                {
+                //                    text = task.text,
+                //                    date_completed = task.date_completed,
+                //                    details = task.details,
+                //                    id = task.id,
+                //                    is_completed = task.is_completed,
+                //                    location = task.location,
+                //                    reminder = task.reminder,
+                //                    task_date = task.task_date,
+                //                    category = cat.category,
+                                    
+                //                })
+                //                .Where(task => task.id == id).FirstAsync();
             task.comments = await (from c in _context.Comment
                             where c.task.id == id
                             orderby c.date descending
