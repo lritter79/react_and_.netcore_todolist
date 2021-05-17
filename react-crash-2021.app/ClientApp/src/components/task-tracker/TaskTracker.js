@@ -8,6 +8,7 @@ import { useShowToast } from '../toast/ToastContext'
 import { useToken} from '../api-authorization/UserContext'
 import Calendar from './Calendar'
 import Button from '../Button'
+import CategoryCrudOperations from '../categories/CategoryCrudOperations'
 
 const TaskTracker = () => {
         //showAddTask = current state
@@ -19,9 +20,29 @@ const TaskTracker = () => {
     const [isLoading, setIsLoading] = useState(true)
     const showToast = useShowToast()
     const [showCalendarView, setShowCalendarView] = useState(false)
+    const [categories, setCategories] = useState([])
    
     useEffect(() => {
         //console.log('task tracker use effect')
+        const getCategories = async () => {
+            try {
+                //console.log(CrudOperations)                               
+                //console.log(`token = ${token}`)
+                //console.log(`user = ${userId}`)
+                if (token !== undefined) {
+                    let catsFromServer = (await CategoryCrudOperations.getCategoriesByUser(token?.id, token?.token))  
+                    catsFromServer.unshift({name: 'Choose...', id:''})             
+                    console.log(catsFromServer)
+                    setCategories(catsFromServer)
+                }
+                
+            } catch (error) {
+                //showToast('error', error)
+            }
+        }
+  
+        getCategories()
+
         const getTasks = async () => {
             try {
                 //console.log(CrudOperations)                               
@@ -100,7 +121,8 @@ const TaskTracker = () => {
                 showAdd={showAddTask} />
             <AddTask isToggled={showAddTask}
                 tasks={tasks} setTasks={setTasks}
-                setShowAddTask={setShowAddTask} />
+                setShowAddTask={setShowAddTask}
+                categories={categories} />
             <div id='divBtnContainer'>
                 <Button text={showCalendarView ? ('Show List View') : ('Show Calendar View')}
                     textColor='white'
@@ -113,6 +135,7 @@ const TaskTracker = () => {
                         (<Calendar tasks={tasks} setTasks={setTasks} />) :
                         (<Tasks
                             tasks={tasks}
+                            categories={categories}
                             onDelete={onDelete}
                             onToggle={toggleReminder}
                             onGoToDetail={() => { setShowAddTask(false) }} />)

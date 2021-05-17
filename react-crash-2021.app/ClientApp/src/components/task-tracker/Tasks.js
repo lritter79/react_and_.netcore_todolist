@@ -6,7 +6,7 @@ import "react-toggle/style.css"
 //import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 //.map() takes in  a function
-const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
+const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail, categories }) => {
     const [showCompleted, setShowCompleted] = useState(true)
     //whether or not there are more tasks to render
     const [hasMore, setHasMore] = useState(true)

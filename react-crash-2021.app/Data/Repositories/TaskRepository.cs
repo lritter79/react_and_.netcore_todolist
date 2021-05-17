@@ -27,6 +27,7 @@ namespace react_crash_2021.Data.Repositories
         public async Task<TaskEntity> AddTask(TaskEntity model)
         {
             _context.Entry(model.user).State = EntityState.Unchanged;
+            model.category = await _context.Categories.Where(cat => cat.id == model.category.id).FirstOrDefaultAsync();
             await _context.Tasks.AddAsync(model);
             if (model.reminder && model.task_date.HasValue)
             {
