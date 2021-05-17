@@ -3,7 +3,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
 //import CoolColor from './CoolColor'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+//import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 //.map() takes in  a function
 const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
@@ -89,9 +89,9 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
                 />
                 <span>Show Completed Tasks?</span>
             </label>                
-            <ReactCSSTransitionGroup transitionName="example">
+            <>
                 {getSlicedTasks()}
-            </ReactCSSTransitionGroup>                              
+            </>                              
         </>
   )
 }

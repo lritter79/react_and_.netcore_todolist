@@ -12,7 +12,7 @@ const Colors = [
     'indigo', 
     'tan', 
     'violet', 
-    'periwnkle', 
+    'periwinkle', 
     'magenta', 
     'crimson', 
     'lime', 

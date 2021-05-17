@@ -1,10 +1,11 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
 import CreateTask from '../task-crud-operations/CreateTask'
 import { useToken } from '../api-authorization/UserContext'
+import CategoryCrudOperations from '../categories/CategoryCrudOperations'
 
 //take in the function onAdd
 const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
@@ -15,9 +16,11 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
   const [details, setDetails] = useState('')
   const [location, setLocation] = useState('')
   const [day, setDay] = useState('')
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState('')
+  const [categories, setCategories] = useState([])
   const [reminder, setReminder] = useState(false)
   const [includeDay, setIncludeDay] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
     const showToast = useShowToast()
     // Add Task
     //post because we're adding tasks
@@ -39,6 +42,34 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
 
         
     //}
+
+    useEffect(() => {
+      console.log('use effect in cat container')
+      
+      const getCategories = async () => {
+          try {
+              //console.log(CrudOperations)                               
+              //console.log(`token = ${token}`)
+              //console.log(`user = ${userId}`)
+              if (token !== undefined) {
+                  const catsFromServer = await CategoryCrudOperations.getCategoriesByUser(token?.id, token?.token)
+                  console.log(catsFromServer)
+                  setIsLoading(false)
+                  setCategories(catsFromServer)
+              }
+              
+          } catch (error) {
+              //showToast('error', error)
+          }
+      }
+
+      getCategories()
+
+      return function cleanup() {
+          setCategories([])
+      }
+
+  }, [])
 
   const onSubmit = async (e) => {
     //e.preventDefault() is so it doesnt actually submit to the page
@@ -91,15 +122,19 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask }) => {
                       value={text}
                       onChange={(e) => setText(e.target.value)} />
         </Form.Group>
-
         <Form.Group>
-          <Form.Label>Category: </Form.Label>
-          <Form.Control 
-                  type='text'
-                      placeholder=''
-                      value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  />
+            <Form.Label>Category:</Form.Label>
+            <Form.Control
+              as='select'
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categories
+              .map((cat, index) => 
+                <option key={index} value={cat.id}>{cat.name}</option>
+              )}
+              
+            </Form.Control>
         </Form.Group>
         <Form.Group>
           <Form.Label>Location: </Form.Label>

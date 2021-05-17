@@ -4,10 +4,10 @@ import { useState } from 'react'
 import CategoryCrudOperations from './CategoryCrudOperations'
 import { useToken } from '../api-authorization/UserContext'
 
-const AddCategory = ({ categories, setCategories }) => {
+const AddCategory = ({ token, categories, setCategories }) => {
     const [name, setName] = useState('')
     const [color, setColor] = useState('')
-    const { token, setToken } = useToken()
+    
     
     const onSubmit = async (e) => {
       e.preventDefault()
@@ -24,6 +24,7 @@ const AddCategory = ({ categories, setCategories }) => {
 
     return (
         <>
+        <h1>Add a category</h1>
         <Form onSubmit={onSubmit}>
           <Form.Group>
             <Form.Label>Name:</Form.Label>
@@ -33,30 +34,29 @@ const AddCategory = ({ categories, setCategories }) => {
                         placeholder=''
                         value={name}
                         onChange={(e) => setName(e.target.value)} />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Category:</Form.Label>
-          <Form.Control
-            as='select'
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          >
-            {Colors.map((color, index) => 
-              <option key={index} value={color}>{color}</option>
-            )}
-            
-          </Form.Control>
-        </Form.Group>
-        
-        <button
-            type='submit'
-            className='btn btn-block'
-            style={{ backgroundColor: 'skyblue', color: 'white' }}
-          >
-            Save
-        </button>
-      </Form>  
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Color:</Form.Label>
+            <Form.Control
+              as='select'
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            >
+              {Colors.map((color, index) => 
+                <option key={index} value={color}>{color}</option>
+              )}
+              
+            </Form.Control>
+          </Form.Group>
+          
+          <button
+              type='submit'
+              className='btn btn-block'
+              style={{ backgroundColor: 'skyblue', color: 'white' }}
+            >
+              Save
+          </button>
+        </Form>  
         </>
     )
 }

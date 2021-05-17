@@ -4,16 +4,15 @@ const CategoryCrudOperations = {
 
     'getCategoriesByUser': async (id, token) => {
         //console.log('getting user data')
-        const res = await fetch(Constant() + `/api/users/${id}/Categories`, {
+        return await fetch(Constant() + `/api/Users/${id}/Categories`, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
                 'Content-type': 'application/json'
             }
         })
-        const categories = await res.json()
-
-        return categories
+        .then(data => data.json())
+        .catch((error) => console.error('Fetch Error:', error))
     },
     'postCategory': async (token, category) => {
         return await fetch(Constant() + `/api/Categories`, {
@@ -23,6 +22,17 @@ const CategoryCrudOperations = {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(category)
+        })
+        .then(data => data.json())
+        .catch((error) => console.error('Fetch Error:', error))
+    },
+    'deleteCategory': async (token, catId) => {
+        return await fetch(Constant() + `/api/Categories/${catId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-type': 'application/json'
+            }
         })
         .then(data => data.json())
         .catch((error) => console.error('Fetch Error:', error))
