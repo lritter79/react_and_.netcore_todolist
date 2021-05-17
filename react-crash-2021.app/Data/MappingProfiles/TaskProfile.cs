@@ -21,6 +21,7 @@ namespace react_crash_2021.Data.MappingProfiles
               .ForMember(m => m.Comments, e => e.MapFrom(t => t.comments))
               .ForMember(m => m.CategoryName, e => e.MapFrom(t => t.category.name))
               .ForMember(m => m.CategoryId, e => e.MapFrom(t => t.category.id))
+              .ForMember(m => m.Color, e => e.MapFrom(t => t.category.color))
               .ReverseMap();
         }
     }

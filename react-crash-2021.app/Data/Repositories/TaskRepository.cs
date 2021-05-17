@@ -133,15 +133,20 @@ namespace react_crash_2021.Data.Repositories
                         .Join(_context.Users,
                         task => task.user.Id,
                         user => user.Id,
-                        (task, user) => new TaskEntity
+                        (task, user) => new { task, user })
+                        .Join(_context.Categories,
+                        te => te.task.category.id,
+                        cat => cat.id,
+                        (te, cat) => new TaskEntity
                         {
-                            id = task.id,
-                            details = task.details,
-                            reminder = task.reminder,
-                            location = task.location,
-                            task_date = task.task_date,
-                            text = task.text,
-                            user = user
+                            id = te.task.id,
+                            details = te.task.details,
+                            reminder = te.task.reminder,
+                            location = te.task.location,
+                            task_date = te.task.task_date,
+                            text = te.task.text,
+                            user = te.user,
+                            category = cat
                         })
                         .Where(t => t.user.Id == userId);
 
@@ -155,25 +160,46 @@ namespace react_crash_2021.Data.Repositories
         
         public async Task<IEnumerable<TaskEntity>> GetTasksByUser(Guid userId)
         {
-
-            return await _context.Tasks
-                                    .Join(_context.Users,
-                                    task => task.user.Id,
-                                    user => user.Id,
-                                    (task, user) => new TaskEntity
-                                    {
-                                        id = task.id,
-                                        details = task.details,
-                                        reminder = task.reminder,
-                                        location = task.location,
-                                        task_date = task.task_date,
-                                        date_completed = task.date_completed,
-                                        is_completed = task.is_completed,
-                                        text = task.text,
-                                        user = user
-                                    })
-                                    .Where(t => t.user.Id == userId)
-                                    .ToListAsync();
+            //linq
+            //return await _context.Tasks
+            //                        .Join(_context.Users,
+            //                        task => task.user.Id,
+            //                        user => user.Id,
+            //                        (task, user) => new TaskEntity
+            //                        {
+            //id = task.id,
+            //                            details = task.details,
+            //                            reminder = task.reminder,
+            //                            location = task.location,
+            //                            task_date = task.task_date,
+            //                            date_completed = task.date_completed,
+            //                            is_completed = task.is_completed,
+            //                            text = task.text,
+            //                            user = user
+            //                        })
+            //                        .Where(t => t.user.Id == userId)
+            //                        .ToListAsync();
+            //query syntax
+            return await
+                (from task in _context.Tasks
+                join user in _context.Users
+                on task.user.Id equals user.Id
+                join category in _context.Categories
+                on task.category.id equals category.id
+                where task.user.Id == userId
+                select new TaskEntity {
+                    id = task.id,
+                    details = task.details,
+                    reminder = task.reminder,
+                    location = task.location,
+                    task_date = task.task_date,
+                    date_completed = task.date_completed,
+                    is_completed = task.is_completed,
+                    text = task.text,
+                    user = user,
+                    category = category
+                })
+                .ToListAsync();
         }
 
         public async Task<TaskEntity> UpdateTask(long id, TaskEntity task)

@@ -16,5 +16,6 @@ namespace react_crash_2021.Data.Entities
         public IEnumerable<TaskEntity> tasks { get; set; }
         [ForeignKey("user_id")]
         public reactCrashUser user { get; set; }
+        public string color { get; set; }
     }
 }

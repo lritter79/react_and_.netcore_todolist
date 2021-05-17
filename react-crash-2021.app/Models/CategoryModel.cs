@@ -13,5 +13,6 @@ namespace react_crash_2021.Models
         [MaxLength(40)]
         public string Name { get; set; }
         public Guid UserId { get; set; }
-    }
+        public string Color { get; set; }
+}
 }
