@@ -19,6 +19,9 @@ const AddCategory = ({ token, categories, setCategories }) => {
       if (!('error' in category)) {
         setCategories([...categories, category])
       }
+      else {
+        alert(category)
+      }
       
     }
 

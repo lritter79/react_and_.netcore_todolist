@@ -47,6 +47,9 @@ namespace react_crash_2021.Data
                 .WithMany(u => u.tasks)
                 .HasForeignKey("user_id");
 
+            modelBuilder.Entity<Category>()
+                .HasIndex(u => u.name)
+                .IsUnique();
 
             modelBuilder.Entity<Collaboration>()
                 .HasKey(collab => new { collab.task_id, collab.user_id });
