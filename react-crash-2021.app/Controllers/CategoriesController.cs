@@ -39,7 +39,7 @@ namespace react_crash_2021.Controllers
         [HttpGet]
         [Route("~/api/Users/{userId}/Categories")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<CategoryModel>>> GetTasksByUser(Guid userId)
+        public async Task<ActionResult<IEnumerable<CategoryModel>>> GetCategoriesByUser(Guid userId)
         {
             var categories = await _context.Categories.Where(c => c.user.Id == userId).ToListAsync();
 
