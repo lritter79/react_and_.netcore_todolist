@@ -15,6 +15,7 @@ namespace react_crash_2021.Models
         public IEnumerable<TaskModel> Tasks { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsOpenToCollaboration { get; set; }
+        public IEnumerable<CategoryModel> Categories { get; set; }
         public IEnumerable<TaskModel> Collaborations { get; set; }
         public string City { get; set; }
         public string State { get; set; }

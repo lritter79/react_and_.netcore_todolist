@@ -15,6 +15,7 @@ namespace react_crash_2021.Data.MappingProfiles
         {
             CreateMap<reactCrashUser, ReactCrashUserModel>()
                 .ForMember(m => m.Tasks, c => c.MapFrom(e => e.tasks))
+                .ForMember(m => m.Categories, c => c.MapFrom(e => e.categories))
                 .ForMember(m => m.Collaborations, c => c.MapFrom(e => e.collaboratorations.Select(t => t.task)))
                 .ForMember(m => m.IsOpenToCollaboration, c => c.MapFrom(e => e.isOpenToCollaboration))
                 .ReverseMap();

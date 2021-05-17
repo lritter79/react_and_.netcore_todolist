@@ -30,7 +30,11 @@ namespace react_crash_2021.Data.Repositories
 
         public async Task<reactCrashUser> GetUser(string userName)
         {
-            return await _context.Users.Where(user => user.UserName == userName).FirstOrDefaultAsync();
+            var user = await _context.Users.
+                Where(user => user.UserName == userName)
+                .FirstOrDefaultAsync();
+            user.categories = await _context.Categories.Where(cat => cat.user.Id == user.Id).ToListAsync();
+            return user;
         }
         
         public async Task<reactCrashUser> GetUser(Guid id)
@@ -46,12 +50,12 @@ namespace react_crash_2021.Data.Repositories
             //                        })
 
             var users = await _context.Users.Join(_context.Collaborations, user => user.Id, collab => collab.user_id, (user, collab) => new { user, collab })
-                                            .Join(_context.Tasks, cu => cu.collab.task_id, taskE => taskE.id, (cu, taskE) => new { taskE, cu })
+                                            .Join(_context.Tasks, cu => cu.collab.task_id, task => task.id, (cu, taskE) => new { task, cu })
                                             .Select(m => new
                                                   {
                                                       User = m.cu.user,                                                    
                                                       Collab = m.cu.collab,
-                                                      Task = m.taskE
+                                                      Task = m.task
                                                   }).Where(o => o.Task.id == task.id || o.Collab.task_id == task.id)   
                                                   .Select(res => res.User)
                                                   .ToListAsync();
