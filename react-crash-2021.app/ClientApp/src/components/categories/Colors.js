@@ -1,0 +1,25 @@
+const Colors = [
+    '',
+    'red', 
+    'green', 
+    'orange', 
+    'blue', 
+    'black', 
+    'yellow', 
+    'white', 
+    'grey', 
+    'cyan', 
+    'indigo', 
+    'tan', 
+    'violet', 
+    'periwnkle', 
+    'magenta', 
+    'crimson', 
+    'lime', 
+    'burgundy', 
+    'auburn', 
+    'turquoise', 
+    'jade', 
+    'purple']
+
+export default Colors

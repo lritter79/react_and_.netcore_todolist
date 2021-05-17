@@ -21,6 +21,11 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
         if (!token?.token) setIsExpanded(false)
     }, [token])
 
+    const logoutAndCollapse = () => {
+        setIsExpanded(false)
+        onLogoutClick()
+    }
+
     return (
         <>
             <Navbar bg="light" expand="lg" sticky="top" expanded={isExpanded} >
@@ -33,10 +38,11 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
                         {token?.token ? (
                             <>
                                 <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/userManager" exact>Manage Account</Nav.Link>
+                                <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/categories">Categories</Nav.Link>
                                 <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/alerts" exact>Alerts
                                         {(alerts.length > 0) && (<span id='alertCounter'>{alerts.length}</span>)}
                                 </Nav.Link>
-                                <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/logout" exact onClick={onLogoutClick}>Logout</Nav.Link>
+                                <Nav.Link as={NavLink} onClick={logoutAndCollapse} to="/logout" exact>Logout</Nav.Link>
                             </>) : (<>
                                 <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/login" exact>Login</Nav.Link>
                                 <Nav.Link as={NavLink} onClick={() => setIsExpanded(false)} to="/register" exact>Register</Nav.Link>

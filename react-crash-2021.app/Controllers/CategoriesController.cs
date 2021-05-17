@@ -94,16 +94,27 @@ namespace react_crash_2021.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CategoryModel>> PostCategory(CategoryModel category)
         {
-            _context.Categories.Add(_mapper.Map<Category>(category));
-            await _context.SaveChangesAsync();
+            try
+            {
+                Category cat = _mapper.Map<Category>(category);
+                cat.user = await _context.Users.Where(u => u.Id == cat.user.Id).FirstOrDefaultAsync();
+                _context.Categories.Add(cat);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+                return _mapper.Map<CategoryModel>(cat);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(long id)
         {
             var category = await _context.Categories.FindAsync(id);

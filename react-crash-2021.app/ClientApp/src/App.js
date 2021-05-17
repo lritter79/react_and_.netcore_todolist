@@ -17,6 +17,7 @@ import TaskDetails from './components/TaskDetails'
 import TaskTracker from './components/task-tracker/TaskTracker'
 import { useToken } from './components/api-authorization/UserContext'
 import AppNavbar from './components/AppNavbar'
+import CategoryContainer from './components/categories/CategoryContainer'
 
 
 //import UpdateTask from './components/UpdateTask'
@@ -191,6 +192,11 @@ const App = () => {
                                 <Route path='/alerts' exact
                                     render={(props) => (
                                         <AlertCenter alerts={alerts} setAlerts={setAlerts} />
+                                    )}
+                                />
+                                <Route path='/categories' exact
+                                    render={(props) => (
+                                        <CategoryContainer />
                                     )}
                                 />
                                 <Redirect from='/login' to="/" />
