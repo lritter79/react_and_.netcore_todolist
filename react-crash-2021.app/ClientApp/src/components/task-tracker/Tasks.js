@@ -2,7 +2,7 @@ import Task from './Task'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
-import CoolColor from './CoolColor'
+//import CoolColor from './CoolColor'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 //.map() takes in  a function
@@ -61,7 +61,6 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
                         key={index}
                         task={task}
                         onDelete={onDelete}
-                        coolColor={CoolColor(index)}
                         onToggle={onToggle}
                         onGoToDetail={onGoToDetail}
                     />
@@ -71,7 +70,6 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail }) => {
                         key={index}
                         task={task}
                         onDelete={onDelete}
-                        coolColor={CoolColor(index)}
                         onToggle={onToggle}
                         onGoToDetail={onGoToDetail}
                     />

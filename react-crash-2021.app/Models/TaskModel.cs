@@ -16,7 +16,7 @@ namespace react_crash_2021.Data.Models
         [Required]
         [MaxLength(30)]
         public string Text { get; set; }
-        public string Color { get; set; }
+        public string Color { get; set; } = "white";
         public DateTime? Day { get; set; }
         public bool Reminder { get; set; }
         public bool IsCompleted { get; set; }
