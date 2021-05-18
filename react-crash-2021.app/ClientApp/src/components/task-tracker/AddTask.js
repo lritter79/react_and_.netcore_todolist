@@ -5,7 +5,7 @@ import Constant from '../Constant'
 import { useShowToast } from '../toast/ToastContext'
 import CreateTask from '../task-crud-operations/CreateTask'
 import { useToken } from '../api-authorization/UserContext'
-
+import Select from 'react-select'
 //take in the function onAdd
 const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask, categories }) => {
   //more info on what the "useSate" hook does here: https://reactjs.org/docs/hooks-state.html
@@ -39,6 +39,12 @@ const AddTask = ({ isToggled, tasks, setTasks, setShowAddTask, categories }) => 
 
         
     //}
+
+    const options = categories.map(getCatOption)
+
+    function getCatOption(cat) {
+      return {value: cat.id, label: cat.name}
+    }
 
     useEffect(() => {
       console.log('use effect in cat container')

@@ -2,11 +2,13 @@ import Task from './Task'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
+import CustomSelect from './CustomSelect'
 //import CoolColor from './CoolColor'
 //import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 //.map() takes in  a function
 const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail, categories }) => {
+    const [categoryId, setCategoryId] = useState('')
     const [showCompleted, setShowCompleted] = useState(true)
     //whether or not there are more tasks to render
     const [hasMore, setHasMore] = useState(true)
@@ -33,6 +35,8 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail, categories }) => {
         //console.log('tasks has rendered')
     }, [])
 
+    
+
     useEffect(() => {
         if (!showCompleted) {
             if (tasks.filter(t => !t.isCompleted).length <= pageNumber * 5) setHasMore(false)
@@ -53,7 +57,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail, categories }) => {
 
     const getSlicedTasks = () => {
       let arr = showCompleted ? tasks.slice(0, (pageNumber * 5)) : tasks.filter(t => !t.isCompleted).slice(0, (pageNumber * 5))
-
+        arr = (categoryId === '') ? arr : arr.filter(t => t.categoryId === categoryId)
         let tasksToDisplay = arr.map((task, index) => {
             return (arr.length === index + 1) ?
                 (<div key={task.id} ref={lastTaskRef}>
@@ -88,7 +92,9 @@ const Tasks = ({ tasks, onDelete, onToggle, onGoToDetail, categories }) => {
                     onChange={toggleShowCompleted}
                 />
                 <span>Show Completed Tasks?</span>
-            </label>                
+                
+            </label>  
+            <CustomSelect categories={categories} setCategoryId={setCategoryId} categoryId={categoryId}/>              
             <>
                 {getSlicedTasks()}
             </>                              
