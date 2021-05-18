@@ -95,8 +95,8 @@ const TaskDetails = () => {
                                 {task.text}
                             </h3>
                             <hr></hr>
-                            <p>
-                                Category: {task.category}
+                            <p> 
+                                Category: <span style={{color: task.color}}>{task.categoryName}</span>
                             </p>
                             <p>
                                 Location: {task.location}

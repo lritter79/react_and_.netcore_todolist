@@ -1,20 +1,46 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from './Button'
 import Form from 'react-bootstrap/Form'
 import { useToken } from './api-authorization/UserContext'
-
+import CategoryCrudOperations from './categories/CategoryCrudOperations'
 
 const EditTask = ({task, onCancel, onUpdate }) => {
     const [id, setId] = useState(task.id)
     const [text, setText] = useState(task.text)
     const [day, setDay] = useState(task?.day ? task?.day.split('.')[0] : null)
     const [details, setDetails] = useState(task.details)
-    const [category, setCategory] = useState(task.category)
+    const [categories, setCategories] = useState([])
+    const [categoryId, setCategoryId] = useState(task.category)
     const [location, setLocation] = useState(task.location)
     const [reminder, setReminder] = useState(task.reminder)
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
     const [includeDay, setIncludeDay] = useState(task?.day)
     const { token } = useToken()
+
+
+    useEffect(() => {
+      //console.log('task tracker use effect')
+      const getCategories = async () => {
+          try {
+              //console.log(CrudOperations)                               
+              //console.log(`token = ${token}`)
+              //console.log(`user = ${userId}`)
+              if (token !== undefined) {
+                  let catsFromServer = (await CategoryCrudOperations.getCategoriesByUser(token?.id, token?.token))  
+                  catsFromServer.unshift({name: 'Choose...', id:''})             
+                  console.log(catsFromServer)
+                  setCategories(catsFromServer)
+              }
+              
+          } catch (error) {
+              //showToast('error', error)
+          }
+      }
+
+      getCategories()
+
+
+  }, [])
 
     const onSubmit = (e) => {
         //e.preventDefault() is so it doesnt actually submit to the page
@@ -32,14 +58,14 @@ const EditTask = ({task, onCancel, onUpdate }) => {
         }
         let dayVal = includeDay ? day : null
 
-        onUpdate({ id, text, details, location, day: dayVal, reminder, isCompleted, category }, token?.token)
+        onUpdate({ id, text, details, location, day: dayVal, reminder, isCompleted, categoryId }, token?.token)
     
         //clears the form
         setId('')
         setText('')
         setDay('')
         setLocation('')
-        setCategory('')
+        setCategoryId('')
         setDetails('')
         setReminder(false)
       }
@@ -66,14 +92,19 @@ const EditTask = ({task, onCancel, onUpdate }) => {
             />
   </Form.Group>
   <Form.Group>
-    <Form.Label>Category: </Form.Label>
-    <Form.Control 
-            type='text'
-            placeholder=''
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            />
-  </Form.Group>
+            <Form.Label>Category:</Form.Label>
+            <Form.Control
+              as='select'
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              {categories
+              .map((cat, index) => 
+                <option key={index} value={cat.id}>{cat.name}</option>
+              )}
+              
+            </Form.Control>
+        </Form.Group>
   <Form.Group>
     <Form.Label>Details: </Form.Label>
     <Form.Control 
@@ -84,6 +115,7 @@ const EditTask = ({task, onCancel, onUpdate }) => {
             onChange={(e) => setDetails(e.target.value)}
              />
   </Form.Group>
+  
   <Form.Group>
           <Form.Check 
             type="checkbox" 
