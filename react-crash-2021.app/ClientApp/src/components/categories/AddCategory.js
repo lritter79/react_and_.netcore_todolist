@@ -11,8 +11,10 @@ const AddCategory = ({ token, categories, setCategories }) => {
     
     const onSubmit = async (e) => {
       e.preventDefault()
-      setName('')
-      setColor('')
+      if (name === '') {
+        alert('Please enter a category name')
+        return
+      }
 
       let category = await CategoryCrudOperations.postCategory(token.token, {name, color, userId: token?.id})
       console.log(category)
@@ -22,6 +24,9 @@ const AddCategory = ({ token, categories, setCategories }) => {
       else {
         alert(category)
       }
+
+      setName('')
+      setColor('')
       
     }
 
