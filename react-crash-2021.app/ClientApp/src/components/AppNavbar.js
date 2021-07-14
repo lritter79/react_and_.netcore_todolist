@@ -21,9 +21,9 @@ const AppNavbar = ({ onLogoutClick, alerts }) => {
         if (!token?.token) setIsExpanded(false)
     }, [token])
 
-    const logoutAndCollapse = () => {
+    const logoutAndCollapse = (e) => {
         setIsExpanded(false)
-        onLogoutClick()
+        onLogoutClick(e)
     }
 
     return (

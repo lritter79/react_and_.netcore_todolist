@@ -108,7 +108,6 @@ const UserManager = ({ handleLogout }) => {
     }
 
     const onDelete = async e => {
-        e.preventDefault()
         handleLogout(e)
         let res = await deleteAccount()
     }

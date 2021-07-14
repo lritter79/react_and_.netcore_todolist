@@ -77,7 +77,7 @@ const App = () => {
     }
 
 
-    function handleLogoutClick(e) {
+    const handleLogoutClick = function (e) {
         e.preventDefault()       
         removeToken()
     }
@@ -177,7 +177,7 @@ const App = () => {
 
                     </div>
 
-                    <AppNavbar onLogoutClick={handleLogoutClick} alerts={alerts} />
+                <AppNavbar onLogoutClick={handleLogoutClick} alerts={alerts} />
 
                     <div className='container'>
                         <Toast
