@@ -37,7 +37,7 @@ body {
 #backdrop {
     background-image: linear-gradient(90deg, pink 12.50%, white 12.50%, white 25%, orange 25%, orange 37.50%, green 37.50%, green 50%, pink 50%, pink 62.50%, white 62.50%, white 75%, orange 75%, orange 87.50%, green 87.50%, green 100%);
     background-size: 500.00px 500.00px;
-    opacity: 50%;
+    opacity: 0.5;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -55,7 +55,7 @@ body {
   padding: 30px;
   border-radius: 5px;
   background-color: white;
-  opacity:100%
+  opacity:1;
 }
 
 .header {

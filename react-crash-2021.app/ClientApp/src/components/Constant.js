@@ -4,7 +4,7 @@ const Constant = () => {
     }
 
     if (process.env.NODE_ENV === 'production') {
-        return ''
+        return 'http://reacttodoapp.com:8003'
     }
 }
 
